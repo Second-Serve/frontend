@@ -1,0 +1,21 @@
+R_DEF: Internal format may change without notice
+local
+color black
+color white
+drawable ic_launcher_background
+drawable ic_launcher_foreground
+drawable screenshot_2024_10_26_at_4_09_51pm
+id button
+id button2
+id imageView
+id main
+id textView
+layout activity_main
+layout get_started
+mipmap ic_launcher
+mipmap ic_launcher_round
+string app_name
+style Base.Theme.SecondServe
+style Theme.SecondServe
+xml backup_rules
+xml data_extraction_rules

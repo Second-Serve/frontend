@@ -1,4 +1,13 @@
 package com.cs407.secondserve
 
-class GetStarted {
+
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+
+class GetStarted : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.get_started)
+    }
 }
