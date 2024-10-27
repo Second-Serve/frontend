@@ -1,0 +1,32 @@
+R_DEF: Internal format may change without notice
+local
+color black
+color white
+drawable border
+drawable ic_launcher_background
+drawable ic_launcher_foreground
+drawable rounded_edit_text
+drawable screenshot_2024_10_26_at_4_09_51pm
+id button
+id button2
+id confirm_password_input
+id email_input
+id imageView
+id main
+id password_input
+id sign_up_button
+id sign_up_title
+id terms_checkbox
+id textView
+layout activity_main
+layout fragment_log_in
+layout fragment_sign_up_restaurant
+layout get_started
+mipmap ic_launcher
+mipmap ic_launcher_round
+string app_name
+string hello_blank_fragment
+style Base.Theme.Secondserve
+style Theme.Secondserve
+xml backup_rules
+xml data_extraction_rules

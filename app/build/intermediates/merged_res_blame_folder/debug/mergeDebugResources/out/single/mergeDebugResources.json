@@ -1,0 +1,94 @@
+[
+    {
+        "merged": "com.cs407.secondserve.app-debug-31:/mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "com.cs407.secondserve.app-main-33:/mipmap-xxxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.cs407.secondserve.app-debug-31:/mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "com.cs407.secondserve.app-main-33:/mipmap-hdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.cs407.secondserve.app-debug-31:/layout_activity_main.xml.flat",
+        "source": "com.cs407.secondserve.app-main-33:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.cs407.secondserve.app-debug-31:/mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "com.cs407.secondserve.app-main-33:/mipmap-xhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.cs407.secondserve.app-debug-31:/drawable_border.xml.flat",
+        "source": "com.cs407.secondserve.app-main-33:/drawable/border.xml"
+    },
+    {
+        "merged": "com.cs407.secondserve.app-debug-31:/drawable_screenshot_2024_10_26_at_4_09_51pm.png.flat",
+        "source": "com.cs407.secondserve.app-main-33:/drawable/screenshot_2024_10_26_at_4_09_51pm.png"
+    },
+    {
+        "merged": "com.cs407.secondserve.app-debug-31:/mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "com.cs407.secondserve.app-main-33:/mipmap-hdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.cs407.secondserve.app-debug-31:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.cs407.secondserve.app-main-33:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.cs407.secondserve.app-debug-31:/xml_backup_rules.xml.flat",
+        "source": "com.cs407.secondserve.app-main-33:/xml/backup_rules.xml"
+    },
+    {
+        "merged": "com.cs407.secondserve.app-debug-31:/mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "com.cs407.secondserve.app-main-33:/mipmap-xhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.cs407.secondserve.app-debug-31:/mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.cs407.secondserve.app-main-33:/mipmap-xxxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.cs407.secondserve.app-debug-31:/layout_get_started.xml.flat",
+        "source": "com.cs407.secondserve.app-main-33:/layout/get_started.xml"
+    },
+    {
+        "merged": "com.cs407.secondserve.app-debug-31:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.cs407.secondserve.app-main-33:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "com.cs407.secondserve.app-debug-31:/layout_fragment_log_in.xml.flat",
+        "source": "com.cs407.secondserve.app-main-33:/layout/fragment_log_in.xml"
+    },
+    {
+        "merged": "com.cs407.secondserve.app-debug-31:/mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "com.cs407.secondserve.app-main-33:/mipmap-xxhdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.cs407.secondserve.app-debug-31:/mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "com.cs407.secondserve.app-main-33:/mipmap-mdpi/ic_launcher_round.webp"
+    },
+    {
+        "merged": "com.cs407.secondserve.app-debug-31:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.cs407.secondserve.app-main-33:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "com.cs407.secondserve.app-debug-31:/layout_fragment_sign_up_restaurant.xml.flat",
+        "source": "com.cs407.secondserve.app-main-33:/layout/fragment_sign_up_restaurant.xml"
+    },
+    {
+        "merged": "com.cs407.secondserve.app-debug-31:/mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "com.cs407.secondserve.app-main-33:/mipmap-xxhdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.cs407.secondserve.app-debug-31:/mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "com.cs407.secondserve.app-main-33:/mipmap-mdpi/ic_launcher.webp"
+    },
+    {
+        "merged": "com.cs407.secondserve.app-debug-31:/xml_data_extraction_rules.xml.flat",
+        "source": "com.cs407.secondserve.app-main-33:/xml/data_extraction_rules.xml"
+    },
+    {
+        "merged": "com.cs407.secondserve.app-debug-31:/drawable_rounded_edit_text.xml.flat",
+        "source": "com.cs407.secondserve.app-main-33:/drawable/rounded_edit_text.xml"
+    },
+    {
+        "merged": "com.cs407.secondserve.app-debug-31:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.cs407.secondserve.app-main-33:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    }
+]
