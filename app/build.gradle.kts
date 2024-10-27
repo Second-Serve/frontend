@@ -4,12 +4,21 @@ plugins {
 }
 
 android {
+<<<<<<< HEAD
     namespace = "com.cs407.appproj"
     compileSdk = 34
 
     defaultConfig {
         applicationId = "com.cs407.appproj"
         minSdk = 24
+=======
+    namespace = "com.cs407.secondserve"
+    compileSdk = 34
+
+    defaultConfig {
+        applicationId = "com.cs407.secondserve"
+        minSdk = 34
+>>>>>>> df12267c44d2f565cba8fcc5c9cfeb427b7b7dfb
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"

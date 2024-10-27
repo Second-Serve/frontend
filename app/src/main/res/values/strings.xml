@@ -1,3 +1,7 @@
 <resources>
+<<<<<<< HEAD
     <string name="app_name">AppProj</string>
+=======
+    <string name="app_name">Second Serve</string>
+>>>>>>> df12267c44d2f565cba8fcc5c9cfeb427b7b7dfb
 </resources>
