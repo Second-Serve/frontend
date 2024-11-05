@@ -14,7 +14,6 @@
         android:gravity="center"
         android:padding="16dp">
 
-        <!-- Log In Title -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -24,13 +23,11 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="32dp"/>
 
-        <!-- Email Label -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Email Label -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -39,7 +36,6 @@
                 android:textColor="#A52A2A"
                 android:layout_marginBottom="8dp"/>
 
-            <!-- Email Input Field -->
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -57,7 +53,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Password Label -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -66,7 +61,6 @@
                 android:textColor="#A52A2A"
                 android:layout_marginBottom="8dp"/>
 
-            <!-- Password Input Field -->
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -77,7 +71,6 @@
                 android:textColorHint="#FFFFFF"
                 android:inputType="textPassword"/>
         </LinearLayout>
-        <!-- Log In Button -->
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
