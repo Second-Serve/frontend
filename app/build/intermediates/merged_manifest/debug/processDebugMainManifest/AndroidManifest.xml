@@ -37,7 +37,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.cs407.secondserve.GetStarted" />
-
+        <!-- <activity android:name=".logIn" /> -->
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="com.cs407.secondserve.androidx-startup"

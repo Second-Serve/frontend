@@ -3321,6 +3321,7 @@ int id fixed 0x7f0900d2
 int id flip 0x7f0900d3
 int id floating 0x7f0900d4
 int id forever 0x7f0900d5
+int id fragment_container 0x7f090226
 int id fragment_container_view_tag 0x7f0900d6
 int id frost 0x7f0900d7
 int id fullscreen_header 0x7f0900d8

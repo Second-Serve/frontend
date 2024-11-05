@@ -33,6 +33,7 @@ id endTime
 id enter_location_label
 id filterLabel
 id filterSpinner
+id fragment_container
 id imageView
 id locationDetails
 id locationTitle

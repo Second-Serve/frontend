@@ -23,6 +23,7 @@ xmlns:tools="http://schemas.android.com/tools">
     </activity>
 
     <activity android:name=".GetStarted"/>
+<!--    <activity android:name=".logIn" />-->
 </application>
 
 </manifest>
