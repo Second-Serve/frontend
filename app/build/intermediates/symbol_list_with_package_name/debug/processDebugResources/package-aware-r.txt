@@ -2989,6 +2989,9 @@ drawable abc_textfield_search_material
 drawable abc_vector_test
 drawable avd_hide_password
 drawable avd_show_password
+drawable back_arrow
+drawable baseline_lock_outline_24
+drawable baseline_restaurant_menu_24
 drawable border
 drawable btn_checkbox_checked_mtrl
 drawable btn_checkbox_checked_to_unchecked_mtrl_animation
@@ -3176,7 +3179,9 @@ id action_text
 id actions
 id activity_chooser_view_content
 id add
+id addToCartButton
 id addToCartButton1
+id addToCartButton2
 id address
 id addressLabel
 id alertTitle
@@ -3195,6 +3200,9 @@ id auto
 id autoComplete
 id autoCompleteToEnd
 id autoCompleteToStart
+id backArrow
+id back_arrow
+id bagsAvailable
 id barrier
 id baseline
 id beginOnFirstDraw
@@ -3293,6 +3301,7 @@ id endTime
 id endToStart
 id enterAlways
 id enterAlwaysCollapsed
+id enter_location_label
 id escape
 id exitUntilCollapsed
 id expand_activities_button
@@ -3302,6 +3311,7 @@ id fill
 id fill_horizontal
 id fill_vertical
 id filled
+id filterLabel
 id filterSpinner
 id fitCenter
 id fitEnd
@@ -3357,7 +3367,10 @@ id line3
 id linear
 id listMode
 id list_item
-id locationSearch
+id locationDetails
+id locationTitle
+id location_input
+id lockIcon
 id m3_side_sheet
 id main
 id marquee
@@ -3470,8 +3483,10 @@ id pathRelative
 id peekHeight
 id percent
 id pickupDay
+id pickupDetails
 id pickupHoursLabel
 id pickupOnly
+id pickupTitle
 id pin
 id position
 id postLayout
@@ -3483,11 +3498,17 @@ id ratio
 id rectangles
 id report_drawn
 id restaurantAvailability1
+id restaurantAvailability2
+id restaurantImage
 id restaurantName
 id restaurantName1
+id restaurantName2
 id restaurantNameLabel
 id restaurantPickupHours1
+id restaurantPickupHours2
+id restaurantPrice
 id restaurantPrice1
+id restaurantPrice2
 id reverseSawtooth
 id right
 id rightToLeft
@@ -3495,6 +3516,7 @@ id right_icon
 id right_side
 id rounded
 id row_index_key
+id save_button
 id save_non_transition_alpha
 id save_overlay_view
 id sawtooth
@@ -3505,8 +3527,7 @@ id scrollIndicatorDown
 id scrollIndicatorUp
 id scrollView
 id scrollable
-id searchButton
-id searchLayout
+id searchView
 id search_badge
 id search_bar
 id search_button
@@ -3752,7 +3773,6 @@ layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
 layout activity_main
-layout activity_signup_restaurant
 layout custom_dialog
 layout design_bottom_navigation_item
 layout design_bottom_sheet_dialog
@@ -3769,9 +3789,13 @@ layout design_navigation_menu
 layout design_navigation_menu_item
 layout design_text_input_end_icon
 layout design_text_input_start_icon
+layout fragment_get_started
 layout fragment_log_in
+layout fragment_restaurant_page
+layout fragment_restaurant_search
+layout fragment_restaurant_sign_up
+layout fragment_save_location
 layout fragment_sign_up_user
-layout get_started
 layout ime_base_split_test_activity
 layout ime_secondary_split_test_activity
 layout m3_alert_dialog
@@ -3831,7 +3855,6 @@ layout notification_template_custom_big
 layout notification_template_icon_group
 layout notification_template_part_chronometer
 layout notification_template_part_time
-layout restaurant_search
 layout select_dialog_item_material
 layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material
