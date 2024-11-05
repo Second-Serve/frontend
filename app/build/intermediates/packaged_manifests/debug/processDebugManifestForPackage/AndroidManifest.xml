@@ -37,7 +37,13 @@
             </intent-filter>
         </activity>
         <activity android:name="com.cs407.secondserve.GetStarted" />
-        <!-- <activity android:name=".logIn" /> -->
+        <activity android:name="com.cs407.secondserve.LoginActivity" />
+        <activity android:name="com.cs407.secondserve.SignUpUser" />
+        <activity android:name="com.cs407.secondserve.restaurantPage" />
+        <activity android:name="com.cs407.secondserve.restaurantSearch" />
+        <activity android:name="com.cs407.secondserve.restaurantSignUp" />
+        <activity android:name="com.cs407.secondserve.saveLocation" />
+
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="com.cs407.secondserve.androidx-startup"

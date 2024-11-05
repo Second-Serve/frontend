@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/aditisunil/Documents/Fall 2024/CS407/frontend1/app/src/main/AndroidManifest.xml:2:1-29:12
-INJECTED from /Users/aditisunil/Documents/Fall 2024/CS407/frontend1/app/src/main/AndroidManifest.xml:2:1-29:12
-INJECTED from /Users/aditisunil/Documents/Fall 2024/CS407/frontend1/app/src/main/AndroidManifest.xml:2:1-29:12
-INJECTED from /Users/aditisunil/Documents/Fall 2024/CS407/frontend1/app/src/main/AndroidManifest.xml:2:1-29:12
+ADDED from /Users/aditisunil/Documents/Fall 2024/CS407/frontend1/app/src/main/AndroidManifest.xml:2:1-34:12
+INJECTED from /Users/aditisunil/Documents/Fall 2024/CS407/frontend1/app/src/main/AndroidManifest.xml:2:1-34:12
+INJECTED from /Users/aditisunil/Documents/Fall 2024/CS407/frontend1/app/src/main/AndroidManifest.xml:2:1-34:12
+INJECTED from /Users/aditisunil/Documents/Fall 2024/CS407/frontend1/app/src/main/AndroidManifest.xml:2:1-34:12
 MERGED from [com.google.android.material:material:1.12.0] /Users/aditisunil/.gradle/caches/transforms-4/86c9a9e55dc8d45fef0ed473fafdfd97/transformed/material-1.12.0/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /Users/aditisunil/.gradle/caches/transforms-4/00a9d304153cff6bf102e5d15bd65c62/transformed/constraintlayout-2.1.4/AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.appcompat:appcompat-resources:1.7.0] /Users/aditisunil/.gradle/caches/transforms-4/b44a70d7e195d1f7227b1c5db7398e06/transformed/appcompat-resources-1.7.0/AndroidManifest.xml:2:1-7:12
@@ -56,8 +56,8 @@ MERGED from [androidx.print:print:1.0.0] /Users/aditisunil/.gradle/caches/transf
 	xmlns:android
 		ADDED from /Users/aditisunil/Documents/Fall 2024/CS407/frontend1/app/src/main/AndroidManifest.xml:2:11-69
 application
-ADDED from /Users/aditisunil/Documents/Fall 2024/CS407/frontend1/app/src/main/AndroidManifest.xml:5:1-27:15
-INJECTED from /Users/aditisunil/Documents/Fall 2024/CS407/frontend1/app/src/main/AndroidManifest.xml:5:1-27:15
+ADDED from /Users/aditisunil/Documents/Fall 2024/CS407/frontend1/app/src/main/AndroidManifest.xml:5:1-32:15
+INJECTED from /Users/aditisunil/Documents/Fall 2024/CS407/frontend1/app/src/main/AndroidManifest.xml:5:1-32:15
 MERGED from [com.google.android.material:material:1.12.0] /Users/aditisunil/.gradle/caches/transforms-4/86c9a9e55dc8d45fef0ed473fafdfd97/transformed/material-1.12.0/AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.12.0] /Users/aditisunil/.gradle/caches/transforms-4/86c9a9e55dc8d45fef0ed473fafdfd97/transformed/material-1.12.0/AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.1.4] /Users/aditisunil/.gradle/caches/transforms-4/00a9d304153cff6bf102e5d15bd65c62/transformed/constraintlayout-2.1.4/AndroidManifest.xml:9:5-20
@@ -116,6 +116,30 @@ activity#com.cs407.secondserve.GetStarted
 ADDED from /Users/aditisunil/Documents/Fall 2024/CS407/frontend1/app/src/main/AndroidManifest.xml:25:5-43
 	android:name
 		ADDED from /Users/aditisunil/Documents/Fall 2024/CS407/frontend1/app/src/main/AndroidManifest.xml:25:15-41
+activity#com.cs407.secondserve.LoginActivity
+ADDED from /Users/aditisunil/Documents/Fall 2024/CS407/frontend1/app/src/main/AndroidManifest.xml:26:5-47
+	android:name
+		ADDED from /Users/aditisunil/Documents/Fall 2024/CS407/frontend1/app/src/main/AndroidManifest.xml:26:15-44
+activity#com.cs407.secondserve.SignUpUser
+ADDED from /Users/aditisunil/Documents/Fall 2024/CS407/frontend1/app/src/main/AndroidManifest.xml:27:5-44
+	android:name
+		ADDED from /Users/aditisunil/Documents/Fall 2024/CS407/frontend1/app/src/main/AndroidManifest.xml:27:15-41
+activity#com.cs407.secondserve.restaurantPage
+ADDED from /Users/aditisunil/Documents/Fall 2024/CS407/frontend1/app/src/main/AndroidManifest.xml:28:5-48
+	android:name
+		ADDED from /Users/aditisunil/Documents/Fall 2024/CS407/frontend1/app/src/main/AndroidManifest.xml:28:15-45
+activity#com.cs407.secondserve.restaurantSearch
+ADDED from /Users/aditisunil/Documents/Fall 2024/CS407/frontend1/app/src/main/AndroidManifest.xml:29:5-50
+	android:name
+		ADDED from /Users/aditisunil/Documents/Fall 2024/CS407/frontend1/app/src/main/AndroidManifest.xml:29:15-47
+activity#com.cs407.secondserve.restaurantSignUp
+ADDED from /Users/aditisunil/Documents/Fall 2024/CS407/frontend1/app/src/main/AndroidManifest.xml:30:5-50
+	android:name
+		ADDED from /Users/aditisunil/Documents/Fall 2024/CS407/frontend1/app/src/main/AndroidManifest.xml:30:15-47
+activity#com.cs407.secondserve.saveLocation
+ADDED from /Users/aditisunil/Documents/Fall 2024/CS407/frontend1/app/src/main/AndroidManifest.xml:31:5-46
+	android:name
+		ADDED from /Users/aditisunil/Documents/Fall 2024/CS407/frontend1/app/src/main/AndroidManifest.xml:31:15-43
 uses-sdk
 INJECTED from /Users/aditisunil/Documents/Fall 2024/CS407/frontend1/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /Users/aditisunil/Documents/Fall 2024/CS407/frontend1/app/src/main/AndroidManifest.xml
