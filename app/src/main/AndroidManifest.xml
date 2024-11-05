@@ -23,7 +23,10 @@ xmlns:tools="http://schemas.android.com/tools">
     </activity>
 
     <activity android:name=".GetStarted"/>
-<!--    <activity android:name=".logIn" />-->
+    <activity android:name=".restaurantPage" />
+    <activity android:name=".restaurantSearch" />
+    <activity android:name=".restaurantSignUp" />
+    <activity android:name=".saveLocation" />
 </application>
 
 </manifest>
