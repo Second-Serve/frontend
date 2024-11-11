@@ -24,6 +24,7 @@ class SignUpUser : AppCompatActivity() {
 
         userApiService = UserApiService(this)
 
+
         val emailField: EditText = findViewById(R.id.email_input)
         val passwordField: EditText = findViewById(R.id.password_input)
         val confirmPasswordField: EditText = findViewById(R.id.confirm_password_input)
