@@ -1,0 +1,5 @@
+com.cs407.secondserve.test.app-core-1.6.1-0 /Users/aditisunil/.gradle/caches/transforms-4/f1de0c4edc1152409866ec97a8de439c/transformed/core-1.6.1/res
+com.cs407.secondserve.test.app-androidTest-1 /Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/build/generated/res/resValues/androidTest/debug
+com.cs407.secondserve.test.app-mergeDebugAndroidTestResources-2 /Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/merged.dir
+com.cs407.secondserve.test.app-mergeDebugAndroidTestResources-3 /Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/stripped.dir
+com.cs407.secondserve.test.app-debugAndroidTest-4 /Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/build/intermediates/merged_res/debugAndroidTest/mergeDebugAndroidTestResources
