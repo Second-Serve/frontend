@@ -9,148 +9,148 @@
 9        android:targetSdkVersion="34" />
 10
 11    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-11-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:4:5-79
-11-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:4:22-76
+11-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:4:5-79
+11-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:4:22-76
 12    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-12-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:5:5-81
-12-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:5:22-78
+12-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:5:5-81
+12-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:5:22-78
 13
 14    <permission
-14-->[androidx.core:core:1.13.1] /Users/aditisunil/.gradle/caches/transforms-4/aad39a1c0706ab6a5a30470c2306073d/transformed/core-1.13.1/AndroidManifest.xml:22:5-24:47
+14-->[androidx.core:core:1.13.1] /Users/diyasatanur/.gradle/caches/transforms-4/aad39a1c0706ab6a5a30470c2306073d/transformed/core-1.13.1/AndroidManifest.xml:22:5-24:47
 15        android:name="com.cs407.secondserve.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-15-->[androidx.core:core:1.13.1] /Users/aditisunil/.gradle/caches/transforms-4/aad39a1c0706ab6a5a30470c2306073d/transformed/core-1.13.1/AndroidManifest.xml:23:9-81
+15-->[androidx.core:core:1.13.1] /Users/diyasatanur/.gradle/caches/transforms-4/aad39a1c0706ab6a5a30470c2306073d/transformed/core-1.13.1/AndroidManifest.xml:23:9-81
 16        android:protectionLevel="signature" />
-16-->[androidx.core:core:1.13.1] /Users/aditisunil/.gradle/caches/transforms-4/aad39a1c0706ab6a5a30470c2306073d/transformed/core-1.13.1/AndroidManifest.xml:24:9-44
+16-->[androidx.core:core:1.13.1] /Users/diyasatanur/.gradle/caches/transforms-4/aad39a1c0706ab6a5a30470c2306073d/transformed/core-1.13.1/AndroidManifest.xml:24:9-44
 17
 18    <uses-permission android:name="com.cs407.secondserve.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
-18-->[androidx.core:core:1.13.1] /Users/aditisunil/.gradle/caches/transforms-4/aad39a1c0706ab6a5a30470c2306073d/transformed/core-1.13.1/AndroidManifest.xml:26:5-97
-18-->[androidx.core:core:1.13.1] /Users/aditisunil/.gradle/caches/transforms-4/aad39a1c0706ab6a5a30470c2306073d/transformed/core-1.13.1/AndroidManifest.xml:26:22-94
+18-->[androidx.core:core:1.13.1] /Users/diyasatanur/.gradle/caches/transforms-4/aad39a1c0706ab6a5a30470c2306073d/transformed/core-1.13.1/AndroidManifest.xml:26:5-97
+18-->[androidx.core:core:1.13.1] /Users/diyasatanur/.gradle/caches/transforms-4/aad39a1c0706ab6a5a30470c2306073d/transformed/core-1.13.1/AndroidManifest.xml:26:22-94
 19
 20    <application
-20-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:8:5-35:15
+20-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:8:5-35:15
 21        android:allowBackup="true"
-21-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:9:5-31
+21-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:9:5-31
 22        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-22-->[androidx.core:core:1.13.1] /Users/aditisunil/.gradle/caches/transforms-4/aad39a1c0706ab6a5a30470c2306073d/transformed/core-1.13.1/AndroidManifest.xml:28:18-86
+22-->[androidx.core:core:1.13.1] /Users/diyasatanur/.gradle/caches/transforms-4/aad39a1c0706ab6a5a30470c2306073d/transformed/core-1.13.1/AndroidManifest.xml:28:18-86
 23        android:dataExtractionRules="@xml/data_extraction_rules"
-23-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:10:5-61
+23-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:10:5-61
 24        android:debuggable="true"
 25        android:extractNativeLibs="false"
 26        android:fullBackupContent="@xml/backup_rules"
-26-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:11:5-50
+26-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:11:5-50
 27        android:icon="@mipmap/ic_launcher"
-27-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:12:5-39
+27-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:12:5-39
 28        android:label="@string/app_name"
-28-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:13:5-37
+28-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:13:5-37
 29        android:roundIcon="@mipmap/ic_launcher_round"
-29-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:14:5-50
+29-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:14:5-50
 30        android:supportsRtl="true"
-30-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:15:5-31
+30-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:15:5-31
 31        android:testOnly="true"
 32        android:theme="@style/Theme.Secondserve" >
-32-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:16:5-45
+32-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:16:5-45
 33        <activity
-33-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:18:5-26:16
+33-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:18:5-26:16
 34            android:name="com.cs407.secondserve.MainActivity"
-34-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:19:9-37
+34-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:19:9-37
 35            android:exported="true" >
-35-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:20:9-32
+35-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:20:9-32
 36            <intent-filter>
-36-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:21:9-25:25
+36-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:21:9-25:25
 37                <action android:name="android.intent.action.MAIN" />
-37-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:22:13-65
-37-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:22:21-62
+37-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:22:13-65
+37-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:22:21-62
 38
 39                <category android:name="android.intent.category.LAUNCHER" />
-39-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:24:13-73
-39-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:24:23-70
+39-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:24:13-73
+39-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:24:23-70
 40            </intent-filter>
 41        </activity>
 42        <activity android:name="com.cs407.secondserve.GetStarted" />
-42-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:28:5-43
-42-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:28:15-41
+42-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:28:5-43
+42-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:28:15-41
 43        <activity android:name="com.cs407.secondserve.LoginActivity" />
-43-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:29:5-47
-43-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:29:15-44
+43-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:29:5-47
+43-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:29:15-44
 44        <activity android:name="com.cs407.secondserve.SignUpUser" />
-44-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:30:5-44
-44-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:30:15-41
+44-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:30:5-44
+44-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:30:15-41
 45        <activity android:name="com.cs407.secondserve.restaurantPage" />
-45-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:31:5-48
-45-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:31:15-45
+45-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:31:5-48
+45-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:31:15-45
 46        <activity android:name="com.cs407.secondserve.restaurantSearch" />
-46-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:32:5-50
-46-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:32:15-47
+46-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:32:5-50
+46-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:32:15-47
 47        <activity android:name="com.cs407.secondserve.restaurantSignUp" />
-47-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:33:5-50
-47-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:33:15-47
+47-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:33:5-50
+47-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:33:15-47
 48        <activity android:name="com.cs407.secondserve.saveLocation" />
-48-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:34:5-46
-48-->/Users/aditisunil/Documents/Fall 2024/CS407/frontend/app/src/main/AndroidManifest.xml:34:15-43
+48-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:34:5-46
+48-->/Users/diyasatanur/Desktop/cs407/frontend/app/src/main/AndroidManifest.xml:34:15-43
 49
 50        <provider
-50-->[androidx.emoji2:emoji2:1.3.0] /Users/aditisunil/.gradle/caches/transforms-4/7c846f2803511e77fcc638b27eb66be3/transformed/emoji2-1.3.0/AndroidManifest.xml:24:9-32:20
+50-->[androidx.emoji2:emoji2:1.3.0] /Users/diyasatanur/.gradle/caches/transforms-4/7c846f2803511e77fcc638b27eb66be3/transformed/emoji2-1.3.0/AndroidManifest.xml:24:9-32:20
 51            android:name="androidx.startup.InitializationProvider"
-51-->[androidx.emoji2:emoji2:1.3.0] /Users/aditisunil/.gradle/caches/transforms-4/7c846f2803511e77fcc638b27eb66be3/transformed/emoji2-1.3.0/AndroidManifest.xml:25:13-67
+51-->[androidx.emoji2:emoji2:1.3.0] /Users/diyasatanur/.gradle/caches/transforms-4/7c846f2803511e77fcc638b27eb66be3/transformed/emoji2-1.3.0/AndroidManifest.xml:25:13-67
 52            android:authorities="com.cs407.secondserve.androidx-startup"
-52-->[androidx.emoji2:emoji2:1.3.0] /Users/aditisunil/.gradle/caches/transforms-4/7c846f2803511e77fcc638b27eb66be3/transformed/emoji2-1.3.0/AndroidManifest.xml:26:13-68
+52-->[androidx.emoji2:emoji2:1.3.0] /Users/diyasatanur/.gradle/caches/transforms-4/7c846f2803511e77fcc638b27eb66be3/transformed/emoji2-1.3.0/AndroidManifest.xml:26:13-68
 53            android:exported="false" >
-53-->[androidx.emoji2:emoji2:1.3.0] /Users/aditisunil/.gradle/caches/transforms-4/7c846f2803511e77fcc638b27eb66be3/transformed/emoji2-1.3.0/AndroidManifest.xml:27:13-37
+53-->[androidx.emoji2:emoji2:1.3.0] /Users/diyasatanur/.gradle/caches/transforms-4/7c846f2803511e77fcc638b27eb66be3/transformed/emoji2-1.3.0/AndroidManifest.xml:27:13-37
 54            <meta-data
-54-->[androidx.emoji2:emoji2:1.3.0] /Users/aditisunil/.gradle/caches/transforms-4/7c846f2803511e77fcc638b27eb66be3/transformed/emoji2-1.3.0/AndroidManifest.xml:29:13-31:52
+54-->[androidx.emoji2:emoji2:1.3.0] /Users/diyasatanur/.gradle/caches/transforms-4/7c846f2803511e77fcc638b27eb66be3/transformed/emoji2-1.3.0/AndroidManifest.xml:29:13-31:52
 55                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-55-->[androidx.emoji2:emoji2:1.3.0] /Users/aditisunil/.gradle/caches/transforms-4/7c846f2803511e77fcc638b27eb66be3/transformed/emoji2-1.3.0/AndroidManifest.xml:30:17-75
+55-->[androidx.emoji2:emoji2:1.3.0] /Users/diyasatanur/.gradle/caches/transforms-4/7c846f2803511e77fcc638b27eb66be3/transformed/emoji2-1.3.0/AndroidManifest.xml:30:17-75
 56                android:value="androidx.startup" />
-56-->[androidx.emoji2:emoji2:1.3.0] /Users/aditisunil/.gradle/caches/transforms-4/7c846f2803511e77fcc638b27eb66be3/transformed/emoji2-1.3.0/AndroidManifest.xml:31:17-49
+56-->[androidx.emoji2:emoji2:1.3.0] /Users/diyasatanur/.gradle/caches/transforms-4/7c846f2803511e77fcc638b27eb66be3/transformed/emoji2-1.3.0/AndroidManifest.xml:31:17-49
 57            <meta-data
-57-->[androidx.lifecycle:lifecycle-process:2.6.2] /Users/aditisunil/.gradle/caches/transforms-4/957be3073d49f64837c34a37214dbef1/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:29:13-31:52
+57-->[androidx.lifecycle:lifecycle-process:2.6.2] /Users/diyasatanur/.gradle/caches/transforms-4/957be3073d49f64837c34a37214dbef1/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:29:13-31:52
 58                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-58-->[androidx.lifecycle:lifecycle-process:2.6.2] /Users/aditisunil/.gradle/caches/transforms-4/957be3073d49f64837c34a37214dbef1/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:30:17-78
+58-->[androidx.lifecycle:lifecycle-process:2.6.2] /Users/diyasatanur/.gradle/caches/transforms-4/957be3073d49f64837c34a37214dbef1/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:30:17-78
 59                android:value="androidx.startup" />
-59-->[androidx.lifecycle:lifecycle-process:2.6.2] /Users/aditisunil/.gradle/caches/transforms-4/957be3073d49f64837c34a37214dbef1/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:31:17-49
+59-->[androidx.lifecycle:lifecycle-process:2.6.2] /Users/diyasatanur/.gradle/caches/transforms-4/957be3073d49f64837c34a37214dbef1/transformed/lifecycle-process-2.6.2/AndroidManifest.xml:31:17-49
 60            <meta-data
-60-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/aditisunil/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:29:13-31:52
+60-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/diyasatanur/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:29:13-31:52
 61                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-61-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/aditisunil/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:30:17-85
+61-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/diyasatanur/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:30:17-85
 62                android:value="androidx.startup" />
-62-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/aditisunil/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:31:17-49
+62-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/diyasatanur/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:31:17-49
 63        </provider>
 64
 65        <receiver
-65-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/aditisunil/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:34:9-52:20
+65-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/diyasatanur/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:34:9-52:20
 66            android:name="androidx.profileinstaller.ProfileInstallReceiver"
-66-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/aditisunil/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:35:13-76
+66-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/diyasatanur/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:35:13-76
 67            android:directBootAware="false"
-67-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/aditisunil/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:36:13-44
+67-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/diyasatanur/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:36:13-44
 68            android:enabled="true"
-68-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/aditisunil/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:37:13-35
+68-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/diyasatanur/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:37:13-35
 69            android:exported="true"
-69-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/aditisunil/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:38:13-36
+69-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/diyasatanur/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:38:13-36
 70            android:permission="android.permission.DUMP" >
-70-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/aditisunil/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:39:13-57
+70-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/diyasatanur/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:39:13-57
 71            <intent-filter>
-71-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/aditisunil/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:40:13-42:29
+71-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/diyasatanur/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:40:13-42:29
 72                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
-72-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/aditisunil/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:41:17-91
-72-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/aditisunil/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:41:25-88
+72-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/diyasatanur/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:41:17-91
+72-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/diyasatanur/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:41:25-88
 73            </intent-filter>
 74            <intent-filter>
-74-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/aditisunil/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:43:13-45:29
+74-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/diyasatanur/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:43:13-45:29
 75                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
-75-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/aditisunil/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:44:17-85
-75-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/aditisunil/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:44:25-82
+75-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/diyasatanur/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:44:17-85
+75-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/diyasatanur/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:44:25-82
 76            </intent-filter>
 77            <intent-filter>
-77-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/aditisunil/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:46:13-48:29
+77-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/diyasatanur/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:46:13-48:29
 78                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
-78-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/aditisunil/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:47:17-88
-78-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/aditisunil/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:47:25-85
+78-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/diyasatanur/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:47:17-88
+78-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/diyasatanur/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:47:25-85
 79            </intent-filter>
 80            <intent-filter>
-80-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/aditisunil/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:49:13-51:29
+80-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/diyasatanur/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:49:13-51:29
 81                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
-81-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/aditisunil/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:50:17-95
-81-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/aditisunil/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:50:25-92
+81-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/diyasatanur/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:50:17-95
+81-->[androidx.profileinstaller:profileinstaller:1.3.1] /Users/diyasatanur/.gradle/caches/transforms-4/5cef0f185cf79aef1033a771068b129e/transformed/profileinstaller-1.3.1/AndroidManifest.xml:50:25-92
 82            </intent-filter>
 83        </receiver>
 84    </application>
