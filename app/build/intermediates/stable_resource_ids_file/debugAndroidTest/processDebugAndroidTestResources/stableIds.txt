@@ -1,2 +1,0 @@
-com.cs407.secondserve.test:style/WhiteBackgroundTheme = 0x7f010001
-com.cs407.secondserve.test:style/WhiteBackgroundDialogTheme = 0x7f010000

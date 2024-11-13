@@ -1,3 +1,0 @@
-com.cs407.secondserve.test
-style WhiteBackgroundDialogTheme
-style WhiteBackgroundTheme
