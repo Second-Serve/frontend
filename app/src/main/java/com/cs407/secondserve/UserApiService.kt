@@ -3,21 +3,30 @@ package com.cs407.secondserve
 import android.content.Context
 import com.android.volley.Request
 import com.android.volley.RequestQueue
-import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.cs407.secondserve.model.UserRegistrationInfo
 import org.json.JSONObject
 
-class UserApiService(context: Context) {
-    private val BASE_URL = "http://<your-backend-ip>:80"
-    private val requestQueue: RequestQueue = Volley.newRequestQueue(context)
+private const val BASE_URL = "http://10.0.2.2:80"
 
-    fun fetchUsers(bearerToken: String?, onSuccess: (JSONObject) -> Unit, onError: (String) -> Unit) {
-        val url = "$BASE_URL/users"
+class UserAPI(context: Context) {
+    private var requestQueue: RequestQueue = Volley.newRequestQueue(context)
+
+    val bearerToken: String? = null
+
+    init {
+        requestQueue.start()
+    }
+
+    private fun makeRequest(endpoint: String, method: Int, onSuccess: (JSONObject) -> Unit, onError: (String) -> Unit) {
+        val url = "$BASE_URL/$endpoint"
 
         val jsonObjectRequest = object : JsonObjectRequest(
-            Request.Method.GET, url, null,
-            { response -> onSuccess(response) },
+            method, url, null,
+            { response ->
+                onSuccess(response)
+            },
             { error ->
                 val errorMessage = when {
                     error.networkResponse != null -> "Network error: ${error.networkResponse.statusCode}"
@@ -37,6 +46,24 @@ class UserApiService(context: Context) {
         }
 
         requestQueue.add(jsonObjectRequest)
+    }
+
+    fun registerAccount(registrationInfo: UserRegistrationInfo) {
+        makeRequest("users/", Request.Method.POST,
+            { response: JSONObject ->
+                println(response)
+            },
+            { errorMessage -> throw Exception(errorMessage) }
+        )
+    }
+
+    fun fetchUsers() {
+        makeRequest("users/", Request.Method.GET,
+            { response: JSONObject ->
+                println(response)
+            },
+            { errorMessage -> throw Exception(errorMessage) }
+        )
     }
 
     fun createAccount(userInfo: JSONObject, onSuccess: (JSONObject) -> Unit, onError: (String) -> Unit) {

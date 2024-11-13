@@ -5,12 +5,9 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.RequestQueue
-
-private const val BASE_URL = "http://<your-backend-ip>:80"
+import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
-
-    private lateinit var userApiService: UserApiService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,24 +26,16 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        fetchUsersExample()
-    }
-    private fun fetchUsersExample() {
-        userApiService.fetchUsers(
-            bearerToken = "your-bearer-token",
-            onSuccess = { response ->
-                // Handle successful response
-                println("Fetched users: $response")
-            },
-            onError = { error ->
-                // Handle error
-                println("Error fetching users: $error")
-            }
-        )
+//        val api = UserAPI(this)
+//        val registrationInfo = UserRegistrationInfo(
+//
+//        )
+//        api.registerAccount(
+//            registrationInfo
+//        )
     }
 
     override fun onStop() {
         super.onStop()
-        userApiService.cancelAllRequests()
     }
 }

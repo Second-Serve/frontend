@@ -16,14 +16,9 @@ data class UserRegistrationInfo(
 
 class SignUpUser : AppCompatActivity() {
 
-    private lateinit var userApiService: UserApiService
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_sign_up_user)
-
-        userApiService = UserApiService(this)
-
 
         val emailField: EditText = findViewById(R.id.email_input)
         val passwordField: EditText = findViewById(R.id.password_input)
@@ -63,21 +58,21 @@ class SignUpUser : AppCompatActivity() {
                 put("accountType", userInfo.accountType)
             }
 
-            userApiService.createAccount(
-                userInfo = userJson,
-                onSuccess = {
-                    Toast.makeText(this, "Account created successfully!", Toast.LENGTH_SHORT).show()
-                    finish()
-                },
-                onError = { error ->
-                    Toast.makeText(this, "Error: $error", Toast.LENGTH_SHORT).show()
-                }
-            )
+//            userApiService.createAccount(
+//                userInfo = userJson,
+//                onSuccess = {
+//                    Toast.makeText(this, "Account created successfully!", Toast.LENGTH_SHORT).show()
+//                    finish()
+//                },
+//                onError = { error ->
+//                    Toast.makeText(this, "Error: $error", Toast.LENGTH_SHORT).show()
+//                }
+//            )
         }
     }
 
     override fun onStop() {
         super.onStop()
-        userApiService.cancelAllRequests()
+//        userApiService.cancelAllRequests()
     }
 }
