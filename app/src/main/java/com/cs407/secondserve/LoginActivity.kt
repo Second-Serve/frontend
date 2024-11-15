@@ -17,9 +17,9 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_log_in)
 
-        val customerButton: Button = findViewById(R.id.button)
+        val logInButton: Button = findViewById(R.id.log_in_button)
 
-        customerButton.setOnClickListener {
+        logInButton.setOnClickListener {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(
