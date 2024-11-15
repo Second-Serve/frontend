@@ -4,8 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import com.android.volley.RequestQueue
-import org.json.JSONObject
+import com.cs407.secondserve.model.AccountType
+import com.cs407.secondserve.model.UserInfo
+import com.cs407.secondserve.model.UserRegistrationInfo
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,13 +27,20 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-//        val api = UserAPI(this)
-//        val registrationInfo = UserRegistrationInfo(
-//
-//        )
-//        api.registerAccount(
-//            registrationInfo
-//        )
+        val api = UserAPI(this)
+        val registrationInfo = UserRegistrationInfo(
+            UserInfo(
+                accountType = AccountType.CUSTOMER,
+                email = "ozinn@wisc.edu",
+                firstName = "Owen",
+                lastName = "Zinn"
+            ),
+            password = "password123"
+        )
+
+        api.registerAccount(registrationInfo) { user ->
+            println(user)
+        }
     }
 
     override fun onStop() {

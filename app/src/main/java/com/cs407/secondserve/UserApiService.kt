@@ -3,8 +3,10 @@ package com.cs407.secondserve
 import android.content.Context
 import com.android.volley.Request
 import com.android.volley.RequestQueue
+import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.cs407.secondserve.model.User
 import com.cs407.secondserve.model.UserRegistrationInfo
 import org.json.JSONObject
 
@@ -19,71 +21,72 @@ class UserAPI(context: Context) {
         requestQueue.start()
     }
 
-    private fun makeRequest(endpoint: String, method: Int, onSuccess: (JSONObject) -> Unit, onError: (String) -> Unit) {
+    private fun makeRequest(
+        endpoint: String,
+        method: Int,
+        onSuccess: (JSONObject) -> Unit,
+        onError: ((VolleyError, String) -> Unit)? = null,
+        body: JSONObject? = null
+    ) {
         val url = "$BASE_URL/$endpoint"
 
         val jsonObjectRequest = object : JsonObjectRequest(
-            method, url, null,
+            method, url, body,
             { response ->
-                onSuccess(response)
+                val responseJSON = getJSONFromResponse(response)
+                onSuccess(responseJSON)
             },
             { error ->
-                val errorMessage = when {
-                    error.networkResponse != null -> "Network error: ${error.networkResponse.statusCode}"
-                    error.cause != null -> "Error caused by: ${error.cause?.localizedMessage ?: "Unknown cause"}"
-                    else -> "Unknown error"
+                if (onError != null) {
+                    val errorMessage = when {
+                        error.networkResponse != null -> "Network error: ${error.networkResponse.statusCode}"
+                        error.cause != null -> "Error caused by: ${error.cause?.localizedMessage ?: "Unknown cause"}"
+                        else -> "Unknown error"
+                    }
+                    onError(error, errorMessage)
                 }
-                onError(errorMessage)
             }
         ) {
             override fun getHeaders(): Map<String, String> {
-                val headers = HashMap<String, String>()
-                bearerToken?.let {
-                    headers["Authorization"] = "Bearer $bearerToken"
-                }
-                return headers
+                return mapOf("Authorization" to "Bearer $bearerToken")
             }
         }
 
         requestQueue.add(jsonObjectRequest)
     }
 
-    fun registerAccount(registrationInfo: UserRegistrationInfo) {
-        makeRequest("users/", Request.Method.POST,
-            { response: JSONObject ->
-                println(response)
+    private fun getJSONFromResponse(json: JSONObject) : JSONObject {
+        return json.getJSONObject("result")
+    }
+
+    fun registerAccount(registrationInfo: UserRegistrationInfo, onSuccess: (User) -> Unit) {
+        val body = registrationInfo.toJSONObject()
+        makeRequest(
+            endpoint = "users/",
+            method = Request.Method.POST,
+            onSuccess = { response ->
+                val user = User.fromJSONObject(response)
+                onSuccess(user)
             },
-            { errorMessage -> throw Exception(errorMessage) }
+            body = body
         )
     }
 
-    fun fetchUsers() {
-        makeRequest("users/", Request.Method.GET,
-            { response: JSONObject ->
-                println(response)
-            },
-            { errorMessage -> throw Exception(errorMessage) }
-        )
-    }
-
-    fun createAccount(userInfo: JSONObject, onSuccess: (JSONObject) -> Unit, onError: (String) -> Unit) {
-        val url = "$BASE_URL/users"
-
-        val jsonObjectRequest = JsonObjectRequest(
-            Request.Method.POST, url, userInfo,
-            { response -> onSuccess(response) },
-            { error ->
-                val errorMessage = when {
-                    error.networkResponse != null -> "Network error: ${error.networkResponse.statusCode}"
-                    error.cause != null -> "Error caused by: ${error.cause?.localizedMessage ?: "Unknown cause"}"
-                    else -> "Unknown error"
+    fun fetchUsers(onSuccess: (List<User>) -> Unit) {
+        makeRequest(
+            endpoint = "users/",
+            method = Request.Method.GET,
+            onSuccess = { response ->
+                val usersJSON = response.getJSONArray("users")
+                val users = buildList {
+                    for (i in 0..<usersJSON.length()) {
+                        val userJSON = usersJSON.getJSONObject(i)
+                        add(User.fromJSONObject(userJSON))
+                    }
                 }
-                onError(errorMessage)
+                onSuccess(users)
             }
         )
-
-
-        requestQueue.add(jsonObjectRequest)
     }
 
     fun cancelAllRequests() {

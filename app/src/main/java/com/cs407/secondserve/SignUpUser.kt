@@ -6,13 +6,6 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import org.json.JSONObject
-
-data class UserRegistrationInfo(
-    val email: String,
-    val password: String,
-    val accountType: String
-)
 
 class SignUpUser : AppCompatActivity() {
 
@@ -46,17 +39,17 @@ class SignUpUser : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val userInfo = UserRegistrationInfo(
-                email = email,
-                password = password,
-                accountType = "CUSTOMER"
-            )
-
-            val userJson = JSONObject().apply {
-                put("email", userInfo.email)
-                put("password", userInfo.password)
-                put("accountType", userInfo.accountType)
-            }
+//            val userInfo = UserRegistrationInfo(
+//                email = email,
+//                password = password,
+//                accountType = "CUSTOMER"
+//            )
+//
+//            val userJson = JSONObject().apply {
+//                put("email", userInfo.email)
+//                put("password", userInfo.password)
+//                put("accountType", userInfo.accountType)
+//            }
 
 //            userApiService.createAccount(
 //                userInfo = userJson,
