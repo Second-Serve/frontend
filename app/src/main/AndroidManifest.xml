@@ -29,10 +29,10 @@ xmlns:tools="http://schemas.android.com/tools">
     <activity android:name=".GetStarted"/>
     <activity android:name=".LoginActivity" />
     <activity android:name=".SignUpUser" />
-    <activity android:name=".restaurantPage" />
-    <activity android:name=".restaurantSearch" />
-    <activity android:name=".restaurantSignUp" />
-    <activity android:name=".saveLocation" />
+    <activity android:name=".RestaurantPage" />
+    <activity android:name=".RestaurantSearch" />
+    <activity android:name=".RestaurantSignUp" />
+    <activity android:name=".SaveLocation" />
 </application>
 
 </manifest>
