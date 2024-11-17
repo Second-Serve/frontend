@@ -22,4 +22,29 @@ class WeeklyPickupHours(
         json.put("saturday", saturday.toJSONObject())
         return json
     }
+
+    companion object {
+        // Useful for placeholders
+        val ALWAYS = WeeklyPickupHours(
+            sunday = DailyPickupHours("00:00", "24:00"),
+            monday = DailyPickupHours("00:00", "24:00"),
+            tuesday = DailyPickupHours("00:00", "24:00"),
+            wednesday = DailyPickupHours("00:00", "24:00"),
+            thursday = DailyPickupHours("00:00", "24:00"),
+            friday = DailyPickupHours("00:00", "24:00"),
+            saturday = DailyPickupHours("00:00", "24:00")
+        )
+
+        fun fromJSONObject(json: JSONObject) : WeeklyPickupHours {
+            return WeeklyPickupHours(
+                sunday = DailyPickupHours.fromJSONObject(json.getJSONObject("sunday")),
+                monday = DailyPickupHours.fromJSONObject(json.getJSONObject("monday")),
+                tuesday = DailyPickupHours.fromJSONObject(json.getJSONObject("tuesday")),
+                wednesday = DailyPickupHours.fromJSONObject(json.getJSONObject("wednesday")),
+                thursday = DailyPickupHours.fromJSONObject(json.getJSONObject("thursday")),
+                friday = DailyPickupHours.fromJSONObject(json.getJSONObject("friday")),
+                saturday = DailyPickupHours.fromJSONObject(json.getJSONObject("saturday"))
+            )
+        }
+    }
 }

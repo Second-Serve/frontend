@@ -5,8 +5,9 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.cs407.secondserve.model.AccountType
-import com.cs407.secondserve.model.UserInfo
+import com.cs407.secondserve.model.RestaurantRegistrationInfo
 import com.cs407.secondserve.model.UserRegistrationInfo
+import com.cs407.secondserve.model.WeeklyPickupHours
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,18 +30,29 @@ class MainActivity : AppCompatActivity() {
 
         val api = UserAPI(this)
         val registrationInfo = UserRegistrationInfo(
-            UserInfo(
-                accountType = AccountType.CUSTOMER,
-                email = "ozinn@wisc.edu",
-                firstName = "Owen",
-                lastName = "Zinn"
-            ),
-            password = "password123"
+            accountType = AccountType.BUSINESS,
+            email = "ozinn@wisc.edu",
+            password = "password123",
+            firstName = "Owen",
+            lastName = "Zinn",
+            restaurant = RestaurantRegistrationInfo(
+                name = "Owen's Restaurant",
+                address = "1234 Fake St",
+                pickupHours = WeeklyPickupHours.ALWAYS
+            )
         )
 
-        api.registerAccount(registrationInfo) { user ->
-            println(user)
-        }
+        println(registrationInfo.toJSONObject())
+
+        api.registerAccount(
+            registrationInfo,
+            onSuccess = { user ->
+                println(user)
+            },
+            onError = { error, message ->
+                println(message)
+            }
+        )
     }
 
     override fun onStop() {

@@ -59,7 +59,11 @@ class UserAPI(context: Context) {
         return json.getJSONObject("result")
     }
 
-    fun registerAccount(registrationInfo: UserRegistrationInfo, onSuccess: (User) -> Unit) {
+    fun registerAccount(
+        registrationInfo: UserRegistrationInfo,
+        onSuccess: (User) -> Unit,
+        onError: ((VolleyError, String) -> Unit)?
+    ) {
         val body = registrationInfo.toJSONObject()
         makeRequest(
             endpoint = "users/",
@@ -68,11 +72,15 @@ class UserAPI(context: Context) {
                 val user = User.fromJSONObject(response)
                 onSuccess(user)
             },
+            onError = onError,
             body = body
         )
     }
 
-    fun fetchUsers(onSuccess: (List<User>) -> Unit) {
+    fun fetchUsers(
+        onSuccess: (List<User>) -> Unit,
+        onError: ((VolleyError, String) -> Unit)?
+    ) {
         makeRequest(
             endpoint = "users/",
             method = Request.Method.GET,
@@ -85,7 +93,8 @@ class UserAPI(context: Context) {
                     }
                 }
                 onSuccess(users)
-            }
+            },
+            onError = onError
         )
     }
 
