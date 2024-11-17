@@ -19,14 +19,14 @@
         android:layout_marginBottom="24dp" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginBottom="24dp">
 
         <EditText
             android:id="@+id/first_name_input"
-            android:layout_width="0dp"
+            android:layout_width="60dp"
             android:layout_height="35dp"
             android:layout_weight="1"
             android:background="@drawable/border"
@@ -38,7 +38,7 @@
 
         <EditText
             android:id="@+id/last_name_input"
-            android:layout_width="0dp"
+            android:layout_width="60dp"
             android:layout_height="35dp"
             android:layout_weight="1"
             android:background="@drawable/border"
@@ -85,7 +85,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Confirm Password:"
-        android:textColor="#A00000"
+        android:textColor="#A52A2A"
         android:textSize="18sp"
         android:layout_marginBottom="8dp"/>
 

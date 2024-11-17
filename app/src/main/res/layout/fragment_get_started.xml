@@ -10,7 +10,7 @@
     <Button
         android:id="@+id/customer_button"
         android:layout_width="235dp"
-        android:layout_height="0dp"
+        android:layout_height="70dp"
         android:layout_marginBottom="17dp"
         android:backgroundTint="#A52A2A"
         android:text="Customer"
@@ -26,7 +26,7 @@
     <Button
         android:id="@+id/business_button"
         android:layout_width="234dp"
-        android:layout_height="0dp"
+        android:layout_height="70dp"
         android:layout_marginStart="88dp"
         android:layout_marginBottom="253dp"
         android:backgroundTint="#A52A2A"

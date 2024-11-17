@@ -11,6 +11,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
+        android:background="#FFFFFF"
         android:padding="16dp">
 
         <TextView
@@ -38,7 +39,7 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:background="@drawable/rounded_edit_text"
+                android:background="@drawable/rounded_border"
                 android:layout_marginBottom="24dp"
                 android:layout_gravity="center_horizontal"
                 android:padding="12dp"
@@ -63,7 +64,7 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:background="@drawable/rounded_edit_text"
+                android:background="@drawable/rounded_border"
                 android:layout_marginBottom="32dp"
                 android:padding="12dp"
                 android:textColor="#FFFFFF"
