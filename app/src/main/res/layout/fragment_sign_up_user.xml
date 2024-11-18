@@ -104,6 +104,16 @@
         android:layout_marginBottom="24dp"
         android:text="agree to terms" />
 
+    <TextView
+        android:id="@+id/scan_wiscard_link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Scan Wiscard"
+        android:textColor="#0645AD"
+        android:textSize="16sp"
+        android:layout_marginTop="16dp"
+        android:clickable="true" />
+
     <Button
         android:id="@+id/sign_up_button"
         android:layout_width="wrap_content"
