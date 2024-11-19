@@ -43,15 +43,19 @@ class MainActivity : AppCompatActivity() {
             val password = passwordInput.text.toString()
             val confirmPassword = confirmPasswordInput.text.toString()
 
-            if (password == confirmPassword) {
+            if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() ||
+                password.isEmpty() || confirmPassword.isEmpty()
+            ) {
+                Toast.makeText(this, "Please fill all fields!", Toast.LENGTH_SHORT).show()
+            } else if (password != confirmPassword) {
+                Toast.makeText(this, "Passwords do not match!", Toast.LENGTH_SHORT).show()
+            } else {
                 Toast.makeText(this, "User Signed Up!", Toast.LENGTH_SHORT).show()
                 val fragment = RestaurantSearch()
                 supportFragmentManager.beginTransaction()
                     .replace(R.id.RestaurantSearchScreen, fragment)
                     .addToBackStack(null)
                     .commit()
-            } else {
-                Toast.makeText(this, "Passwords do not match!", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -59,7 +63,6 @@ class MainActivity : AppCompatActivity() {
     private fun loadRestaurantSignUpLayout() {
         // Load Restaurant Sign Up layout
         setContentView(R.layout.fragment_restaurant_sign_up) // Replace with the ID of your restaurant sign-up XML file
-
         val continueButton: Button = findViewById(R.id.continueButton)
         continueButton.setOnClickListener {
             val firstNameInput: EditText = findViewById(R.id.firstNameInput)
@@ -69,17 +72,20 @@ class MainActivity : AppCompatActivity() {
             val startTime: EditText = findViewById(R.id.startTime)
             val endTime: EditText = findViewById(R.id.endTime)
 
-            val firstName = firstNameInput.text.toString()
-            val lastName = lastNameInput.text.toString()
-            val restaurant = restaurantName.text.toString()
-            val addressText = address.text.toString()
-            val start = startTime.text.toString()
-            val end = endTime.text.toString()
+            val firstName = firstNameInput.text.toString().trim()
+            val lastName = lastNameInput.text.toString().trim()
+            val restaurant = restaurantName.text.toString().trim()
+            val addressText = address.text.toString().trim()
+            val start = startTime.text.toString().trim()
+            val end = endTime.text.toString().trim()
 
-            if (restaurant.isNotEmpty() && addressText.isNotEmpty() && start.isNotEmpty() && end.isNotEmpty()) {
-                Toast.makeText(this, "Restaurant Signed Up!", Toast.LENGTH_SHORT).show()
-            } else {
+            // Check if all fields are filled
+            if (firstName.isEmpty() || lastName.isEmpty() || restaurant.isEmpty() ||
+                addressText.isEmpty() || start.isEmpty() || end.isEmpty()) {
                 Toast.makeText(this, "Please fill all fields!", Toast.LENGTH_SHORT).show()
+            } else {
+                // Proceed with signup
+                Toast.makeText(this, "Restaurant Signed Up!", Toast.LENGTH_SHORT).show()
             }
         }
     }
