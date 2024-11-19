@@ -76,19 +76,24 @@ class SignUpUser : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            if (scannedBarcode.isNullOrEmpty() || !isValidBarcode(scannedBarcode!!)) {
-                Toast.makeText(this, "Please scan your wiscard", Toast.LENGTH_SHORT).show()
+//            if (scannedBarcode.isNullOrEmpty() || !isValidBarcode(scannedBarcode!!)) {
+//                Toast.makeText(this, "Please scan your wiscard", Toast.LENGTH_SHORT).show()
+//                return@setOnClickListener
+//            }
+
+            // Making Wiscard scanning optional for testing
+            if (scannedBarcode != null && !isValidBarcode(scannedBarcode!!)) {
+                Toast.makeText(this, "Invalid Wiscard. Please scan again.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-
-            // Proceed with sign-up if all validations pass
 
             Toast.makeText(this, "Sign up successful!", Toast.LENGTH_SHORT).show()
 
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
-
+            finish()
         }
+
     }
 
     private fun openCamera() {

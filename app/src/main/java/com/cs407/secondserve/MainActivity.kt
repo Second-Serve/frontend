@@ -26,8 +26,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadUserSignUpLayout() {
-        // Load User Sign Up layout
-        setContentView(R.layout.fragment_sign_up_user) // Replace with the ID of your user sign-up XML file
+        val intent = Intent(this, SignUpUser::class.java)
+        startActivity(intent)
+//        finish()
 
         val signUpButton: Button = findViewById(R.id.sign_up_button)
         signUpButton.setOnClickListener {
@@ -67,9 +68,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     private fun loadRestaurantSignUpLayout() {
-        // Load Restaurant Sign Up layout
-        setContentView(R.layout.fragment_restaurant_sign_up) // Replace with the ID of your restaurant sign-up XML file
+        setContentView(R.layout.fragment_restaurant_sign_up)
+
+        // Access the continue button after setting the content view
         val continueButton: Button = findViewById(R.id.continueButton)
         continueButton.setOnClickListener {
             val firstNameInput: EditText = findViewById(R.id.firstNameInput)
@@ -93,17 +96,20 @@ class MainActivity : AppCompatActivity() {
             } else {
                 // Proceed with signup
                 Toast.makeText(this, "Restaurant Signed Up!", Toast.LENGTH_SHORT).show()
-            }
-            val fragment = RestaurantSearch()
+
+                // You can navigate to a new activity or fragment if needed
+                val fragment = RestaurantSearch()
                 supportFragmentManager.beginTransaction()
-                .replace(R.id.RestaurantSearchScreen, fragment)
-                .addToBackStack(null)
-                .commit()
+                    .replace(R.id.RestaurantSearchScreen, fragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
         }
     }
 
 
-override fun onStop() {
+
+    override fun onStop() {
         super.onStop()
     }
 }

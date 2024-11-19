@@ -35,6 +35,7 @@ xmlns:tools="http://schemas.android.com/tools">
     <activity android:name=".RestaurantSearch" />
     <activity android:name=".RestaurantSignUp" />
     <activity android:name=".SaveLocation" />
+        <activity android:name=".UserAPI" />
 </application>
 
 </manifest>
