@@ -23,7 +23,7 @@ tools:context=".MainActivity">
 
 
 <TextView
-    android:id="@+id/nameLabel"
+    android:id="@+id/restaurant_full_name_label"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="Your Name:"
@@ -35,7 +35,7 @@ tools:context=".MainActivity">
     app:layout_constraintTop_toBottomOf="@id/signUpTitle" />
 
 <EditText
-    android:id="@+id/firstNameInput"
+    android:id="@+id/restaurant_first_name_input"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:hint="First Name"
@@ -43,13 +43,13 @@ tools:context=".MainActivity">
     android:padding="12dp"
     android:textColor="#000000"
     android:textSize="16sp"
-    app:layout_constraintTop_toBottomOf="@id/nameLabel"
+    app:layout_constraintTop_toBottomOf="@id/restaurant_full_name_label"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintWidth_percent="0.45"
     android:layout_marginStart="16dp" />
 
 <EditText
-    android:id="@+id/lastNameInput"
+    android:id="@+id/restaurant_last_name_input"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:hint="Last Name"
@@ -57,27 +57,51 @@ tools:context=".MainActivity">
     android:padding="12dp"
     android:textColor="#000000"
     android:textSize="16sp"
-    app:layout_constraintTop_toBottomOf="@id/nameLabel"
-    app:layout_constraintStart_toEndOf="@id/firstNameInput"
+    app:layout_constraintTop_toBottomOf="@id/restaurant_full_name_label"
+    app:layout_constraintStart_toEndOf="@id/restaurant_first_name_input"
     app:layout_constraintEnd_toEndOf="parent"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="16dp" />
 
 
-<TextView
-    android:id="@+id/restaurantNameLabel"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="16dp"
-    android:layout_marginTop="24dp"
-    android:text="Restaurant Name:"
-    android:textColor="#B22222"
-    android:textSize="18sp"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/firstNameInput" />
+    <TextView
+        android:id="@+id/restaurant_name_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="Restaurant Name:"
+        android:textColor="#B22222"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/restaurant_password_input" />
 
-<EditText
-    android:id="@+id/restaurantName"
+    <TextView
+        android:id="@+id/restaurant_email_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="Email:"
+        android:textColor="#B22222"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/restaurant_first_name_input" />
+
+    <TextView
+        android:id="@+id/restaurant_password_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="Password"
+        android:textColor="#B22222"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/restaurant_email_input" />
+
+    <EditText
+    android:id="@+id/restaurant_name_input"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:hint="Enter Restaurant Name"
@@ -85,27 +109,58 @@ tools:context=".MainActivity">
     android:padding="12dp"
     android:textColor="#000000"
     android:textSize="16sp"
-    app:layout_constraintTop_toBottomOf="@id/restaurantNameLabel"
+    app:layout_constraintTop_toBottomOf="@id/restaurant_name_label"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     android:layout_marginStart="16dp"
     android:layout_marginEnd="16dp" />
 
 
-<TextView
-    android:id="@+id/addressLabel"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Address:"
-    android:textSize="18sp"
-    android:textColor="#B22222"
-    android:layout_marginTop="24dp"
-    app:layout_constraintTop_toBottomOf="@id/restaurantName"
-    app:layout_constraintStart_toStartOf="parent"
-    android:layout_marginStart="16dp" />
+    <EditText
+        android:id="@+id/restaurant_email_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/rounded_border"
+        android:hint="Enter Email"
+        android:padding="12dp"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/restaurant_email_label" />
+
+    <EditText
+        android:id="@+id/restaurant_password_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/rounded_border"
+        android:hint="Enter Password"
+        android:inputType="textPassword"
+        android:padding="12dp"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/restaurant_password_label" />
+
+    <TextView
+        android:id="@+id/restaurant_address_label"
+        android:layout_width="70dp"
+        android:layout_height="23dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="Address:"
+        android:textColor="#B22222"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/restaurant_name_input" />
 
 <EditText
-    android:id="@+id/address"
+    android:id="@+id/restaurant_address_input"
     android:layout_width="0dp"
     android:layout_height="wrap_content"
     android:hint="Enter Address"
@@ -113,7 +168,7 @@ tools:context=".MainActivity">
     android:padding="12dp"
     android:textColor="#000000"
     android:textSize="16sp"
-    app:layout_constraintTop_toBottomOf="@id/addressLabel"
+    app:layout_constraintTop_toBottomOf="@id/restaurant_address_label"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     android:layout_marginStart="16dp"
@@ -121,58 +176,57 @@ tools:context=".MainActivity">
 
 
 <TextView
-    android:id="@+id/pickupHoursLabel"
+    android:id="@+id/restaurant_pickup_hours_label"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="Pickup Hours:"
     android:textSize="18sp"
     android:textColor="#B22222"
     android:layout_marginTop="24dp"
-    app:layout_constraintTop_toBottomOf="@id/address"
+    app:layout_constraintTop_toBottomOf="@id/restaurant_address_input"
     app:layout_constraintStart_toStartOf="parent"
     android:layout_marginStart="16dp" />
 
-<EditText
-    android:id="@+id/startTime"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:hint="Start Time (e.g., 9:00 AM)"
-    android:background="@drawable/rounded_border"
-    android:padding="12dp"
-    android:textColor="#FFFFFF"
-    android:textSize="16sp"
-    app:layout_constraintTop_toBottomOf="@id/pickupHoursLabel"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintWidth_percent="0.45"
-    android:layout_marginStart="16dp" />
+    <EditText
+        android:id="@+id/restaurant_pickup_hours_start_time_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/rounded_border"
+        android:hint="9:00 AM"
+        android:padding="12dp"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/restaurant_pickup_hours_label"
+        app:layout_constraintWidth_percent="0.45" />
 
-<EditText
-    android:id="@+id/endTime"
-    android:layout_width="0dp"
-    android:layout_height="wrap_content"
-    android:hint="End Time (e.g., 5:00 PM)"
-    android:background="@drawable/rounded_border"
-    android:padding="12dp"
-    android:textColor="#000000"
-    android:textSize="16sp"
-    app:layout_constraintTop_toBottomOf="@id/pickupHoursLabel"
-    app:layout_constraintStart_toEndOf="@id/startTime"
-    app:layout_constraintWidth_percent="0.45"
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="16dp" />
+    <EditText
+        android:id="@+id/restaurant_pickup_hours_end_time_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/rounded_border"
+        android:hint="5:00 PM"
+        android:padding="12dp"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@id/restaurant_pickup_hours_start_time_input"
+        app:layout_constraintTop_toBottomOf="@id/restaurant_pickup_hours_label"
+        app:layout_constraintWidth_percent="0.45" />
 
 
-<Button
-    android:id="@+id/continueButton"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="24dp"
-    android:text="Continue"
-    android:padding="12dp"
-    android:backgroundTint="#B22222"
-    android:textColor="#000000"
-    app:layout_constraintTop_toBottomOf="@id/endTime"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintEnd_toEndOf="parent" />
+    <Button
+        android:id="@+id/restaurant_sign_up_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="#B22222"
+        android:padding="12dp"
+        android:text="Sign Up"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/restaurant_pickup_hours_end_time_input" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

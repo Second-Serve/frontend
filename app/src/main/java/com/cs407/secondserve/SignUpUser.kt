@@ -18,6 +18,10 @@ import com.google.android.gms.vision.Frame
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import android.Manifest
+import com.android.volley.VolleyError
+import com.cs407.secondserve.model.AccountType
+import com.cs407.secondserve.model.User
+import com.cs407.secondserve.model.UserRegistrationInfo
 
 class SignUpUser : AppCompatActivity() {
 
@@ -29,10 +33,11 @@ class SignUpUser : AppCompatActivity() {
     private var scannedBarcode: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_sign_up_user)
 
+        val firstNameField: EditText = findViewById(R.id.first_name_input)
+        val lastNameField: EditText = findViewById(R.id.last_name_input)
         val emailField: EditText = findViewById(R.id.email_input)
         val passwordField: EditText = findViewById(R.id.password_input)
         val confirmPasswordField: EditText = findViewById(R.id.confirm_password_input)
@@ -57,6 +62,8 @@ class SignUpUser : AppCompatActivity() {
 
 
         signUpButton.setOnClickListener {
+            val firstName = firstNameField.text.toString().trim()
+            val lastName = lastNameField.text.toString().trim()
             val email = emailField.text.toString().trim()
             val password = passwordField.text.toString().trim()
             val confirmPassword = confirmPasswordField.text.toString().trim()
@@ -87,13 +94,29 @@ class SignUpUser : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            Toast.makeText(this, "Sign up successful!", Toast.LENGTH_SHORT).show()
+            val registrationInfo = UserRegistrationInfo(
+                accountType = AccountType.CUSTOMER,
+                email = email,
+                password = password,
+                firstName = firstName,
+                lastName = lastName
+            )
+            UserAPI.registerAccount(
+                registrationInfo,
+                onSuccess = { user: User ->
+                    Toast.makeText(this, "Sign up successful!", Toast.LENGTH_SHORT).show()
 
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
+                    UserAPI.user = user
+
+                    val intent = Intent(this, RestaurantSearch::class.java)
+                    startActivity(intent)
+                    finish()
+                },
+                onError = { _: VolleyError, message: String ->
+                    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+                }
+            )
         }
-
     }
 
     private fun openCamera() {

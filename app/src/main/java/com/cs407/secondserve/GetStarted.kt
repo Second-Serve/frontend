@@ -20,7 +20,7 @@ class GetStarted : AppCompatActivity() {
         }
 
         businessButton.setOnClickListener {
-            val intent = Intent(this, SignUpUser::class.java)
+            val intent = Intent(this, RestaurantSignUp::class.java)
             startActivity(intent)
         }
     }

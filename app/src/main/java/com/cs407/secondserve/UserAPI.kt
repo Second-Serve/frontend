@@ -17,7 +17,7 @@ class UserAPI {
     companion object {
         private lateinit var requestQueue: RequestQueue
 
-        var bearerToken: String? = null
+        var user: User? = null
 
         fun init(context: Context) {
             requestQueue = Volley.newRequestQueue(context)
@@ -51,7 +51,7 @@ class UserAPI {
                 }
             ) {
                 override fun getHeaders(): Map<String, String> {
-                    return mapOf("Authorization" to "Bearer $bearerToken")
+                    return mapOf("Authorization" to "Bearer ${user?.bearer}")
                 }
             }
 

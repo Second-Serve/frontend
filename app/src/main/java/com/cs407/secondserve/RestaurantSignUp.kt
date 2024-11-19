@@ -3,76 +3,82 @@ package com.cs407.secondserve
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.android.volley.VolleyError
+import com.cs407.secondserve.model.AccountType
+import com.cs407.secondserve.model.RestaurantRegistrationInfo
+import com.cs407.secondserve.model.User
+import com.cs407.secondserve.model.UserRegistrationInfo
+import com.cs407.secondserve.model.WeeklyPickupHours
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [RestaurantSignUp.newInstance] factory method to
- * create an instance of this fragment.
- */
-class RestaurantSignUp : Fragment() {
-    private var param1: String? = null
-    private var param2: String? = null
-
+class RestaurantSignUp : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+        setContentView(R.layout.fragment_restaurant_sign_up)
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_restaurant_sign_up, container, false)
-    }
+        val firstNameField: EditText = findViewById(R.id.restaurant_first_name_input)
+        val lastNameField: EditText = findViewById(R.id.restaurant_last_name_input)
+        val emailField: EditText = findViewById(R.id.restaurant_email_input)
+        val passwordField: EditText = findViewById(R.id.restaurant_password_input)
+        // val confirmPasswordField: EditText = findViewById(R.id.confirm_password_input)
+        val restaurantNameField: EditText = findViewById(R.id.restaurant_name_input)
+        val restaurantAddressField: EditText = findViewById(R.id.restaurant_address_input)
+        val restaurantPickupHoursStartField: EditText = findViewById(R.id.restaurant_pickup_hours_start_time_input)
+        val restaurantPickupHoursEndField: EditText = findViewById(R.id.restaurant_pickup_hours_end_time_input)
+        // val termsCheckbox: CheckBox = findViewById(R.id.terms_checkbox)
+        val signUpButton: Button = findViewById(R.id.restaurant_sign_up_button)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        signUpButton.setOnClickListener {
+            val firstName = firstNameField.text.toString().trim()
+            val lastName = lastNameField.text.toString().trim()
+            val email = emailField.text.toString().trim()
+            val password = passwordField.text.toString().trim()
+            val restaurantName = restaurantNameField.text.toString().trim()
+            val address = restaurantAddressField.text.toString().trim()
+            val pickupStart = restaurantPickupHoursStartField.text.toString().trim()
+            val pickupEnd = restaurantPickupHoursEndField.text.toString().trim()
 
-        val continueButton: Button = view.findViewById(R.id.continueButton)
-
-//        continueButton.setOnClickListener {
-//            context?.let {
-//                val intent = Intent(it, LoginActivity::class.java)
-//                startActivity(intent)
-////                requireActivity().finish()
-//            }
-//        }
-
-        continueButton.setOnClickListener {
-            println("Button clicked!")
-        }
-
-
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment restaurantSignUp.
-         */
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            RestaurantSignUp().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+            // TODO: add all fields to check
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
+
+            // if (!termsCheckbox.isChecked) {
+            //     Toast.makeText(this, "You must agree to the terms", Toast.LENGTH_SHORT).show()
+            //     return@setOnClickListener
+            // }
+
+            val registrationInfo = UserRegistrationInfo(
+                accountType = AccountType.CUSTOMER,
+                email = email,
+                password = password,
+                firstName = firstName,
+                lastName = lastName,
+                restaurant = RestaurantRegistrationInfo(
+                    name = restaurantName,
+                    address = address,
+                    pickupHours = WeeklyPickupHours.ALWAYS // TODO: Implement pickup hours field
+                )
+            )
+            UserAPI.registerAccount(
+                registrationInfo,
+                onSuccess = { user: User ->
+                    Toast.makeText(this, "Sign up successful!", Toast.LENGTH_SHORT).show()
+
+                    UserAPI.user = user
+
+                    val intent = Intent(this, RestaurantSearch::class.java)
+                    startActivity(intent)
+                    finish()
+                },
+                onError = { _: VolleyError, message: String ->
+                    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+                }
+            )
+        }
     }
 }

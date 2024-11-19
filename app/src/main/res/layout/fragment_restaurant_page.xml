@@ -28,7 +28,7 @@
         app:layout_constraintTop_toBottomOf="@id/backArrow" />
 
     <TextView
-        android:id="@+id/restaurantName"
+        android:id="@+id/restaurant_name_input"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:text="Pizza Guys Co."
@@ -48,7 +48,7 @@
         android:text="$7.99"
         android:textColor="@android:color/white"
         android:textSize="16sp"
-        app:layout_constraintTop_toTopOf="@id/restaurantName"
+        app:layout_constraintTop_toTopOf="@id/restaurant_name_input"
         app:layout_constraintEnd_toEndOf="parent"
         android:padding="8dp"
         android:background="@color/red" />
@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:text="4 bags available"
         android:textColor="@android:color/white"
-        app:layout_constraintTop_toBottomOf="@id/restaurantName"
+        app:layout_constraintTop_toBottomOf="@id/restaurant_name_input"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginStart="8dp"
         android:padding="4dp"

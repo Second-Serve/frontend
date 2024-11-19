@@ -49,7 +49,7 @@ class LoginActivity : AppCompatActivity() {
             email,
             password,
             onSuccess = { user: User ->
-                UserAPI.bearerToken = user.bearer
+                UserAPI.user = user
 
                 val intent = Intent(this, RestaurantSearch::class.java)
                 startActivity(intent)

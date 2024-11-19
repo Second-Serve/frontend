@@ -6,10 +6,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.cs407.secondserve.model.AccountType
-import com.cs407.secondserve.model.RestaurantRegistrationInfo
-import com.cs407.secondserve.model.UserRegistrationInfo
-import com.cs407.secondserve.model.WeeklyPickupHours
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,10 +26,10 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, GetStarted::class.java)
         startActivity(intent)
 
-        val userSignUpButton: Button = findViewById(R.id.customer_button)
-        val restaurantSignUpButton: Button = findViewById(R.id.business_button)
-        userSignUpButton.setOnClickListener { loadUserSignUpLayout() }
-        restaurantSignUpButton.setOnClickListener { loadRestaurantSignUpLayout() }
+//        val userSignUpButton: Button = findViewById(R.id.customer_button)
+//        val restaurantSignUpButton: Button = findViewById(R.id.business_button)
+//        userSignUpButton.setOnClickListener { loadUserSignUpLayout() }
+//        restaurantSignUpButton.setOnClickListener { loadRestaurantSignUpLayout() }
     }
 
     private fun loadLogIn() {
@@ -80,14 +76,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.fragment_restaurant_sign_up)
 
         // Access the continue button after setting the content view
-        val continueButton: Button = findViewById(R.id.continueButton)
+        val continueButton: Button = findViewById(R.id.restaurant_sign_up_button)
         continueButton.setOnClickListener {
-            val firstNameInput: EditText = findViewById(R.id.firstNameInput)
-            val lastNameInput: EditText = findViewById(R.id.lastNameInput)
-            val restaurantName: EditText = findViewById(R.id.restaurantName)
-            val address: EditText = findViewById(R.id.address)
-            val startTime: EditText = findViewById(R.id.startTime)
-            val endTime: EditText = findViewById(R.id.endTime)
+            val firstNameInput: EditText = findViewById(R.id.restaurant_first_name_input)
+            val lastNameInput: EditText = findViewById(R.id.restaurant_last_name_input)
+            val restaurantName: EditText = findViewById(R.id.restaurant_name_input)
+            val address: EditText = findViewById(R.id.restaurant_address_input)
+            val startTime: EditText = findViewById(R.id.restaurant_pickup_hours_start_time_input)
+            val endTime: EditText = findViewById(R.id.restaurant_pickup_hours_end_time_input)
 
             val firstName = firstNameInput.text.toString().trim()
             val lastName = lastNameInput.text.toString().trim()
