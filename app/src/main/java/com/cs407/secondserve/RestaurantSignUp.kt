@@ -2,13 +2,13 @@ package com.cs407.secondserve
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.VolleyError
 import com.cs407.secondserve.model.AccountType
+import com.cs407.secondserve.model.DailyPickupHours
 import com.cs407.secondserve.model.RestaurantRegistrationInfo
 import com.cs407.secondserve.model.User
 import com.cs407.secondserve.model.UserRegistrationInfo
@@ -69,7 +69,15 @@ class RestaurantSignUp : AppCompatActivity() {
                 restaurant = RestaurantRegistrationInfo(
                     name = restaurantName,
                     address = address,
-                    pickupHours = WeeklyPickupHours.ALWAYS // TODO: Implement pickup hours field
+                    pickupHours = WeeklyPickupHours( // TODO: Allow users to select pickup hours per-day
+                        DailyPickupHours(pickupStart, pickupEnd),
+                        DailyPickupHours(pickupStart, pickupEnd),
+                        DailyPickupHours(pickupStart, pickupEnd),
+                        DailyPickupHours(pickupStart, pickupEnd),
+                        DailyPickupHours(pickupStart, pickupEnd),
+                        DailyPickupHours(pickupStart, pickupEnd),
+                        DailyPickupHours(pickupStart, pickupEnd)
+                    )
                 )
             )
             UserAPI.registerAccount(
