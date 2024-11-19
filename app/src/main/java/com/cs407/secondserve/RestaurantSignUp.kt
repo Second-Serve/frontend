@@ -41,8 +41,16 @@ class RestaurantSignUp : AppCompatActivity() {
             val pickupStart = restaurantPickupHoursStartField.text.toString().trim()
             val pickupEnd = restaurantPickupHoursEndField.text.toString().trim()
 
-            // TODO: add all fields to check
-            if (email.isEmpty() || password.isEmpty()) {
+            if (
+                firstName.isEmpty()
+                || lastName.isEmpty()
+                || email.isEmpty()
+                || password.isEmpty()
+                || restaurantName.isEmpty()
+                || address.isEmpty()
+                || pickupStart.isEmpty()
+                || pickupEnd.isEmpty()
+            ) {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -53,7 +61,7 @@ class RestaurantSignUp : AppCompatActivity() {
             // }
 
             val registrationInfo = UserRegistrationInfo(
-                accountType = AccountType.CUSTOMER,
+                accountType = AccountType.BUSINESS,
                 email = email,
                 password = password,
                 firstName = firstName,
