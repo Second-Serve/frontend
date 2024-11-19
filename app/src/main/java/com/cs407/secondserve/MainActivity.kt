@@ -68,19 +68,10 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Passwords do not match!", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "User Signed Up!", Toast.LENGTH_SHORT).show()
-
-
-
-
-
-
-
+                val restaurantSearchIntent = Intent(this, RestaurantSearch::class.java)
+                startActivity(restaurantSearchIntent)
             }
-//            val loginFragment = LoginActivity()
-//            supportFragmentManager.beginTransaction()
-//                .replace(R.id.fragment_container, loginFragment)
-//                .addToBackStack(null)
-//                .commit()
+
         }
     }
 
@@ -105,23 +96,25 @@ class MainActivity : AppCompatActivity() {
             val start = startTime.text.toString().trim()
             val end = endTime.text.toString().trim()
 
-            // Check if all fields are filled
             if (firstName.isEmpty() || lastName.isEmpty() || restaurant.isEmpty() ||
                 addressText.isEmpty() || start.isEmpty() || end.isEmpty()) {
                 Toast.makeText(this, "Please fill all fields!", Toast.LENGTH_SHORT).show()
             } else {
-                // Proceed with signup
                 Toast.makeText(this, "Restaurant Signed Up!", Toast.LENGTH_SHORT).show()
+                val restaurantSearchIntent = Intent(this, RestaurantSearch::class.java)
+                startActivity(restaurantSearchIntent)
+                finish()
 
-                // You can navigate to a new activity or fragment if needed
-                val fragment = RestaurantSearch()
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.RestaurantSearchScreen, fragment)
-                    .addToBackStack(null)
-                    .commit()
             }
         }
+
+        fun restaurantSearch(){
+            val intent = Intent(this, RestaurantSearch::class.java)
+            startActivity(intent)
+
+        }
     }
+
 
 
 
