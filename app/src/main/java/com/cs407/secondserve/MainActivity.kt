@@ -12,22 +12,21 @@ import com.cs407.secondserve.model.UserRegistrationInfo
 import com.cs407.secondserve.model.WeeklyPickupHours
 
 class MainActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
 
+        UserAPI.init(this)
+
         val userLogInButton: Button = findViewById(R.id.button)
         val userSignUpButton: Button = findViewById(R.id.button2)
-
-
 
         userSignUpButton.setOnClickListener { loadSignUp() }
         userLogInButton.setOnClickListener { loadLogIn() }
     }
 
-    private fun loadSignUp(){
+    private fun loadSignUp() {
         val intent = Intent(this, GetStarted::class.java)
         startActivity(intent)
 
@@ -37,15 +36,17 @@ class MainActivity : AppCompatActivity() {
         restaurantSignUpButton.setOnClickListener { loadRestaurantSignUpLayout() }
     }
 
-    private fun loadLogIn(){
+    private fun loadLogIn() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
     }
+
     private fun loadUserSignUpLayout() {
         val intent = Intent(this, SignUpUser::class.java)
         startActivity(intent)
 //        finish()
 
+        // TODO: this should probably be in SignUpUser
         val signUpButton: Button = findViewById(R.id.sign_up_button)
         signUpButton.setOnClickListener {
             val firstNameInput: EditText = findViewById(R.id.first_name_input)
@@ -74,7 +75,6 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
-
 
     private fun loadRestaurantSignUpLayout() {
         setContentView(R.layout.fragment_restaurant_sign_up)
@@ -114,8 +114,6 @@ class MainActivity : AppCompatActivity() {
 
         }
     }
-
-
 
 
     override fun onStop() {
