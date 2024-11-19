@@ -51,12 +51,19 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Passwords do not match!", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "User Signed Up!", Toast.LENGTH_SHORT).show()
-                val fragment = RestaurantSearch()
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.RestaurantSearchScreen, fragment)
-                    .addToBackStack(null)
-                    .commit()
+
+
+
+
+
+
+
             }
+//            val loginFragment = LoginActivity()
+//            supportFragmentManager.beginTransaction()
+//                .replace(R.id.fragment_container, loginFragment)
+//                .addToBackStack(null)
+//                .commit()
         }
     }
 
@@ -87,6 +94,11 @@ class MainActivity : AppCompatActivity() {
                 // Proceed with signup
                 Toast.makeText(this, "Restaurant Signed Up!", Toast.LENGTH_SHORT).show()
             }
+            val fragment = RestaurantSearch()
+                supportFragmentManager.beginTransaction()
+                .replace(R.id.RestaurantSearchScreen, fragment)
+                .addToBackStack(null)
+                .commit()
         }
     }
 

@@ -82,9 +82,11 @@ class SignUpUser : AppCompatActivity() {
             }
 
             // Proceed with sign-up if all validations pass
-            Toast.makeText(this, "Sign up successful!", Toast.LENGTH_SHORT).show()
 
             Toast.makeText(this, "Sign up successful!", Toast.LENGTH_SHORT).show()
+
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
 
         }
     }
