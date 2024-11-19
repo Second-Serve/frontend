@@ -16,15 +16,31 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.fragment_get_started)
+        setContentView(R.layout.activity_main)
+
+        val userLogInButton: Button = findViewById(R.id.button)
+        val userSignUpButton: Button = findViewById(R.id.button2)
+
+
+
+        userSignUpButton.setOnClickListener { loadSignUp() }
+        userLogInButton.setOnClickListener { loadLogIn() }
+    }
+
+    private fun loadSignUp(){
+        val intent = Intent(this, GetStarted::class.java)
+        startActivity(intent)
 
         val userSignUpButton: Button = findViewById(R.id.customer_button)
         val restaurantSignUpButton: Button = findViewById(R.id.business_button)
-
         userSignUpButton.setOnClickListener { loadUserSignUpLayout() }
         restaurantSignUpButton.setOnClickListener { loadRestaurantSignUpLayout() }
     }
 
+    private fun loadLogIn(){
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+    }
     private fun loadUserSignUpLayout() {
         val intent = Intent(this, SignUpUser::class.java)
         startActivity(intent)
