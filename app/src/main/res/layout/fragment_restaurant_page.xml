@@ -2,17 +2,16 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp">
 
     <ImageView
-        android:id="@+id/backArrow"
+        android:id="@+id/restaurant_search_back_arrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/back_arrow"
-        android:contentDescription="Back Arrow"
+        android:contentDescription="@string/back_arrow_description"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:padding="8dp" />
@@ -25,7 +24,7 @@
         android:src="@drawable/baseline_restaurant_menu_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/backArrow" />
+        app:layout_constraintTop_toBottomOf="@id/restaurant_search_back_arrow" />
 
     <TextView
         android:id="@+id/restaurant_name_input"
@@ -57,7 +56,7 @@
         android:id="@+id/bagsAvailable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="4 bags available"
+        android:text="@string/restaurant_bags_available"
         android:textColor="@android:color/white"
         app:layout_constraintTop_toBottomOf="@id/restaurant_name_input"
         app:layout_constraintStart_toStartOf="parent"
@@ -69,7 +68,7 @@
         android:id="@+id/pickupTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pickup"
+        android:text="@string/restaurant_pickup_label"
         android:textColor="@color/red"
         android:textStyle="bold"
         android:textSize="18sp"
@@ -81,7 +80,7 @@
         android:id="@+id/pickupDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Available from 8 pm to 10 pm"
+        android:text="@string/restaurant_page_available_time"
         android:textColor="@android:color/darker_gray"
         app:layout_constraintTop_toBottomOf="@id/pickupTitle"
         app:layout_constraintStart_toStartOf="parent"
@@ -91,7 +90,7 @@
         android:id="@+id/locationTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Location"
+        android:text="@string/restaurant_location_label"
         android:textColor="@color/red"
         android:textStyle="bold"
         android:textSize="18sp"
@@ -113,7 +112,7 @@
         android:id="@+id/addToCartButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Add to Cart"
+        android:text="@string/add_to_cart_button"
         android:backgroundTint="@color/red"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"

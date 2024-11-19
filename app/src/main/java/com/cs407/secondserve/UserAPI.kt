@@ -6,6 +6,7 @@ import com.android.volley.RequestQueue
 import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.cs407.secondserve.model.Restaurant
 import com.cs407.secondserve.model.User
 import com.cs407.secondserve.model.UserLoginInfo
 import com.cs407.secondserve.model.UserRegistrationInfo
@@ -62,10 +63,19 @@ class UserAPI {
             return json.getJSONObject("result")
         }
 
+        fun saveUser(context: Context) {
+            val sharedPreferences = context.getSharedPreferences("com.cs407.secondserve", Context.MODE_PRIVATE)
+            with (sharedPreferences.edit()) {
+                putString("com.cs407.secondserve.email", user?.email)
+                putString("com.cs407.secondserve.password", user?.password)
+                apply()
+            }
+        }
+
         fun registerAccount(
             registrationInfo: UserRegistrationInfo,
             onSuccess: (User) -> Unit,
-            onError: ((VolleyError, String) -> Unit)?
+            onError: ((VolleyError, String) -> Unit)? = null
         ) {
             val body = registrationInfo.toJSONObject()
             makeRequest(
@@ -84,16 +94,16 @@ class UserAPI {
             email: String,
             password: String,
             onSuccess: (User) -> Unit,
-            onError: ((VolleyError, String) -> Unit)?
+            onError: ((VolleyError, String) -> Unit)? = null
         ) {
             val loginInfo = UserLoginInfo(email, password)
             val body = loginInfo.toJSONObject()
-            println(body)
             makeRequest(
                 endpoint = "users/login",
                 method = Request.Method.POST,
                 onSuccess = { response ->
                     val user = User.fromJSONObject(response)
+                    this.user = user
                     onSuccess(user)
                 },
                 onError = onError,
@@ -103,7 +113,7 @@ class UserAPI {
 
         fun fetchUsers(
             onSuccess: (List<User>) -> Unit,
-            onError: ((VolleyError, String) -> Unit)?
+            onError: ((VolleyError, String) -> Unit)? = null
         ) {
             makeRequest(
                 endpoint = "users/",
@@ -117,6 +127,27 @@ class UserAPI {
                         }
                     }
                     onSuccess(users)
+                },
+                onError = onError
+            )
+        }
+
+        fun fetchRestaurants(
+            onSuccess: (List<Restaurant>) -> Unit,
+            onError: ((VolleyError, String) -> Unit)? = null
+        ) {
+            makeRequest(
+                endpoint = "restaurants/",
+                method = Request.Method.GET,
+                onSuccess = { response ->
+                    val restaurantsJSON = response.getJSONArray("restaurants")
+                    val restaurants = buildList {
+                        for (i in 0..<restaurantsJSON.length()) {
+                            val restaurantJSON = restaurantsJSON.getJSONObject(i)
+                            add(Restaurant.fromJSONObject(restaurantJSON))
+                        }
+                    }
+                    onSuccess(restaurants)
                 },
                 onError = onError
             )

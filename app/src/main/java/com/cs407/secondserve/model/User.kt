@@ -16,7 +16,6 @@ class User(
 ) {
     companion object {
         fun fromJSONObject(json: JSONObject) : User {
-            println(json)
             val user = User(
                 id = json.getString("id"),
                 accountType = AccountType.fromString(json.getString("account_type")),

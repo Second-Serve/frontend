@@ -8,11 +8,11 @@
     android:padding="16dp">
 
     <ImageView
-        android:id="@+id/backArrow"
+        android:id="@+id/restaurant_search_back_arrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/back_arrow"
-        android:contentDescription="Back Arrow"
+        android:contentDescription="@string/back_arrow_description"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:padding="8dp" />
@@ -24,7 +24,7 @@
         android:iconifiedByDefault="false"
         android:queryHint="Location..."
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/backArrow"
+        app:layout_constraintStart_toEndOf="@id/restaurant_search_back_arrow"
         app:layout_constraintEnd_toStartOf="@id/lockIcon"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp" />
@@ -34,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/baseline_lock_outline_24"
-        android:contentDescription="Lock Icon"
+        android:contentDescription="@string/lock_icon_description"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:padding="8dp" />
@@ -43,7 +43,7 @@
         android:id="@+id/filterLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Filter by:"
+        android:text="@string/filter_by_label"
         android:textColor="@android:color/black"
         app:layout_constraintTop_toBottomOf="@id/searchView"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,97 +62,14 @@
         android:layout_marginTop="8dp" />
 
     <LinearLayout
+        android:id="@+id/restaurant_list"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@id/filterSpinner"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp"
-            android:background="@drawable/rounded_border">
-
-            <TextView
-                android:id="@+id/restaurantName1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Restaurant 1"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/restaurantPrice1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="$6.99" />
-
-            <TextView
-                android:id="@+id/restaurantPickupHours1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Pickup Hours: 7 pm - 8 pm" />
-
-            <TextView
-                android:id="@+id/restaurantAvailability1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="4 bags available" />
-
-            <Button
-                android:id="@+id/addToCartButton1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add to Cart"
-                android:backgroundTint="@color/red" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/rounded_border">
-
-            <TextView
-                android:id="@+id/restaurantName2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Restaurant 2"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/restaurantPrice2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="$4.99" />
-
-            <TextView
-                android:id="@+id/restaurantPickupHours2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Pickup Hours: 5 pm - 5:30 pm" />
-
-            <TextView
-                android:id="@+id/restaurantAvailability2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="8 bags available" />
-
-            <Button
-                android:id="@+id/addToCartButton2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add to Cart"
-                android:backgroundTint="@color/red" />
-        </LinearLayout>
-    </LinearLayout>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/filterSpinner"/>
 
     <TextView
         android:id="@+id/pickupOnly"
@@ -161,7 +78,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="pickup only"
+        android:text="@string/pickup_only"
         android:textColor="@android:color/holo_red_dark" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

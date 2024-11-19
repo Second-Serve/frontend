@@ -48,8 +48,8 @@ class LoginActivity : AppCompatActivity() {
         UserAPI.login(
             email,
             password,
-            onSuccess = { user: User ->
-                UserAPI.user = user
+            onSuccess = { _: User ->
+                UserAPI.saveUser(applicationContext)
 
                 val intent = Intent(this, RestaurantSearch::class.java)
                 startActivity(intent)
@@ -76,6 +76,7 @@ class LoginActivity : AppCompatActivity() {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 navigateToSignUp()
             } else {
+                // TODO: User denied our request for location. Need to figure out how to handle this.
             }
         }
     }

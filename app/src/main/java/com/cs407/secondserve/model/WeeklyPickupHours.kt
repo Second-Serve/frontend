@@ -23,16 +23,42 @@ class WeeklyPickupHours(
         return json
     }
 
+    fun onDay(weekday: Weekday) : DailyPickupHours {
+        return when (weekday) {
+            Weekday.SUNDAY -> sunday
+            Weekday.MONDAY -> monday
+            Weekday.TUESDAY -> tuesday
+            Weekday.WEDNESDAY -> wednesday
+            Weekday.THURSDAY -> thursday
+            Weekday.FRIDAY -> friday
+            Weekday.SATURDAY -> saturday
+        }
+    }
+
+    fun onDay(weekday: Int) : DailyPickupHours {
+        return onDay(Weekday.entries[weekday])
+    }
+
     companion object {
         // Useful for placeholders
         val ALWAYS = WeeklyPickupHours(
-            sunday = DailyPickupHours("00:00", "24:00"),
-            monday = DailyPickupHours("00:00", "24:00"),
-            tuesday = DailyPickupHours("00:00", "24:00"),
-            wednesday = DailyPickupHours("00:00", "24:00"),
-            thursday = DailyPickupHours("00:00", "24:00"),
-            friday = DailyPickupHours("00:00", "24:00"),
-            saturday = DailyPickupHours("00:00", "24:00")
+            sunday = DailyPickupHours.ALWAYS,
+            monday = DailyPickupHours.ALWAYS,
+            tuesday = DailyPickupHours.ALWAYS,
+            wednesday = DailyPickupHours.ALWAYS,
+            thursday = DailyPickupHours.ALWAYS,
+            friday = DailyPickupHours.ALWAYS,
+            saturday = DailyPickupHours.ALWAYS
+        )
+
+        val NEVER = WeeklyPickupHours(
+            sunday = DailyPickupHours.NEVER,
+            monday = DailyPickupHours.NEVER,
+            tuesday = DailyPickupHours.NEVER,
+            wednesday = DailyPickupHours.NEVER,
+            thursday = DailyPickupHours.NEVER,
+            friday = DailyPickupHours.NEVER,
+            saturday = DailyPickupHours.NEVER
         )
 
         fun fromJSONObject(json: JSONObject) : WeeklyPickupHours {

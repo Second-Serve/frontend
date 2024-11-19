@@ -14,9 +14,14 @@ class DailyPickupHours(
     }
 
     companion object {
-        val NONE = DailyPickupHours(
+        val NEVER = DailyPickupHours(
             startTime = "00:00",
             endTime = "00:00"
+        )
+
+        val ALWAYS = DailyPickupHours(
+            startTime = "00:00",
+            endTime = "24:00"
         )
 
         fun fromJSONObject(json: JSONObject) : DailyPickupHours {

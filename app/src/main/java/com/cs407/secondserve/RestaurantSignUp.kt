@@ -86,6 +86,7 @@ class RestaurantSignUp : AppCompatActivity() {
                     Toast.makeText(this, "Sign up successful!", Toast.LENGTH_SHORT).show()
 
                     UserAPI.user = user
+                    UserAPI.saveUser(applicationContext)
 
                     val intent = Intent(this, RestaurantSearch::class.java)
                     startActivity(intent)
