@@ -43,10 +43,9 @@ class SignUpUser : AppCompatActivity() {
         val confirmPasswordField: EditText = findViewById(R.id.confirm_password_input)
         val termsCheckbox: CheckBox = findViewById(R.id.terms_checkbox)
         val signUpButton: Button = findViewById(R.id.sign_up_button)
-        val scanWiscardLink: TextView = findViewById(R.id.scan_wiscard_link)
+        val scanWiscardButton: TextView = findViewById(R.id.scan_wiscard_button)
 
-
-        scanWiscardLink.setOnClickListener {
+        scanWiscardButton.setOnClickListener {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED
             ) {
@@ -83,10 +82,10 @@ class SignUpUser : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-//            if (scannedBarcode.isNullOrEmpty() || !isValidBarcode(scannedBarcode!!)) {
-//                Toast.makeText(this, "Please scan your wiscard", Toast.LENGTH_SHORT).show()
-//                return@setOnClickListener
-//            }
+            // if (scannedBarcode.isNullOrEmpty() || !isValidBarcode(scannedBarcode!!)) {
+            //     Toast.makeText(this, "Please scan your wiscard", Toast.LENGTH_SHORT).show()
+            //     return@setOnClickListener
+            // }
 
             // Making Wiscard scanning optional for testing
             if (scannedBarcode != null && !isValidBarcode(scannedBarcode!!)) {

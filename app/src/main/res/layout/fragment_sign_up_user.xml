@@ -25,6 +25,7 @@
         android:orientation="horizontal">
 
         <EditText
+            android:id="@+id/first_name_input"
             android:layout_width="60dp"
             android:layout_height="35dp"
             android:layout_marginEnd="8dp"
@@ -115,7 +116,7 @@
 
     <!-- TODO: Make this a button -->
     <Button
-        android:id="@+id/button"
+        android:id="@+id/scan_wiscard_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
