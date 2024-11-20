@@ -3,25 +3,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/accent_tint"
     tools:context=".LoginActivity">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:background="@color/clear"
         android:gravity="center"
-        android:background="#FFFFFF"
+        android:orientation="vertical"
         android:padding="16dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Log In:"
-            android:textSize="36sp"
-            android:textColor="#A52A2A"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="32dp"/>
+            android:layout_marginBottom="32dp"
+            android:text="@string/log_in_title"
+            android:textColor="@color/accent"
+            android:textSize="36sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,10 +32,11 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Email:"
-                android:textSize="18sp"
-                android:textColor="#A52A2A"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginBottom="8dp"
+                android:labelFor="@id/login_email_field"
+                android:text="@string/email_label"
+                android:textColor="@color/accent"
+                android:textSize="18sp" />
 
             <EditText
                 android:id="@+id/login_email_field"
@@ -42,11 +44,13 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="24dp"
+                android:autofillHints="emailAddress"
                 android:background="@drawable/rounded_border"
+                android:hint="@string/enter_email_hint"
                 android:inputType="textEmailAddress"
                 android:padding="12dp"
                 android:textColor="#000000"
-                android:textColorHint="#000000" />
+                android:textColorHint="@color/light_gray" />
         </LinearLayout>
 
         <LinearLayout
@@ -57,30 +61,34 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Password:"
-                android:textSize="18sp"
-                android:textColor="#A52A2A"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginBottom="8dp"
+                android:labelFor="@id/login_password_field"
+                android:text="@string/password_label"
+                android:textColor="@color/accent"
+                android:textSize="18sp" />
 
             <EditText
                 android:id="@+id/login_password_field"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginBottom="32dp"
+                android:autofillHints="password"
                 android:background="@drawable/rounded_border"
+                android:hint="@string/enter_password_hint"
+                android:inputType="textPassword"
                 android:padding="12dp"
                 android:textColor="#000000"
-                android:textColorHint="#000000"
-                android:inputType="textPassword"/>
+                android:textColorHint="@color/light_gray" />
         </LinearLayout>
+
         <Button
             android:id="@+id/log_in_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Log In!"
             android:layout_gravity="center_horizontal"
-            android:backgroundTint="#A52A2A"
-            android:padding="12dp"/>
+            android:backgroundTint="@color/accent"
+            android:padding="12dp"
+            android:text="@string/log_in_button" />
 
     </LinearLayout>
 </FrameLayout>

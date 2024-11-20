@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         val savedPassword = prefs.getString(getString(R.string.saved_password_key), null)
 
         // If we have saved credentials, try logging in with them.
-        if (savedEmail != null && savedPassword != null) {
+        if (savedEmail != null && savedPassword != null && !FORCE_LANDING_PAGE) {
             UserAPI.login(
                 savedEmail,
                 savedPassword,
@@ -41,8 +41,8 @@ class MainActivity : AppCompatActivity() {
     private fun initializeActivity() {
         setContentView(R.layout.activity_main)
 
-        val userLogInButton: Button = findViewById(R.id.button)
-        val userSignUpButton: Button = findViewById(R.id.button2)
+        val userLogInButton: Button = findViewById(R.id.landing_log_in_button)
+        val userSignUpButton: Button = findViewById(R.id.landing_sign_up_button)
 
         userSignUpButton.setOnClickListener { loadSignUp() }
         userLogInButton.setOnClickListener { loadLogIn() }
@@ -65,5 +65,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
+    }
+
+    companion object {
+        private const val FORCE_LANDING_PAGE = true // DEBUG: Ignore saved credentials, show landing page anyways
     }
 }

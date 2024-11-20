@@ -2,5 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="red">#D32F2F</color>
+    <color name="accent">#FFA52A2A</color>
+    <color name="accent_tint">#0DA52A2A</color>
+    <color name="clear">#00000000</color>
+    <color name="light_gray">#B0B0B0</color>
 </resources>
