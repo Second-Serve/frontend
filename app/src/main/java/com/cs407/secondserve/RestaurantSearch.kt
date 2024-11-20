@@ -67,7 +67,13 @@ class RestaurantSearch : AppCompatActivity() {
                 pickupHoursToday.endTime
             )
 
-            // TODO: Price and bag count
+            // TODO: Remove hard-coding
+            val restaurantBagPriceLabel = itemView.findViewById<TextView>(R.id.list_restaurant_bag_price)
+            restaurantBagPriceLabel.text = getString(R.string.restaurant_bag_price, 6.99)
+
+            // TODO: Remove hard-coding
+            val restaurantBagCountLabel = itemView.findViewById<TextView>(R.id.list_restaurant_bag_count)
+            restaurantBagCountLabel.text = getString(R.string.restaurant_bag_count, 4)
 
             restaurantListLayout.addView(itemView)
         }

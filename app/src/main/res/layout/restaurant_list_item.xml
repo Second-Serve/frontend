@@ -20,10 +20,10 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/list_restaurant_price"
+            android:id="@+id/list_restaurant_bag_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="$6.99" />
+            android:text="@string/restaurant_bag_price" />
 
         <TextView
             android:id="@+id/list_restaurant_pickup_hours"
@@ -32,10 +32,10 @@
             android:text="@string/restaurant_page_available_time" />
 
         <TextView
-            android:id="@+id/list_restaurant_bags_available"
+            android:id="@+id/list_restaurant_bag_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/restaurant_bags_available" />
+            android:text="@string/restaurant_bag_count" />
 
         <Button
             android:id="@+id/list_restaurant_add_to_cart_button"

@@ -20,5 +20,7 @@
     <string name="lock_icon_description">Lock Icon</string>
     <string name="filter_by_label">Filter by:</string>
     <string name="pickup_only">Pickup only</string>
-    <string name="restaurant_bags_available">%1$d bags available</string>
+    <string name="restaurant_bag_count">%1$d bags available</string>
+    <string name="restaurant_bag_price">$%1$.2f</string>
+    <string name="restaurant_banner_content_description">Restaurant Banner</string>
 </resources>
