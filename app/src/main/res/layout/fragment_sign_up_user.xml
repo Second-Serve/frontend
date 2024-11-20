@@ -114,16 +114,14 @@
         android:text="@string/agree_to_terms_of_service" />
 
     <!-- TODO: Make this a button -->
-    <TextView
-        android:id="@+id/scan_wiscard_link"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:clickable="true"
-        android:focusable="true"
+        android:background="@android:color/transparent"
         android:text="@string/scan_wiscard_button"
-        android:textColor="#0645AD"
-        android:textSize="16sp" />
+        android:textColor="@color/accent"
+        android:textColorHighlight="@color/accent" />
 
     <Button
         android:id="@+id/sign_up_button"
