@@ -7,7 +7,9 @@ class Restaurant(
     val name: String,
     val address: String,
     val pickupHours: WeeklyPickupHours,
-    val menuItems: List<String>
+    val bagPrice: Double,
+    val bagsAvailable: Int,
+    val bagsClaimed: Int
 ) {
     fun toJSONObject() : JSONObject {
         val json = JSONObject()
@@ -15,7 +17,9 @@ class Restaurant(
         json.put("name", name)
         json.put("address", address)
         json.put("pickup_hours", pickupHours.toJSONObject())
-        json.put("menu_items", menuItems)
+        json.put("bag_price", bagPrice)
+        json.put("bags_available", bagsAvailable)
+        json.put("bags_claimed", bagsClaimed)
 
         return json
     }
@@ -27,7 +31,9 @@ class Restaurant(
                 name = json.getString("name"),
                 address = json.getString("address"),
                 pickupHours = WeeklyPickupHours.fromJSONObject(json.getJSONObject("pickup_hours")),
-                menuItems = emptyList() // TODO
+                bagPrice = json.getDouble("bag_price"),
+                bagsAvailable = json.getInt("bags_available"),
+                bagsClaimed = json.getInt("bags_claimed")
             )
         }
     }
