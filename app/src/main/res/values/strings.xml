@@ -9,7 +9,7 @@
     </string-array>
     <string name="filter_prompt">Filter by</string>
     <string name="error_cannot_get_restaurants">Couldn\'t get restaurants</string>
-    <string name="list_restaurant_pickup_hours">Pickup Hours: %1$s - %2$s</string>
+    <string name="restaurant_pickup_hours">Pickup Hours: %1$s - %2$s</string>
     <string name="saved_email_key">com.cs407.secondserve.email</string>
     <string name="saved_password_key">com.cs407.secondserve.password</string>
     <string name="back_arrow_description">Back Arrow</string>

@@ -59,7 +59,6 @@ class SignUpUser : AppCompatActivity() {
             }
         }
 
-
         signUpButton.setOnClickListener {
             val firstName = firstNameField.text.toString().trim()
             val lastName = lastNameField.text.toString().trim()

@@ -1,8 +1,10 @@
 package com.cs407.secondserve
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -26,7 +28,7 @@ class RestaurantSearch : AppCompatActivity() {
         restaurantListLayout = findViewById(R.id.restaurant_list)
 
         // When you hit the back arrow, go back
-        val backArrow = findViewById<ImageView>(R.id.restaurant_search_back_arrow)
+        val backArrow = findViewById<ImageView>(R.id.back_arrow)
         backArrow.setOnClickListener {
             finish()
         }
@@ -62,7 +64,7 @@ class RestaurantSearch : AppCompatActivity() {
             val currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
             val pickupHoursToday = restaurant.pickupHours.onDay(currentDayOfWeek)
             restaurantPickupHoursLabel.text = getString(
-                R.string.list_restaurant_pickup_hours,
+                R.string.restaurant_pickup_hours,
                 pickupHoursToday.startTime,
                 pickupHoursToday.endTime
             )
@@ -74,6 +76,19 @@ class RestaurantSearch : AppCompatActivity() {
             // TODO: Remove hard-coding
             val restaurantBagCountLabel = itemView.findViewById<TextView>(R.id.list_restaurant_bag_count)
             restaurantBagCountLabel.text = getString(R.string.restaurant_bag_count, 4)
+
+            // Go to the restaurant page when "Add to Cart" clicked
+            val addToCartButton = itemView.findViewById<Button>(R.id.list_restaurant_add_to_cart_button)
+            addToCartButton.setOnClickListener {
+                val intent = Intent(this, RestaurantPage::class.java)
+                intent.putExtra("restaurantName", restaurant.name)
+                intent.putExtra("restaurantBagPrice", 6.99) // TODO: un-hardcode
+                intent.putExtra("restaurantBagCount", 4) // TODO: un-hardcode
+                intent.putExtra("restaurantPickupStart", pickupHoursToday.startTime)
+                intent.putExtra("restaurantPickupEnd", pickupHoursToday.endTime)
+                intent.putExtra("restaurantAddress", restaurant.address)
+                startActivity(intent)
+            }
 
             restaurantListLayout.addView(itemView)
         }

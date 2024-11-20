@@ -7,7 +7,7 @@
     android:padding="16dp">
 
     <ImageView
-        android:id="@+id/restaurant_search_back_arrow"
+        android:id="@+id/back_arrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/back_arrow_description"
@@ -18,17 +18,17 @@
 
     <ImageView
         android:id="@+id/restaurantImage"
-        android:layout_width="344dp"
-        android:layout_height="163dp"
+        android:layout_width="380dp"
+        android:layout_height="160dp"
         android:contentDescription="@string/restaurant_banner_content_description"
         android:scaleType="centerCrop"
         android:src="@drawable/baseline_restaurant_menu_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/restaurant_search_back_arrow" />
+        app:layout_constraintTop_toBottomOf="@id/back_arrow" />
 
     <TextView
-        android:id="@+id/restaurant_name_input"
+        android:id="@+id/restaurant_name_text"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:background="@color/accent"
@@ -37,12 +37,12 @@
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@id/restaurantPrice"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/restaurantImage" />
 
     <TextView
-        android:id="@+id/restaurantPrice"
+        android:id="@+id/restaurant_price_text"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:background="@color/accent"
@@ -51,10 +51,10 @@
         android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/restaurant_name_input" />
+        app:layout_constraintTop_toTopOf="@id/restaurant_name_text" />
 
     <TextView
-        android:id="@+id/bagsAvailable"
+        android:id="@+id/restaurant_bag_count_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -63,10 +63,10 @@
         android:textColor="@color/accent"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/restaurant_name_input" />
+        app:layout_constraintTop_toBottomOf="@id/restaurant_name_text" />
 
     <TextView
-        android:id="@+id/pickupTitle"
+        android:id="@+id/restaurant_pickup_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -75,20 +75,20 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bagsAvailable" />
+        app:layout_constraintTop_toBottomOf="@id/restaurant_bag_count_text" />
 
     <TextView
-        android:id="@+id/pickupDetails"
+        android:id="@+id/restaurant_pickup_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="@string/restaurant_page_available_time"
         android:textColor="@color/light_gray"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/pickupTitle" />
+        app:layout_constraintTop_toBottomOf="@id/restaurant_pickup_title" />
 
     <TextView
-        android:id="@+id/locationTitle"
+        android:id="@+id/restaurant_location_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -97,17 +97,17 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/pickupDetails" />
+        app:layout_constraintTop_toBottomOf="@id/restaurant_pickup_text" />
 
     <TextView
-        android:id="@+id/locationDetails"
+        android:id="@+id/restaurant_location_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="123 State St, Madison, WI 53703"
         android:textColor="@color/light_gray"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/locationTitle" />
+        app:layout_constraintTop_toBottomOf="@id/restaurant_location_title" />
 
     <Button
         android:id="@+id/addToCartButton"
