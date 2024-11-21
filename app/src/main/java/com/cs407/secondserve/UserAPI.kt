@@ -4,25 +4,36 @@ import android.content.Context
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.VolleyError
+import com.android.volley.toolbox.ImageLoader
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.cs407.secondserve.model.Restaurant
 import com.cs407.secondserve.model.User
 import com.cs407.secondserve.model.UserLoginInfo
 import com.cs407.secondserve.model.UserRegistrationInfo
+import com.cs407.secondserve.util.APIImageLoader
+import com.cs407.secondserve.util.AppImageCache
 import org.json.JSONObject
 
 private const val BASE_URL = "http://10.0.2.2:80"
 
 class UserAPI {
     companion object {
-        private lateinit var requestQueue: RequestQueue
+        lateinit var requestQueue: RequestQueue
+
+        lateinit var imageLoader: APIImageLoader
 
         var user: User? = null
 
         fun init(context: Context) {
             requestQueue = Volley.newRequestQueue(context)
             requestQueue.start()
+
+            imageLoader = APIImageLoader(
+                requestQueue,
+                AppImageCache(32),
+                BASE_URL
+            )
         }
 
         private fun makeRequest(

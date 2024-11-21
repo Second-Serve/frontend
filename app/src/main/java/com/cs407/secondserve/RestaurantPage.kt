@@ -1,9 +1,17 @@
 package com.cs407.secondserve
 
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
+import android.util.LruCache
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.android.volley.toolbox.ImageLoader
+import com.android.volley.toolbox.ImageLoader.ImageCache
+import com.android.volley.toolbox.NetworkImageView
+import com.cs407.secondserve.util.AppImageCache
+
 
 class RestaurantPage : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +51,15 @@ class RestaurantPage : AppCompatActivity() {
 
             // Address
             findViewById<TextView>(R.id.restaurant_location_text).text = extras.getString("restaurantAddress")
+
+            // Banner
+            val bannerImage = findViewById<NetworkImageView>(R.id.restaurant_banner_image)
+            bannerImage.setDefaultImageResId(R.drawable.baseline_restaurant_menu_24)
+            bannerImage.setImageUrl(
+                extras.getString("restaurantBannerImagePath"),
+                UserAPI.imageLoader
+            )
+            println("set image url")
         }
     }
 }

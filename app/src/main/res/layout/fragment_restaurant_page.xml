@@ -16,13 +16,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/restaurantImage"
+    <com.android.volley.toolbox.NetworkImageView
+        android:id="@+id/restaurant_banner_image"
         android:layout_width="380dp"
         android:layout_height="160dp"
         android:contentDescription="@string/restaurant_banner_content_description"
+        android:minWidth="320dp"
+        android:minHeight="760dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/baseline_restaurant_menu_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/back_arrow" />
@@ -39,7 +40,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/restaurantImage" />
+        app:layout_constraintTop_toBottomOf="@id/restaurant_banner_image" />
 
     <TextView
         android:id="@+id/restaurant_price_text"

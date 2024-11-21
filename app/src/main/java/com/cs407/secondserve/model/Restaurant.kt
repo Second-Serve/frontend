@@ -9,7 +9,8 @@ class Restaurant(
     val pickupHours: WeeklyPickupHours,
     val bagPrice: Double,
     val bagsAvailable: Int,
-    val bagsClaimed: Int
+    val bagsClaimed: Int,
+    var bannerImagePath: String? = null
 ) {
     fun toJSONObject() : JSONObject {
         val json = JSONObject()
@@ -20,13 +21,14 @@ class Restaurant(
         json.put("bag_price", bagPrice)
         json.put("bags_available", bagsAvailable)
         json.put("bags_claimed", bagsClaimed)
+        json.put("banner_image_path", bannerImagePath)
 
         return json
     }
 
     companion object {
         fun fromJSONObject(json: JSONObject) : Restaurant {
-            return Restaurant(
+            val restaurant = Restaurant(
                 id = json.getString("id"),
                 name = json.getString("name"),
                 address = json.getString("address"),
@@ -35,6 +37,12 @@ class Restaurant(
                 bagsAvailable = json.getInt("bags_available"),
                 bagsClaimed = json.getInt("bags_claimed")
             )
+
+            if (!json.isNull("banner_image_path")) {
+                restaurant.bannerImagePath = json.getString("banner_image_path")
+            }
+
+            return restaurant
         }
     }
 }

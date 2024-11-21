@@ -87,6 +87,7 @@ class RestaurantSearch : AppCompatActivity() {
                 intent.putExtra("restaurantPickupStart", pickupHoursToday.startTime)
                 intent.putExtra("restaurantPickupEnd", pickupHoursToday.endTime)
                 intent.putExtra("restaurantAddress", restaurant.address)
+                intent.putExtra("restaurantBannerImagePath", restaurant.bannerImagePath)
                 startActivity(intent)
             }
 

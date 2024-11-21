@@ -77,7 +77,9 @@ class RestaurantSignUp : AppCompatActivity() {
                         DailyPickupHours(pickupStart, pickupEnd),
                         DailyPickupHours(pickupStart, pickupEnd),
                         DailyPickupHours(pickupStart, pickupEnd)
-                    )
+                    ),
+                    bagsAvailable = 0, // TODO: un-hardcode
+                    bagPrice = 6.99    // TODO: un-hardcode
                 )
             )
             UserAPI.registerAccount(

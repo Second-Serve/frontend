@@ -68,6 +68,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val FORCE_LANDING_PAGE = false // DEBUG: Ignore saved credentials, show landing page anyways
+        private const val FORCE_LANDING_PAGE = true // DEBUG: Ignore saved credentials, show landing page anyways
     }
 }
