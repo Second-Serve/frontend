@@ -63,10 +63,6 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    override fun onStop() {
-        super.onStop()
-    }
-
     companion object {
         private const val FORCE_LANDING_PAGE = true // DEBUG: Ignore saved credentials, show landing page anyways
     }
