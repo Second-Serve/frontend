@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "429857347846",
+    "project_id": "secondserve-fd53ceff",
+    "storage_bucket": "secondserve-fd53ceff.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:429857347846:android:51c4bc83f9940a26f86687",
+        "android_client_info": {
+          "package_name": "com.cs407.secondserve"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC50mqMVy8bRc_pvJ7dWo5eQeAC9A66T0A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
