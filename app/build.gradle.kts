@@ -37,7 +37,8 @@ android {
 }
 
 dependencies {
-    implementation("com.android.volley:volley:1.2.1")
+    // Other dependencies
+    implementation ("com.android.volley:volley:1.2.1")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -46,6 +47,9 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation("com.google.android.gms:play-services-vision:20.1.3")
 
+    // Firebase dependencies
+    implementation("com.google.firebase:firebase-ml-vision:24.0.3")  // Firebase Vision ML
+    implementation("com.google.firebase:firebase-auth:21.0.6")        // Firebase Authentication
+    implementation("com.google.firebase:firebase-analytics:21.0.0")
 }

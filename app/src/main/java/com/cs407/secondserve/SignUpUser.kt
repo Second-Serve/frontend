@@ -14,14 +14,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.google.android.gms.vision.Frame
-import com.google.android.gms.vision.barcode.Barcode
-import com.google.android.gms.vision.barcode.BarcodeDetector
 import android.Manifest
-import com.android.volley.VolleyError
 import com.cs407.secondserve.model.AccountType
 import com.cs407.secondserve.model.User
 import com.cs407.secondserve.model.UserRegistrationInfo
+import com.google.firebase.ml.vision.FirebaseVision
+import com.google.firebase.ml.vision.common.FirebaseVisionImage
 
 class SignUpUser : AppCompatActivity() {
 
@@ -81,14 +79,8 @@ class SignUpUser : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // if (scannedBarcode.isNullOrEmpty() || !isValidBarcode(scannedBarcode!!)) {
-            //     Toast.makeText(this, "Please scan your wiscard", Toast.LENGTH_SHORT).show()
-            //     return@setOnClickListener
-            // }
-
-            // Making Wiscard scanning optional for testing
-            if (scannedBarcode != null && !isValidBarcode(scannedBarcode!!)) {
-                Toast.makeText(this, "Invalid Wiscard. Please scan again.", Toast.LENGTH_SHORT).show()
+            if (scannedBarcode.isNullOrEmpty() || !isValidBarcode(scannedBarcode!!)) {
+                Toast.makeText(this, "Please scan your wiscard", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -110,9 +102,6 @@ class SignUpUser : AppCompatActivity() {
                     val intent = Intent(this, RestaurantSearch::class.java)
                     startActivity(intent)
                     finish()
-                },
-                onError = { _: VolleyError, message: String ->
-                    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
                 }
             )
         }
@@ -136,24 +125,21 @@ class SignUpUser : AppCompatActivity() {
     }
 
     private fun processBarcode(bitmap: Bitmap) {
-        val barcodeDetector = BarcodeDetector.Builder(this)
-            .setBarcodeFormats(Barcode.ALL_FORMATS)
-            .build()
-
-        if (!barcodeDetector.isOperational) {
-            Toast.makeText(this, "Barcode detector is not operational", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val frame = Frame.Builder().setBitmap(bitmap).build()
-        val barcodes = barcodeDetector.detect(frame)
-
-        if (barcodes.size() > 0) {
-            val barcode = barcodes.valueAt(0)
-            Toast.makeText(this, "Scanned: ${barcode.displayValue}", Toast.LENGTH_LONG).show()
-        } else {
-            Toast.makeText(this, "No barcode detected", Toast.LENGTH_SHORT).show()
-        }
+        val image = FirebaseVisionImage.fromBitmap(bitmap)
+        val barcodeDetector = FirebaseVision.getInstance().getVisionBarcodeDetector()
+        barcodeDetector.detectInImage(image)
+            .addOnSuccessListener { barcodes ->
+                if (barcodes.isNotEmpty()) {
+                    val barcode = barcodes.first()
+                    scannedBarcode = barcode.displayValue
+                    Toast.makeText(this, "Scanned: ${scannedBarcode}", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(this, "No barcode detected", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Barcode detection failed: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
     }
 
     private fun isValidBarcode(barcode: String): Boolean {
@@ -173,10 +159,5 @@ class SignUpUser : AppCompatActivity() {
                 Toast.makeText(this, "Camera permission is required", Toast.LENGTH_SHORT).show()
             }
         }
-    }
-
-    override fun onStop() {
-        super.onStop()
-//        userApiService.cancelAllRequests()
     }
 }
