@@ -8,14 +8,11 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import com.android.volley.VolleyError
 import com.cs407.secondserve.model.Restaurant
 import java.util.Calendar
 
 
-class RestaurantSearch : AppCompatActivity() {
+class RestaurantSearchView : SecondServeView() {
     lateinit var restaurantListLayout: LinearLayout
 
     lateinit var restaurants: List<Restaurant>
@@ -33,15 +30,16 @@ class RestaurantSearch : AppCompatActivity() {
             finish()
         }
 
-        UserAPI.fetchRestaurants(
-            onSuccess = { fetchedRestaurants: List<Restaurant> ->
-                updateRestaurants(fetchedRestaurants)
-            },
-            onError = { _: VolleyError, _: String ->
-                restaurantListLayout.removeAllViews()
-                Toast.makeText(this, R.string.error_cannot_get_restaurants, Toast.LENGTH_SHORT).show()
-            }
-        )
+        // TODO: Update to use Firebase
+//        UserAPI.fetchRestaurants(
+//            onSuccess = { fetchedRestaurants: List<Restaurant> ->
+//                updateRestaurants(fetchedRestaurants)
+//            },
+//            onError = { _: VolleyError, _: String ->
+//                restaurantListLayout.removeAllViews()
+//                Toast.makeText(baseContext, R.string.error_cannot_get_restaurants, Toast.LENGTH_SHORT).show()
+//            }
+//        )
     }
 
     private fun updateRestaurants(newRestaurants: List<Restaurant>) {
@@ -80,7 +78,7 @@ class RestaurantSearch : AppCompatActivity() {
             // Go to the restaurant page when "Add to Cart" clicked
             val addToCartButton = itemView.findViewById<Button>(R.id.list_restaurant_add_to_cart_button)
             addToCartButton.setOnClickListener {
-                val intent = Intent(this, RestaurantPage::class.java)
+                val intent = Intent(this, RestaurantPageView::class.java)
                 intent.putExtra("restaurantName", restaurant.name)
                 intent.putExtra("restaurantBagPrice", 6.99) // TODO: un-hardcode
                 intent.putExtra("restaurantBagCount", 4) // TODO: un-hardcode

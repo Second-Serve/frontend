@@ -11,19 +11,14 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.vision.Frame
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import android.Manifest
-import com.android.volley.VolleyError
-import com.cs407.secondserve.model.AccountType
-import com.cs407.secondserve.model.User
-import com.cs407.secondserve.model.UserRegistrationInfo
 
-class SignUpUser : AppCompatActivity() {
+class UserSignUpView : SecondServeView() {
 
     companion object {
         private const val REQUEST_IMAGE_CAPTURE = 1
@@ -67,54 +62,41 @@ class SignUpUser : AppCompatActivity() {
             val confirmPassword = confirmPasswordField.text.toString().trim()
 
             if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
-                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+                Toast.makeText(baseContext, "Please fill in all fields", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             if (password != confirmPassword) {
-                Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
+                Toast.makeText(baseContext, "Passwords do not match", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             if (!termsCheckbox.isChecked) {
-                Toast.makeText(this, "You must agree to the terms", Toast.LENGTH_SHORT).show()
+                Toast.makeText(baseContext, "You must agree to the terms", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             // if (scannedBarcode.isNullOrEmpty() || !isValidBarcode(scannedBarcode!!)) {
-            //     Toast.makeText(this, "Please scan your wiscard", Toast.LENGTH_SHORT).show()
+            //     Toast.makeText(baseContext, "Please scan your wiscard", Toast.LENGTH_SHORT).show()
             //     return@setOnClickListener
             // }
 
             // Making Wiscard scanning optional for testing
             if (scannedBarcode != null && !isValidBarcode(scannedBarcode!!)) {
-                Toast.makeText(this, "Invalid Wiscard. Please scan again.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(baseContext, "Invalid Wiscard. Please scan again.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            val registrationInfo = UserRegistrationInfo(
-                accountType = AccountType.CUSTOMER,
-                email = email,
-                password = password,
-                firstName = firstName,
-                lastName = lastName
-            )
-            UserAPI.registerAccount(
-                registrationInfo,
-                onSuccess = { user: User ->
-                    Toast.makeText(this, "Sign up successful!", Toast.LENGTH_SHORT).show()
-
-                    UserAPI.user = user
-                    UserAPI.saveUser(applicationContext)
-
-                    val intent = Intent(this, RestaurantSearch::class.java)
-                    startActivity(intent)
-                    finish()
-                },
-                onError = { _: VolleyError, message: String ->
-                    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+            auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(baseContext, "Sign up successful!", Toast.LENGTH_SHORT).show()
+                        startActivityEmptyIntent(RestaurantSearchView::class.java)
+                        finish()
+                    } else {
+                        Toast.makeText(baseContext, task.exception?.message, Toast.LENGTH_LONG).show()
+                    }
                 }
-            )
         }
     }
 
@@ -123,7 +105,7 @@ class SignUpUser : AppCompatActivity() {
         if (takePictureIntent.resolveActivity(packageManager) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
         } else {
-            Toast.makeText(this, "No camera app found", Toast.LENGTH_SHORT).show()
+            Toast.makeText(baseContext, "No camera app found", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -141,7 +123,7 @@ class SignUpUser : AppCompatActivity() {
             .build()
 
         if (!barcodeDetector.isOperational) {
-            Toast.makeText(this, "Barcode detector is not operational", Toast.LENGTH_SHORT).show()
+            Toast.makeText(baseContext, "Barcode detector is not operational", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -150,9 +132,9 @@ class SignUpUser : AppCompatActivity() {
 
         if (barcodes.size() > 0) {
             val barcode = barcodes.valueAt(0)
-            Toast.makeText(this, "Scanned: ${barcode.displayValue}", Toast.LENGTH_LONG).show()
+            Toast.makeText(baseContext, "Scanned: ${barcode.displayValue}", Toast.LENGTH_LONG).show()
         } else {
-            Toast.makeText(this, "No barcode detected", Toast.LENGTH_SHORT).show()
+            Toast.makeText(baseContext, "No barcode detected", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -170,13 +152,8 @@ class SignUpUser : AppCompatActivity() {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 openCamera()
             } else {
-                Toast.makeText(this, "Camera permission is required", Toast.LENGTH_SHORT).show()
+                Toast.makeText(baseContext, "Camera permission is required", Toast.LENGTH_SHORT).show()
             }
         }
-    }
-
-    override fun onStop() {
-        super.onStop()
-//        userApiService.cancelAllRequests()
     }
 }

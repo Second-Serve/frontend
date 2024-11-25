@@ -19,7 +19,7 @@ xmlns:tools="http://schemas.android.com/tools">
     tools:targetApi="31"
     android:usesCleartextTraffic="true">
     <activity
-        android:name=".MainActivity"
+        android:name=".LandingPageView"
         android:exported="true">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
@@ -28,14 +28,13 @@ xmlns:tools="http://schemas.android.com/tools">
         </intent-filter>
     </activity>
 
-    <activity android:name=".GetStarted"/>
-    <activity android:name=".LoginActivity" />
-    <activity android:name=".SignUpUser" />
-    <activity android:name=".RestaurantPage" />
-    <activity android:name=".RestaurantSearch" />
-    <activity android:name=".RestaurantSignUp" />
-    <activity android:name=".SaveLocation" />
-        <activity android:name=".UserAPI" />
+    <activity android:name=".GetStartedView"/>
+    <activity android:name=".LoginView" />
+    <activity android:name=".UserSignUpView" />
+    <activity android:name=".RestaurantPageView" />
+    <activity android:name=".RestaurantSearchView" />
+    <activity android:name=".RestaurantSignUpView" />
+    <activity android:name=".SaveLocationView" />
 </application>
 
 </manifest>
