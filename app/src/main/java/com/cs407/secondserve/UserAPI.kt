@@ -122,6 +122,27 @@ class UserAPI {
             )
         }
 
+//        fun fetchUsers(
+//            onSuccess: (List<User>) -> Unit,
+//            onError: ((VolleyError, String) -> Unit)? = null
+//        ) {
+//            makeRequest(
+//                endpoint = "users/",
+//                method = Request.Method.GET,
+//                onSuccess = { response ->
+//                    val usersJSON = response.getJSONArray("users")
+//                    val users = buildList {
+//                        for (i in 0..<usersJSON.length()) {
+//                            val userJSON = usersJSON.getJSONObject(i)
+//                            add(User.fromJSONObject(userJSON))
+//                        }
+//                    }
+//                    onSuccess(users)
+//                },
+//                onError = onError
+//            )
+//        }
+
         fun fetchUsers(
             onSuccess: (List<User>) -> Unit,
             onError: ((VolleyError, String) -> Unit)? = null
@@ -132,7 +153,7 @@ class UserAPI {
                 onSuccess = { response ->
                     val usersJSON = response.getJSONArray("users")
                     val users = buildList {
-                        for (i in 0..<usersJSON.length()) {
+                        for (i in 0 until usersJSON.length()) { // Use 'until' instead of '<'
                             val userJSON = usersJSON.getJSONObject(i)
                             add(User.fromJSONObject(userJSON))
                         }
@@ -142,6 +163,28 @@ class UserAPI {
                 onError = onError
             )
         }
+
+
+//        fun fetchRestaurants(
+//            onSuccess: (List<Restaurant>) -> Unit,
+//            onError: ((VolleyError, String) -> Unit)? = null
+//        ) {
+//            makeRequest(
+//                endpoint = "restaurants/",
+//                method = Request.Method.GET,
+//                onSuccess = { response ->
+//                    val restaurantsJSON = response.getJSONArray("restaurants")
+//                    val restaurants = buildList {
+//                        for (i in 0..<restaurantsJSON.length()) {
+//                            val restaurantJSON = restaurantsJSON.getJSONObject(i)
+//                            add(Restaurant.fromJSONObject(restaurantJSON))
+//                        }
+//                    }
+//                    onSuccess(restaurants)
+//                },
+//                onError = onError
+//            )
+//        }
 
         fun fetchRestaurants(
             onSuccess: (List<Restaurant>) -> Unit,
@@ -153,7 +196,7 @@ class UserAPI {
                 onSuccess = { response ->
                     val restaurantsJSON = response.getJSONArray("restaurants")
                     val restaurants = buildList {
-                        for (i in 0..<restaurantsJSON.length()) {
+                        for (i in 0 until restaurantsJSON.length()) { // Use 'until' instead of '<'
                             val restaurantJSON = restaurantsJSON.getJSONObject(i)
                             add(Restaurant.fromJSONObject(restaurantJSON))
                         }
@@ -163,6 +206,7 @@ class UserAPI {
                 onError = onError
             )
         }
+
 
         fun cancelAllRequests() {
             requestQueue.cancelAll("UserApiService")

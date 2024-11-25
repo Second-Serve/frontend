@@ -1,4 +1,5 @@
 package com.cs407.secondserve
+
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -15,25 +16,30 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.Manifest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.core.*
+import androidx.camera.lifecycle.ProcessCameraProvider
 import com.cs407.secondserve.model.AccountType
 import com.cs407.secondserve.model.User
 import com.cs407.secondserve.model.UserRegistrationInfo
-import com.google.firebase.FirebaseApp
-import com.google.firebase.ml.vision.FirebaseVision
-import com.google.firebase.ml.vision.common.FirebaseVisionImage
+import com.google.mlkit.vision.barcode.BarcodeScanning
+import com.google.mlkit.vision.common.InputImage
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+import androidx.camera.view.PreviewView
+import androidx.camera.core.Preview
 
-//import androidx.activity.result.contracts.ActivityResultContracts
+
 
 class SignUpUser : AppCompatActivity() {
 
     companion object {
-        private const val REQUEST_IMAGE_CAPTURE = 1
         private const val CAMERA_PERMISSION_CODE = 101
     }
 
     private var scannedBarcode: String? = null
 
-    // Register the activity result launcher for camera intent
+    private lateinit var cameraExecutor: ExecutorService
+
     private val takePictureLauncher =
         registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
             if (bitmap != null) {
@@ -47,9 +53,7 @@ class SignUpUser : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_sign_up_user)
 
-        if (FirebaseApp.getApps(this).isEmpty()) {
-            FirebaseApp.initializeApp(this)
-        }
+        cameraExecutor = Executors.newSingleThreadExecutor()
 
         val firstNameField: EditText = findViewById(R.id.first_name_input)
         val lastNameField: EditText = findViewById(R.id.last_name_input)
@@ -108,6 +112,7 @@ class SignUpUser : AppCompatActivity() {
                 firstName = firstName,
                 lastName = lastName
             )
+
             UserAPI.registerAccount(
                 registrationInfo,
                 onSuccess = { user: User ->
@@ -124,22 +129,80 @@ class SignUpUser : AppCompatActivity() {
         }
     }
 
+    @ExperimentalGetImage
+    private fun startCamera() {
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
+
+        cameraProviderFuture.addListener({
+            val cameraProvider = cameraProviderFuture.get()
+
+            val preview = Preview.Builder().build()
+            val imageAnalysis = ImageAnalysis.Builder().build()
+
+            val barcodeScanner = BarcodeScanning.getClient()
+
+
+            imageAnalysis.setAnalyzer(cameraExecutor) { imageProxy ->
+
+                val mediaImage = imageProxy.image
+                if (mediaImage != null) {
+                    val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
+
+                    barcodeScanner.process(image)
+                        .addOnSuccessListener { barcodes ->
+                            if (barcodes.isNotEmpty()) {
+                                val barcode = barcodes.first()
+                                scannedBarcode = barcode.displayValue
+                                Toast.makeText(this, "Scanned: $scannedBarcode", Toast.LENGTH_LONG).show()
+                            }
+                        }
+                        .addOnFailureListener { e ->
+                            Toast.makeText(this, "Barcode detection failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                            e.printStackTrace()
+                        }
+                        .addOnCompleteListener {
+                            imageProxy.close()
+                        }
+                }
+            }
+
+            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
+            try {
+                cameraProvider.unbindAll()
+                cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalysis)
+                val previewView = findViewById<PreviewView>(R.id.viewFinder)
+                preview.setSurfaceProvider(previewView.surfaceProvider)
+            } catch (e: Exception) {
+                Toast.makeText(this, "Camera initialization failed: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+
+        }, ContextCompat.getMainExecutor(this))
+    }
+
+    @ExperimentalGetImage
+    override fun onStart() {
+        super.onStart()
+        startCamera()
+    }
+
     private fun processBarcode(bitmap: Bitmap) {
-        val image = FirebaseVisionImage.fromBitmap(bitmap)
-        val barcodeDetector = FirebaseVision.getInstance().getVisionBarcodeDetector()
-        barcodeDetector.detectInImage(image)
+        val image = InputImage.fromBitmap(bitmap, 0)
+        val scanner = BarcodeScanning.getClient()
+
+        scanner.process(image)
             .addOnSuccessListener { barcodes ->
                 if (barcodes.isNotEmpty()) {
                     val barcode = barcodes.first()
                     scannedBarcode = barcode.displayValue
-                    Toast.makeText(this, "Scanned: ${scannedBarcode}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Scanned: $scannedBarcode", Toast.LENGTH_LONG).show()
                 } else {
                     Toast.makeText(this, "No barcode detected", Toast.LENGTH_SHORT).show()
                 }
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Barcode detection failed: ${e.message}", Toast.LENGTH_SHORT).show()
-                e.printStackTrace()  // Log error for debugging
+                e.printStackTrace()
             }
     }
 
@@ -161,5 +224,9 @@ class SignUpUser : AppCompatActivity() {
             }
         }
     }
-}
 
+    override fun onDestroy() {
+        super.onDestroy()
+        cameraExecutor.shutdown()
+    }
+}
