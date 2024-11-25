@@ -49,7 +49,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     // Firebase dependencies
-    implementation("com.google.firebase:firebase-ml-vision:24.0.3")  // Firebase Vision ML
-    implementation("com.google.firebase:firebase-auth:21.0.6")        // Firebase Authentication
+    implementation("com.google.firebase:firebase-ml-vision:24.0.3")
+    implementation("com.google.firebase:firebase-auth:21.0.6") 
     implementation("com.google.firebase:firebase-analytics:21.0.0")
 }

@@ -1,5 +1,4 @@
 package com.cs407.secondserve
-
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -15,11 +14,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.Manifest
+import androidx.activity.result.contract.ActivityResultContracts
 import com.cs407.secondserve.model.AccountType
 import com.cs407.secondserve.model.User
 import com.cs407.secondserve.model.UserRegistrationInfo
+import com.google.firebase.FirebaseApp
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
+
+//import androidx.activity.result.contracts.ActivityResultContracts
 
 class SignUpUser : AppCompatActivity() {
 
@@ -30,9 +33,23 @@ class SignUpUser : AppCompatActivity() {
 
     private var scannedBarcode: String? = null
 
+    // Register the activity result launcher for camera intent
+    private val takePictureLauncher =
+        registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
+            if (bitmap != null) {
+                processBarcode(bitmap)
+            } else {
+                Toast.makeText(this, "No image data", Toast.LENGTH_SHORT).show()
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_sign_up_user)
+
+        if (FirebaseApp.getApps(this).isEmpty()) {
+            FirebaseApp.initializeApp(this)
+        }
 
         val firstNameField: EditText = findViewById(R.id.first_name_input)
         val lastNameField: EditText = findViewById(R.id.last_name_input)
@@ -53,7 +70,7 @@ class SignUpUser : AppCompatActivity() {
                     CAMERA_PERMISSION_CODE
                 )
             } else {
-                openCamera()
+                takePictureLauncher.launch(null)
             }
         }
 
@@ -107,23 +124,6 @@ class SignUpUser : AppCompatActivity() {
         }
     }
 
-    private fun openCamera() {
-        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (takePictureIntent.resolveActivity(packageManager) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
-        } else {
-            Toast.makeText(this, "No camera app found", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-            val imageBitmap = data?.extras?.get("data") as Bitmap
-            processBarcode(imageBitmap)
-        }
-    }
-
     private fun processBarcode(bitmap: Bitmap) {
         val image = FirebaseVisionImage.fromBitmap(bitmap)
         val barcodeDetector = FirebaseVision.getInstance().getVisionBarcodeDetector()
@@ -139,6 +139,7 @@ class SignUpUser : AppCompatActivity() {
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Barcode detection failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                e.printStackTrace()  // Log error for debugging
             }
     }
 
@@ -154,10 +155,11 @@ class SignUpUser : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CAMERA_PERMISSION_CODE) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                openCamera()
+                takePictureLauncher.launch(null)
             } else {
                 Toast.makeText(this, "Camera permission is required", Toast.LENGTH_SHORT).show()
             }
         }
     }
 }
+
