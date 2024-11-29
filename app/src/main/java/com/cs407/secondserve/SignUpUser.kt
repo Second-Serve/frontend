@@ -141,7 +141,7 @@ class SignUpUser : AppCompatActivity() {
             val cameraProvider = cameraProviderFuture.get()
 
             val previewView = findViewById<PreviewView>(R.id.viewFinder)
-            previewView.visibility = View.VISIBLE // Show the camera preview
+            previewView.visibility = View.VISIBLE
 
             val preview = Preview.Builder().build().also {
                 it.setSurfaceProvider(previewView.surfaceProvider)
