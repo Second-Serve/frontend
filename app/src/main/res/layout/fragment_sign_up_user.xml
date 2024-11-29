@@ -134,6 +134,16 @@
         android:text="@string/sign_up_button"
         android:textColor="#000000" />
 
+    <TextView
+        android:id="@+id/result_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Scan results will appear here"
+        android:layout_marginTop="16dp"
+        android:layout_gravity="center"
+        android:textSize="16sp"
+        android:textColor="@color/black" />
+
     <androidx.camera.view.PreviewView
         android:id="@+id/viewFinder"
         android:layout_width="match_parent"
