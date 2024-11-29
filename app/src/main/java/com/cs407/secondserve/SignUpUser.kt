@@ -134,7 +134,6 @@ class SignUpUser : AppCompatActivity() {
         }
     }
 
-    @ExperimentalGetImage
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
@@ -142,6 +141,8 @@ class SignUpUser : AppCompatActivity() {
             val cameraProvider = cameraProviderFuture.get()
 
             val previewView = findViewById<PreviewView>(R.id.viewFinder)
+            previewView.visibility = View.VISIBLE // Show the camera preview
+
             val preview = Preview.Builder().build().also {
                 it.setSurfaceProvider(previewView.surfaceProvider)
             }
@@ -162,19 +163,24 @@ class SignUpUser : AppCompatActivity() {
                             if (barcodes.isNotEmpty()) {
                                 val barcode = barcodes.first()
                                 scannedBarcode = barcode.displayValue
-                                Toast.makeText(
-                                    this,
-                                    "Scanned: $scannedBarcode",
-                                    Toast.LENGTH_LONG
-                                ).show()
+
+                                previewView.visibility = View.GONE
+
+                                if (scannedBarcode != null && isValidBarcode(scannedBarcode!!)) {
+                                    val snackbar = com.google.android.material.snackbar.Snackbar.make(
+                                        findViewById(android.R.id.content),
+                                        "Valid Barcode: $scannedBarcode",
+                                        10000
+                                    )
+                                    snackbar.show()
+                                } else {
+                                    Toast.makeText(this, "Invalid Barcode: $scannedBarcode", Toast.LENGTH_LONG).show()
+                                }
+
                             }
                         }
                         .addOnFailureListener { e ->
-                            Toast.makeText(
-                                this,
-                                "Barcode detection failed: ${e.message}",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            Toast.makeText(this, "Barcode detection failed: ${e.message}", Toast.LENGTH_SHORT).show()
                             e.printStackTrace()
                         }
                         .addOnCompleteListener {
@@ -194,20 +200,17 @@ class SignUpUser : AppCompatActivity() {
                     imageAnalysis
                 )
             } catch (e: Exception) {
-                Toast.makeText(
-                    this,
-                    "Camera initialization failed: ${e.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(this, "Camera initialization failed: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }, ContextCompat.getMainExecutor(this))
     }
 
 
+
     @ExperimentalGetImage
     override fun onStart() {
         super.onStart()
-        startCamera()
+//        startCamera()
     }
 
     private fun processBarcode(bitmap: Bitmap) {
@@ -231,7 +234,7 @@ class SignUpUser : AppCompatActivity() {
     }
 
     private fun isValidBarcode(barcode: String): Boolean {
-        return barcode.length == 10 && barcode.startsWith("9") && barcode.all { it.isDigit() }
+        return barcode.length == 11 && barcode.startsWith("9") && barcode.all { it.isDigit() }
     }
 
     @androidx.camera.core.ExperimentalGetImage
