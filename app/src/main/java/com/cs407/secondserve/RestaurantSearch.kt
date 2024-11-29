@@ -17,11 +17,15 @@ import com.android.volley.VolleyError
 import com.cs407.secondserve.model.Restaurant
 import java.util.Calendar
 import android.Manifest
-
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import android.location.Location
 
 class RestaurantSearch : AppCompatActivity() {
 
     private val location_permission_code = 1
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var userLocation: Location? = null
     lateinit var restaurantListLayout: LinearLayout
 
     lateinit var restaurants: List<Restaurant>
@@ -124,7 +128,7 @@ class RestaurantSearch : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if(requestCode == location_permission_code){
             if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                getUserLocation()
+                //getUserLocation()
             }
             else{
                 Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show()
