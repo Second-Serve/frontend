@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.Manifest
+import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
@@ -49,6 +50,7 @@ class SignUpUser : AppCompatActivity() {
             }
         }
 
+    @androidx.camera.core.ExperimentalGetImage
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_sign_up_user)
@@ -74,9 +76,12 @@ class SignUpUser : AppCompatActivity() {
                     CAMERA_PERMISSION_CODE
                 )
             } else {
-                takePictureLauncher.launch(null)
+                val previewView = findViewById<PreviewView>(R.id.viewFinder)
+                previewView.visibility = View.VISIBLE
+                startCamera()
             }
         }
+
 
         signUpButton.setOnClickListener {
             val firstName = firstNameField.text.toString().trim()
@@ -136,28 +141,40 @@ class SignUpUser : AppCompatActivity() {
         cameraProviderFuture.addListener({
             val cameraProvider = cameraProviderFuture.get()
 
-            val preview = Preview.Builder().build()
-            val imageAnalysis = ImageAnalysis.Builder().build()
+            val previewView = findViewById<PreviewView>(R.id.viewFinder)
+            val preview = Preview.Builder().build().also {
+                it.setSurfaceProvider(previewView.surfaceProvider)
+            }
 
+            val imageAnalysis = ImageAnalysis.Builder().build()
             val barcodeScanner = BarcodeScanning.getClient()
 
-
             imageAnalysis.setAnalyzer(cameraExecutor) { imageProxy ->
-
                 val mediaImage = imageProxy.image
                 if (mediaImage != null) {
-                    val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
+                    val image = InputImage.fromMediaImage(
+                        mediaImage,
+                        imageProxy.imageInfo.rotationDegrees
+                    )
 
                     barcodeScanner.process(image)
                         .addOnSuccessListener { barcodes ->
                             if (barcodes.isNotEmpty()) {
                                 val barcode = barcodes.first()
                                 scannedBarcode = barcode.displayValue
-                                Toast.makeText(this, "Scanned: $scannedBarcode", Toast.LENGTH_LONG).show()
+                                Toast.makeText(
+                                    this,
+                                    "Scanned: $scannedBarcode",
+                                    Toast.LENGTH_LONG
+                                ).show()
                             }
                         }
                         .addOnFailureListener { e ->
-                            Toast.makeText(this, "Barcode detection failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this,
+                                "Barcode detection failed: ${e.message}",
+                                Toast.LENGTH_SHORT
+                            ).show()
                             e.printStackTrace()
                         }
                         .addOnCompleteListener {
@@ -170,15 +187,22 @@ class SignUpUser : AppCompatActivity() {
 
             try {
                 cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalysis)
-                val previewView = findViewById<PreviewView>(R.id.viewFinder)
-                preview.setSurfaceProvider(previewView.surfaceProvider)
+                cameraProvider.bindToLifecycle(
+                    this,
+                    cameraSelector,
+                    preview,
+                    imageAnalysis
+                )
             } catch (e: Exception) {
-                Toast.makeText(this, "Camera initialization failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Camera initialization failed: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
-
         }, ContextCompat.getMainExecutor(this))
     }
+
 
     @ExperimentalGetImage
     override fun onStart() {
@@ -210,6 +234,7 @@ class SignUpUser : AppCompatActivity() {
         return barcode.length == 10 && barcode.startsWith("9") && barcode.all { it.isDigit() }
     }
 
+    @androidx.camera.core.ExperimentalGetImage
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -218,12 +243,15 @@ class SignUpUser : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CAMERA_PERMISSION_CODE) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                takePictureLauncher.launch(null)
+                val previewView = findViewById<PreviewView>(R.id.viewFinder)
+                previewView.visibility = View.VISIBLE
+                startCamera()
             } else {
                 Toast.makeText(this, "Camera permission is required", Toast.LENGTH_SHORT).show()
             }
         }
     }
+
 
     override fun onDestroy() {
         super.onDestroy()
