@@ -128,11 +128,37 @@ class RestaurantSearch : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if(requestCode == location_permission_code){
             if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                //getUserLocation()
+                getUserLocation()
             }
             else{
                 Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun getUserLocation() {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        if(ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+
+        ) == PackageManager.PERMISSION_GRANTED
+            )
+        {
+            fusedLocationClient.lastLocation.addOnSuccessListener {
+                location->
+                if(location != null){
+                    userLocation = location
+                    Toast.makeText(this, "Location: ${location.latitude}, ${location.longitude}", Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    Toast.makeText(this, "Unable to fetch location", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        }
+        else{
+            requestLocationPermission()
         }
     }
 }
