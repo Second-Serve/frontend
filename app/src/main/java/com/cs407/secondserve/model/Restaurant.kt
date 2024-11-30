@@ -5,6 +5,8 @@ import org.json.JSONObject
 class Restaurant(
     val id: String,
     val name: String,
+    val latitude: Double,
+    val longitude: Double,
     val address: String,
     val pickupHours: WeeklyPickupHours,
     val bagPrice: Double,
@@ -16,6 +18,8 @@ class Restaurant(
         val json = JSONObject()
         json.put("id", id)
         json.put("name", name)
+        json.put("latitude", latitude)
+        json.put("longitude", longitude)
         json.put("address", address)
         json.put("pickup_hours", pickupHours.toJSONObject())
         json.put("bag_price", bagPrice)
@@ -31,6 +35,8 @@ class Restaurant(
             val restaurant = Restaurant(
                 id = json.getString("id"),
                 name = json.getString("name"),
+                latitude = json.getDouble("latitude"),
+                longitude = json.getDouble("longitude"),
                 address = json.getString("address"),
                 pickupHours = WeeklyPickupHours.fromJSONObject(json.getJSONObject("pickup_hours")),
                 bagPrice = json.getDouble("bag_price"),

@@ -196,7 +196,7 @@ class UserAPI {
                 onSuccess = { response ->
                     val restaurantsJSON = response.getJSONArray("restaurants")
                     val restaurants = buildList {
-                        for (i in 0 until restaurantsJSON.length()) { // Use 'until' instead of '<'
+                        for (i in 0 until restaurantsJSON.length()) {
                             val restaurantJSON = restaurantsJSON.getJSONObject(i)
                             add(Restaurant.fromJSONObject(restaurantJSON))
                         }

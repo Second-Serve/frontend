@@ -20,6 +20,7 @@ import android.Manifest
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import android.location.Location
+import android.util.Log
 
 class RestaurantSearch : AppCompatActivity() {
 
@@ -64,11 +65,10 @@ class RestaurantSearch : AppCompatActivity() {
         for (restaurant in restaurants) {
             val itemView: View = inflater.inflate(R.layout.restaurant_list_item, restaurantListLayout, false)
 
-            // Restaurant name
             val restaurantNameLabel = itemView.findViewById<TextView>(R.id.list_restaurant_name)
             restaurantNameLabel.text = restaurant.name
 
-            // Pickup hours
+
             val restaurantPickupHoursLabel = itemView.findViewById<TextView>(R.id.list_restaurant_pickup_hours)
             val calendar = Calendar.getInstance()
             val currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
@@ -79,15 +79,28 @@ class RestaurantSearch : AppCompatActivity() {
                 pickupHoursToday.endTime
             )
 
-            // TODO: Remove hard-coding
             val restaurantBagPriceLabel = itemView.findViewById<TextView>(R.id.list_restaurant_bag_price)
             restaurantBagPriceLabel.text = getString(R.string.restaurant_bag_price, 6.99)
 
-            // TODO: Remove hard-coding
             val restaurantBagCountLabel = itemView.findViewById<TextView>(R.id.list_restaurant_bag_count)
             restaurantBagCountLabel.text = getString(R.string.restaurant_bag_count, 4)
 
-            // Go to the restaurant page when "Add to Cart" clicked
+
+            val distanceTextView = itemView.findViewById<TextView>(R.id.list_restaurant_distance)
+            val distance = if (userLocation != null) {
+                calculateDistance(userLocation!!, restaurant.latitude, restaurant.longitude)
+            } else {
+                -1f
+            }
+
+
+            distanceTextView.text = if (distance >= 0) {
+                String.format("%.2f km away", distance) // Format distance
+            } else {
+                "Location unavailable"
+            }
+
+
             val addToCartButton = itemView.findViewById<Button>(R.id.list_restaurant_add_to_cart_button)
             addToCartButton.setOnClickListener {
                 val intent = Intent(this, RestaurantPage::class.java)
@@ -160,5 +173,13 @@ class RestaurantSearch : AppCompatActivity() {
         else{
             requestLocationPermission()
         }
+    }
+
+    private fun calculateDistance(userLocation: Location, restaurantLat: Double, restaurantLng: Double): Float{
+        val restaurantLocation = Location("").apply {
+            latitude = restaurantLat
+            longitude = restaurantLng
+        }
+        return userLocation.distanceTo(restaurantLocation) / 1000
     }
 }
