@@ -174,6 +174,7 @@ class RestaurantSearch : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
 
+                    // Reverse geocode the user's address (optional)
                     val geocoder = Geocoder(this, Locale.getDefault())
                     try {
                         val addresses = geocoder.getFromLocation(
@@ -182,24 +183,20 @@ class RestaurantSearch : AppCompatActivity() {
                             1
                         )
 
-                        // Check if addresses is not null or empty before accessing it
                         if (!addresses.isNullOrEmpty()) {
                             val userAddress = addresses[0].getAddressLine(0)
-                            Toast.makeText(this, "Address: $userAddress", Toast.LENGTH_LONG).show()
                             Log.d("UserLocation", "Address: $userAddress")
-                        } else {
-                            Toast.makeText(this, "Unable to fetch address", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Address: $userAddress", Toast.LENGTH_LONG).show()
                         }
                     } catch (e: Exception) {
-                        e.printStackTrace()
-                        Toast.makeText(this, "Geocoding failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                        Log.e("GeocodingError", "Failed to geocode: ${e.message}")
                     }
                 } else {
                     Toast.makeText(this, "Unable to fetch location", Toast.LENGTH_SHORT).show()
                 }
             }.addOnFailureListener { e ->
+                Log.e("LocationError", "Error fetching location: ${e.message}")
                 Toast.makeText(this, "Error fetching location: ${e.message}", Toast.LENGTH_SHORT).show()
-                e.printStackTrace()
             }
         } else {
             requestLocationPermission()

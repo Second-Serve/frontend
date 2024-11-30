@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.Manifest
+import android.location.Location
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.*
@@ -28,7 +29,9 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import androidx.camera.view.PreviewView
 import androidx.camera.core.Preview
-
+import androidx.databinding.tool.store.Location
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 
 
 class SignUpUser : AppCompatActivity() {
@@ -49,64 +52,38 @@ class SignUpUser : AppCompatActivity() {
                 Toast.makeText(this, "No image data", Toast.LENGTH_SHORT).show()
             }
         }
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var userLocation: Location? = null
 
     @androidx.camera.core.ExperimentalGetImage
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_sign_up_user)
 
-        cameraExecutor = Executors.newSingleThreadExecutor()
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        val firstNameField: EditText = findViewById(R.id.first_name_input)
-        val lastNameField: EditText = findViewById(R.id.last_name_input)
-        val emailField: EditText = findViewById(R.id.email_input)
-        val passwordField: EditText = findViewById(R.id.password_input)
-        val confirmPasswordField: EditText = findViewById(R.id.confirm_password_input)
-        val termsCheckbox: CheckBox = findViewById(R.id.terms_checkbox)
-        val signUpButton: Button = findViewById(R.id.sign_up_button)
-        val scanWiscardButton: TextView = findViewById(R.id.scan_wiscard_button)
-
-        scanWiscardButton.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED
-            ) {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.CAMERA),
-                    CAMERA_PERMISSION_CODE
-                )
-            } else {
-                val previewView = findViewById<PreviewView>(R.id.viewFinder)
-                previewView.visibility = View.VISIBLE
-                startCamera()
-            }
+        // Request location permission if not already granted
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            getUserLocation()
+        } else {
+            requestLocationPermission()
         }
 
-
+        // Existing UI elements and click listeners
+        val signUpButton: Button = findViewById(R.id.sign_up_button)
         signUpButton.setOnClickListener {
-            val firstName = firstNameField.text.toString().trim()
-            val lastName = lastNameField.text.toString().trim()
-            val email = emailField.text.toString().trim()
-            val password = passwordField.text.toString().trim()
-            val confirmPassword = confirmPasswordField.text.toString().trim()
+            val email = findViewById<EditText>(R.id.email_input).text.toString().trim()
+            val password = findViewById<EditText>(R.id.password_input).text.toString().trim()
+            val firstName = findViewById<EditText>(R.id.first_name_input).text.toString().trim()
+            val lastName = findViewById<EditText>(R.id.last_name_input).text.toString().trim()
 
-            if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+            if (email.isEmpty() || password.isEmpty() || firstName.isEmpty() || lastName.isEmpty()) {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            if (password != confirmPassword) {
-                Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            if (!termsCheckbox.isChecked) {
-                Toast.makeText(this, "You must agree to the terms", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            if (scannedBarcode.isNullOrEmpty() || !isValidBarcode(scannedBarcode!!)) {
-                Toast.makeText(this, "Please scan your wiscard", Toast.LENGTH_SHORT).show()
+            if (userLocation == null) {
+                Toast.makeText(this, "Unable to fetch location. Please try again.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -116,21 +93,49 @@ class SignUpUser : AppCompatActivity() {
                 password = password,
                 firstName = firstName,
                 lastName = lastName
-            )
+            ).apply {
+                userLocation?.let {
+                    latitude = it.latitude
+                    longitude = it.longitude
+                }
+            }
 
             UserAPI.registerAccount(
                 registrationInfo,
-                onSuccess = { user: User ->
+                onSuccess = {
                     Toast.makeText(this, "Sign up successful!", Toast.LENGTH_SHORT).show()
-
-                    UserAPI.user = user
-                    UserAPI.saveUser(applicationContext)
-
-                    val intent = Intent(this, RestaurantSearch::class.java)
-                    startActivity(intent)
+                    startActivity(Intent(this, RestaurantSearch::class.java))
                     finish()
+                },
+                onError = { _, message ->
+                    Toast.makeText(this, "Error: $message", Toast.LENGTH_SHORT).show()
                 }
             )
+        }
+    }
+
+    private fun getUserLocation() {
+        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+            if (location != null) {
+                userLocation = location
+            } else {
+                Toast.makeText(this, "Unable to fetch location.", Toast.LENGTH_SHORT).show()
+            }
+        }.addOnFailureListener {
+            Toast.makeText(this, "Failed to get location: ${it.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun requestLocationPermission() {
+        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 1 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            getUserLocation()
+        } else {
+            Toast.makeText(this, "Location permission is required for registration.", Toast.LENGTH_SHORT).show()
         }
     }
 
