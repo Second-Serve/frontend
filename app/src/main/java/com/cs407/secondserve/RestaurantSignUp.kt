@@ -1,18 +1,16 @@
 package com.cs407.secondserve
 
+
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import android.location.Geocoder
+import java.util.Locale
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.VolleyError
-import com.cs407.secondserve.model.AccountType
-import com.cs407.secondserve.model.DailyPickupHours
-import com.cs407.secondserve.model.RestaurantRegistrationInfo
-import com.cs407.secondserve.model.User
-import com.cs407.secondserve.model.UserRegistrationInfo
-import com.cs407.secondserve.model.WeeklyPickupHours
+import com.cs407.secondserve.model.*
 
 class RestaurantSignUp : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,12 +21,10 @@ class RestaurantSignUp : AppCompatActivity() {
         val lastNameField: EditText = findViewById(R.id.restaurant_last_name_input)
         val emailField: EditText = findViewById(R.id.restaurant_email_input)
         val passwordField: EditText = findViewById(R.id.restaurant_password_input)
-        // val confirmPasswordField: EditText = findViewById(R.id.confirm_password_input)
         val restaurantNameField: EditText = findViewById(R.id.restaurant_name_input)
         val restaurantAddressField: EditText = findViewById(R.id.restaurant_address_input)
         val restaurantPickupHoursStartField: EditText = findViewById(R.id.restaurant_pickup_hours_start_time_input)
         val restaurantPickupHoursEndField: EditText = findViewById(R.id.restaurant_pickup_hours_end_time_input)
-        // val termsCheckbox: CheckBox = findViewById(R.id.terms_checkbox)
         val signUpButton: Button = findViewById(R.id.restaurant_sign_up_button)
 
         signUpButton.setOnClickListener {
@@ -42,62 +38,69 @@ class RestaurantSignUp : AppCompatActivity() {
             val pickupEnd = restaurantPickupHoursEndField.text.toString().trim()
 
             if (
-                firstName.isEmpty()
-                || lastName.isEmpty()
-                || email.isEmpty()
-                || password.isEmpty()
-                || restaurantName.isEmpty()
-                || address.isEmpty()
-                || pickupStart.isEmpty()
-                || pickupEnd.isEmpty()
+                firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty() ||
+                restaurantName.isEmpty() || address.isEmpty() || pickupStart.isEmpty() || pickupEnd.isEmpty()
             ) {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // if (!termsCheckbox.isChecked) {
-            //     Toast.makeText(this, "You must agree to the terms", Toast.LENGTH_SHORT).show()
-            //     return@setOnClickListener
-            // }
-
-            val registrationInfo = UserRegistrationInfo(
-                accountType = AccountType.BUSINESS,
-                email = email,
-                password = password,
-                firstName = firstName,
-                lastName = lastName,
-                restaurant = RestaurantRegistrationInfo(
-                    name = restaurantName,
-                    address = address,
-                    pickupHours = WeeklyPickupHours( // TODO: Allow users to select pickup hours per-day
-                        DailyPickupHours(pickupStart, pickupEnd),
-                        DailyPickupHours(pickupStart, pickupEnd),
-                        DailyPickupHours(pickupStart, pickupEnd),
-                        DailyPickupHours(pickupStart, pickupEnd),
-                        DailyPickupHours(pickupStart, pickupEnd),
-                        DailyPickupHours(pickupStart, pickupEnd),
-                        DailyPickupHours(pickupStart, pickupEnd)
-                    ),
-                    bagsAvailable = 0, // TODO: un-hardcode
-                    bagPrice = 6.99    // TODO: un-hardcode
-                )
-            )
-            UserAPI.registerAccount(
-                registrationInfo,
-                onSuccess = { user: User ->
-                    Toast.makeText(this, "Sign up successful!", Toast.LENGTH_SHORT).show()
-
-                    UserAPI.user = user
-                    UserAPI.saveUser(applicationContext)
-
-                    val intent = Intent(this, RestaurantSearch::class.java)
-                    startActivity(intent)
-                    finish()
-                },
-                onError = { _: VolleyError, message: String ->
-                    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+            val geocoder = Geocoder(this, Locale.getDefault())
+            try {
+                val addresses = geocoder.getFromLocationName(address, 1)
+                if (addresses.isNullOrEmpty()) {
+                    Toast.makeText(this, "Invalid address. Please enter a valid address.", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
                 }
-            )
+
+                val location = addresses[0]
+                val latitude = location.latitude
+                val longitude = location.longitude
+
+                val registrationInfo = UserRegistrationInfo(
+                    accountType = AccountType.BUSINESS,
+                    email = email,
+                    password = password,
+                    firstName = firstName,
+                    lastName = lastName,
+                    restaurant = RestaurantRegistrationInfo(
+                        name = restaurantName,
+                        address = address,
+                        latitude = latitude,
+                        longitude = longitude,
+                        pickupHours = WeeklyPickupHours(
+                            DailyPickupHours(pickupStart, pickupEnd),
+                            DailyPickupHours(pickupStart, pickupEnd),
+                            DailyPickupHours(pickupStart, pickupEnd),
+                            DailyPickupHours(pickupStart, pickupEnd),
+                            DailyPickupHours(pickupStart, pickupEnd),
+                            DailyPickupHours(pickupStart, pickupEnd),
+                            DailyPickupHours(pickupStart, pickupEnd)
+                        ),
+                        bagsAvailable = 0, // TODO: un-hardcode
+                        bagPrice = 6.99    // TODO: un-hardcode
+                    )
+                )
+
+                UserAPI.registerAccount(
+                    registrationInfo,
+                    onSuccess = { user: User ->
+                        Toast.makeText(this, "Sign up successful!", Toast.LENGTH_SHORT).show()
+                        UserAPI.user = user
+                        UserAPI.saveUser(applicationContext)
+                        val intent = Intent(this, RestaurantSearch::class.java)
+                        startActivity(intent)
+                        finish()
+                    },
+                    onError = { _: VolleyError, message: String ->
+                        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+                    }
+                )
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(this, "Failed to fetch coordinates: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }
