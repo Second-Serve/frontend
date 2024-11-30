@@ -17,10 +17,12 @@ import com.android.volley.VolleyError
 import com.cs407.secondserve.model.Restaurant
 import java.util.Calendar
 import android.Manifest
+import android.location.Geocoder
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import android.location.Location
 import android.util.Log
+import java.util.Locale
 
 class RestaurantSearch : AppCompatActivity() {
 
@@ -53,6 +55,12 @@ class RestaurantSearch : AppCompatActivity() {
                 Toast.makeText(this, R.string.error_cannot_get_restaurants, Toast.LENGTH_SHORT).show()
             }
         )
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            getUserLocation()
+        } else {
+            requestLocationPermission()
+        }
     }
 
     private fun updateRestaurants(newRestaurants: List<Restaurant>) {
@@ -151,26 +159,49 @@ class RestaurantSearch : AppCompatActivity() {
 
     private fun getUserLocation() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        if(ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.ACCESS_FINE_LOCATION
 
-        ) == PackageManager.PERMISSION_GRANTED
-            )
-        {
-            fusedLocationClient.lastLocation.addOnSuccessListener {
-                location->
-                if(location != null){
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                if (location != null) {
                     userLocation = location
-                    Toast.makeText(this, "Location: ${location.latitude}, ${location.longitude}", Toast.LENGTH_SHORT).show()
-                }
-                else{
+                    Toast.makeText(
+                        this,
+                        "Location: ${location.latitude}, ${location.longitude}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    val geocoder = Geocoder(this, Locale.getDefault())
+                    try {
+                        val addresses = geocoder.getFromLocation(
+                            location.latitude,
+                            location.longitude,
+                            1
+                        )
+
+                        // Check if addresses is not null or empty before accessing it
+                        if (!addresses.isNullOrEmpty()) {
+                            val userAddress = addresses[0].getAddressLine(0)
+                            Toast.makeText(this, "Address: $userAddress", Toast.LENGTH_LONG).show()
+                            Log.d("UserLocation", "Address: $userAddress")
+                        } else {
+                            Toast.makeText(this, "Unable to fetch address", Toast.LENGTH_SHORT).show()
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Toast.makeText(this, "Geocoding failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
                     Toast.makeText(this, "Unable to fetch location", Toast.LENGTH_SHORT).show()
                 }
+            }.addOnFailureListener { e ->
+                Toast.makeText(this, "Error fetching location: ${e.message}", Toast.LENGTH_SHORT).show()
+                e.printStackTrace()
             }
-
-        }
-        else{
+        } else {
             requestLocationPermission()
         }
     }
