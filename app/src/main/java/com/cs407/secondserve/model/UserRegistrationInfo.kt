@@ -1,16 +1,17 @@
 package com.cs407.secondserve.model
 
 import org.json.JSONObject
-
 class UserRegistrationInfo(
     var accountType: AccountType,
     var email: String,
     var password: String,
     var firstName: String,
     var lastName: String,
+    var latitude: Double? = null,
+    var longitude: Double? = null,
     var restaurant: RestaurantRegistrationInfo? = null
 ) {
-    fun toJSONObject() : JSONObject {
+    fun toJSONObject(): JSONObject {
         val json = JSONObject()
         json.put("account_type", accountType.toString())
         json.put("email", email)
@@ -18,10 +19,13 @@ class UserRegistrationInfo(
         json.put("last_name", lastName)
         json.put("password", password)
 
+        latitude?.let { json.put("latitude", it) }
+        longitude?.let { json.put("longitude", it) }
+
         if (accountType == AccountType.BUSINESS && restaurant != null) {
             json.put("restaurant", restaurant!!.toJSONObject())
         }
-        
+
         return json
     }
 }

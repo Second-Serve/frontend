@@ -8,6 +8,8 @@ class User(
     var email: String,
     var password: String? = null,
     var bearer: String,
+    val latitude: Double? = null,
+    val longitude: Double? = null,
     var isAdmin: Boolean,
     var firstName: String,
     var lastName: String,
@@ -15,13 +17,15 @@ class User(
     var restaurant: Restaurant? = null
 ) {
     companion object {
-        fun fromJSONObject(json: JSONObject) : User {
+        fun fromJSONObject(json: JSONObject): User {
             val user = User(
                 id = json.getString("id"),
                 accountType = AccountType.fromString(json.getString("account_type")),
                 email = json.getString("email"),
-                password = json.getString("password"),
+                password = json.optString("password", null),
                 bearer = json.getString("bearer"),
+                latitude = json.optDouble("latitude", Double.NaN).takeIf { !it.isNaN() },
+                longitude = json.optDouble("longitude", Double.NaN).takeIf { !it.isNaN() },
                 isAdmin = json.getBoolean("is_admin"),
                 firstName = json.getString("first_name"),
                 lastName = json.getString("last_name")
