@@ -1,13 +1,11 @@
 package com.cs407.secondserve
 
-
 import android.content.Intent
+import android.location.Geocoder
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import android.location.Geocoder
-import java.util.Locale
 import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.VolleyError
 import com.cs407.secondserve.model.*
@@ -37,15 +35,15 @@ class RestaurantSignUp : AppCompatActivity() {
             val pickupStart = restaurantPickupHoursStartField.text.toString().trim()
             val pickupEnd = restaurantPickupHoursEndField.text.toString().trim()
 
-            if (
-                firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty() ||
+            if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty() ||
                 restaurantName.isEmpty() || address.isEmpty() || pickupStart.isEmpty() || pickupEnd.isEmpty()
             ) {
                 Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            val geocoder = Geocoder(this, Locale.getDefault())
+            // Fetch latitude and longitude for the address
+            val geocoder = Geocoder(this)
             try {
                 val addresses = geocoder.getFromLocationName(address, 1)
                 if (addresses.isNullOrEmpty()) {
@@ -86,8 +84,6 @@ class RestaurantSignUp : AppCompatActivity() {
                     registrationInfo,
                     onSuccess = { user: User ->
                         Toast.makeText(this, "Sign up successful!", Toast.LENGTH_SHORT).show()
-                        UserAPI.user = user
-                        UserAPI.saveUser(applicationContext)
                         val intent = Intent(this, RestaurantSearch::class.java)
                         startActivity(intent)
                         finish()
@@ -98,8 +94,7 @@ class RestaurantSignUp : AppCompatActivity() {
                 )
 
             } catch (e: Exception) {
-                e.printStackTrace()
-                Toast.makeText(this, "Failed to fetch coordinates: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Error fetching address: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }
