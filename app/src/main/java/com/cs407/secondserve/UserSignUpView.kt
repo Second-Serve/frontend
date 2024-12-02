@@ -1,22 +1,14 @@
 package com.cs407.secondserve
 
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
-import android.graphics.Bitmap
 import android.os.Bundle
-import android.provider.MediaStore
 import android.widget.Button
-import android.widget.CheckBox
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.google.android.gms.vision.Frame
-import com.google.android.gms.vision.barcode.Barcode
-import com.google.android.gms.vision.barcode.BarcodeDetector
 import android.Manifest
 import android.view.View
 import androidx.annotation.OptIn
@@ -25,7 +17,6 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import com.cs407.secondserve.model.AccountType
 import com.cs407.secondserve.service.AccountService
-import com.cs407.secondserve.model.UserRegistrationInfo
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -34,9 +25,7 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 class UserSignUpView : SecondServeView() {
-
     companion object {
-        private const val REQUEST_IMAGE_CAPTURE = 1
         private const val CAMERA_PERMISSION_CODE = 101
         private const val LOCATION_PERMISSION_CODE = 102
     }
@@ -50,31 +39,8 @@ class UserSignUpView : SecondServeView() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_sign_up_user)
 
-        val firstNameField: EditText = findViewById(R.id.first_name_input)
-        val lastNameField: EditText = findViewById(R.id.last_name_input)
-        val emailField: EditText = findViewById(R.id.email_input)
-        val passwordField: EditText = findViewById(R.id.password_input)
-        val confirmPasswordField: EditText = findViewById(R.id.confirm_password_input)
-        val termsCheckbox: CheckBox = findViewById(R.id.terms_checkbox)
-        val signUpButton: Button = findViewById(R.id.sign_up_button)
-        val scanWiscardButton: TextView = findViewById(R.id.scan_wiscard_button)
-
         cameraExecutor = Executors.newSingleThreadExecutor()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
-        scanWiscardButton.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED
-            ) {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.CAMERA),
-                    CAMERA_PERMISSION_CODE
-                )
-            } else {
-                openCamera()
-            }
-        }
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             getUserLocation()
@@ -104,48 +70,21 @@ class UserSignUpView : SecondServeView() {
             return
         }
 
-        val registrationInfo = UserRegistrationInfo(
-            accountType = AccountType.CUSTOMER,
+        AccountService.register(
             email = email,
             password = password,
             firstName = firstName,
             lastName = lastName,
-            latitude = userLocation?.latitude,
-            longitude = userLocation?.longitude
-        )
-
-        UserAPI.registerAccount(
-            registrationInfo,
+            accountType = AccountType.CUSTOMER,
             onSuccess = {
-                Toast.makeText(this, "Sign up successful!", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, RestaurantSearch::class.java))
+                Toast.makeText(baseContext, "Sign up successful!", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, RestaurantSearchView::class.java))
                 finish()
             },
-            onError = { _, message ->
-                Toast.makeText(this, "Error: $message", Toast.LENGTH_SHORT).show()
+            onFailure = { exception ->
+                Toast.makeText(baseContext, exception.message, Toast.LENGTH_SHORT).show()
             }
         )
-    }
-
-    private fun processBarcode(bitmap: Bitmap) {
-        val barcodeDetector = BarcodeDetector.Builder(this)
-            .setBarcodeFormats(Barcode.ALL_FORMATS)
-            .build()
-
-        if (!barcodeDetector.isOperational) {
-            Toast.makeText(baseContext, "Barcode detector is not operational", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val frame = Frame.Builder().setBitmap(bitmap).build()
-        val barcodes = barcodeDetector.detect(frame)
-
-        if (barcodes.size() > 0) {
-            val barcode = barcodes.valueAt(0)
-            Toast.makeText(baseContext, "Scanned: ${barcode.displayValue}", Toast.LENGTH_LONG).show()
-        } else {
-            Toast.makeText(baseContext, "No barcode detected", Toast.LENGTH_SHORT).show()
-        }
     }
 
     private fun getUserLocation() {
@@ -176,15 +115,7 @@ class UserSignUpView : SecondServeView() {
         )
     }
 
-    private fun isValidBarcode(barcode: String): Boolean {
-        return barcode.length == 10 && barcode.startsWith("9") && barcode.all { it.isDigit() }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         when (requestCode) {
