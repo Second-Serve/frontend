@@ -5,10 +5,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.cs407.secondserve.model.AccountType
-import com.cs407.secondserve.model.DailyPickupHours
-import com.cs407.secondserve.model.RestaurantRegistrationInfo
-import com.cs407.secondserve.model.UserRegistrationInfo
-import com.cs407.secondserve.model.WeeklyPickupHours
+import com.cs407.secondserve.service.AccountService
 
 class RestaurantSignUpView : SecondServeView() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,8 +31,8 @@ class RestaurantSignUpView : SecondServeView() {
             val password = passwordField.text.toString().trim()
             val restaurantName = restaurantNameField.text.toString().trim()
             val address = restaurantAddressField.text.toString().trim()
-            val pickupStart = restaurantPickupHoursStartField.text.toString().trim()
-            val pickupEnd = restaurantPickupHoursEndField.text.toString().trim()
+            val pickupStartTime = restaurantPickupHoursStartField.text.toString().trim()
+            val pickupEndTime = restaurantPickupHoursEndField.text.toString().trim()
 
             if (
                 firstName.isEmpty()
@@ -44,8 +41,8 @@ class RestaurantSignUpView : SecondServeView() {
                 || password.isEmpty()
                 || restaurantName.isEmpty()
                 || address.isEmpty()
-                || pickupStart.isEmpty()
-                || pickupEnd.isEmpty()
+                || pickupStartTime.isEmpty()
+                || pickupEndTime.isEmpty()
             ) {
                 Toast.makeText(baseContext, "Please fill in all fields", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -57,40 +54,25 @@ class RestaurantSignUpView : SecondServeView() {
             //     return@setOnClickListener
             // }
 
-            // TODO: Integrate this with Firebase
-            val registrationInfo = UserRegistrationInfo(
-                accountType = AccountType.BUSINESS,
-                email = email,
-                password = password,
-                firstName = firstName,
-                lastName = lastName,
-                restaurant = RestaurantRegistrationInfo(
-                    name = restaurantName,
-                    address = address,
-                    pickupHours = WeeklyPickupHours( // TODO: Allow users to select pickup hours per-day
-                        DailyPickupHours(pickupStart, pickupEnd),
-                        DailyPickupHours(pickupStart, pickupEnd),
-                        DailyPickupHours(pickupStart, pickupEnd),
-                        DailyPickupHours(pickupStart, pickupEnd),
-                        DailyPickupHours(pickupStart, pickupEnd),
-                        DailyPickupHours(pickupStart, pickupEnd),
-                        DailyPickupHours(pickupStart, pickupEnd)
-                    ),
-                    bagsAvailable = 0, // TODO: un-hardcode
-                    bagPrice = 6.99    // TODO: un-hardcode
-                )
-            )
-
-            auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(baseContext, "Sign up successful!", Toast.LENGTH_SHORT).show()
-                        startActivityEmptyIntent(RestaurantSearchView::class.java)
-                        finish()
-                    } else {
-                        Toast.makeText(baseContext, task.exception?.message, Toast.LENGTH_LONG).show()
-                    }
+            AccountService.register(
+                email,
+                password,
+                firstName,
+                lastName,
+                AccountType.BUSINESS,
+                restaurantName,
+                address,
+                pickupStartTime,
+                pickupEndTime,
+                onSuccess = {
+                    Toast.makeText(baseContext, "Sign up successful!", Toast.LENGTH_SHORT).show()
+                    startActivityEmptyIntent(RestaurantSearchView::class.java)
+                    finish()
+                },
+                onFailure = { exception ->
+                    Toast.makeText(baseContext, exception.message, Toast.LENGTH_LONG).show()
                 }
+            )
         }
     }
 }

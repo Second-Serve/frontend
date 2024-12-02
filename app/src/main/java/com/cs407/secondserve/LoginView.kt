@@ -8,8 +8,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
+import com.cs407.secondserve.service.AccountService
 
 class LoginView : SecondServeView() {
     private val LOCATION_PERMISSION_REQUEST_CODE = 100
@@ -37,20 +36,22 @@ class LoginView : SecondServeView() {
             val emailField: EditText = findViewById(R.id.login_email_field)
             val passwordField: EditText = findViewById(R.id.login_password_field)
 
-            tryLogIn(emailField.text.toString(), passwordField.text.toString())
+            trySignIn(emailField.text.toString(), passwordField.text.toString())
         }
     }
 
-    private fun tryLogIn(email: String, password: String) {
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(this) { task: Task<AuthResult> ->
-                if (task.isSuccessful) {
-                    // We were able to sign in, so go to the search view
-                    startActivityEmptyIntent(RestaurantSearchView::class.java)
-                } else {
-                    Toast.makeText(baseContext, task.exception?.message, Toast.LENGTH_LONG).show()
-                }
+    private fun trySignIn(email: String, password: String) {
+        AccountService.signIn(
+            email,
+            password,
+            onSuccess = {
+                // We were able to sign in, so go to the search view
+                startActivityEmptyIntent(RestaurantSearchView::class.java)
+            },
+            onFailure = { exception ->
+                Toast.makeText(baseContext, exception.message, Toast.LENGTH_LONG).show()
             }
+        )
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

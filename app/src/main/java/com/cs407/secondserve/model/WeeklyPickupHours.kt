@@ -1,7 +1,5 @@
 package com.cs407.secondserve.model
 
-import org.json.JSONObject
-
 class WeeklyPickupHours(
     val sunday: DailyPickupHours,
     val monday: DailyPickupHours,
@@ -11,18 +9,6 @@ class WeeklyPickupHours(
     val friday: DailyPickupHours,
     val saturday: DailyPickupHours
 ) {
-    fun toJSONObject() : JSONObject {
-        val json = JSONObject()
-        json.put("sunday", sunday.toJSONObject())
-        json.put("monday", monday.toJSONObject())
-        json.put("tuesday", tuesday.toJSONObject())
-        json.put("wednesday", wednesday.toJSONObject())
-        json.put("thursday", thursday.toJSONObject())
-        json.put("friday", friday.toJSONObject())
-        json.put("saturday", saturday.toJSONObject())
-        return json
-    }
-
     fun onDay(weekday: Weekday) : DailyPickupHours {
         return when (weekday) {
             Weekday.SUNDAY -> sunday
@@ -61,16 +47,21 @@ class WeeklyPickupHours(
             saturday = DailyPickupHours.NEVER
         )
 
-        fun fromJSONObject(json: JSONObject) : WeeklyPickupHours {
+        fun fromDailyHours(dailyPickupHours: DailyPickupHours) : WeeklyPickupHours {
             return WeeklyPickupHours(
-                sunday = DailyPickupHours.fromJSONObject(json.getJSONObject("sunday")),
-                monday = DailyPickupHours.fromJSONObject(json.getJSONObject("monday")),
-                tuesday = DailyPickupHours.fromJSONObject(json.getJSONObject("tuesday")),
-                wednesday = DailyPickupHours.fromJSONObject(json.getJSONObject("wednesday")),
-                thursday = DailyPickupHours.fromJSONObject(json.getJSONObject("thursday")),
-                friday = DailyPickupHours.fromJSONObject(json.getJSONObject("friday")),
-                saturday = DailyPickupHours.fromJSONObject(json.getJSONObject("saturday"))
+                dailyPickupHours,
+                dailyPickupHours,
+                dailyPickupHours,
+                dailyPickupHours,
+                dailyPickupHours,
+                dailyPickupHours,
+                dailyPickupHours
             )
+        }
+
+        fun fromDailyHours(dailyStartTime: String, dailyEndTime: String) : WeeklyPickupHours {
+            val dailyPickupHours = DailyPickupHours(dailyStartTime, dailyEndTime)
+            return fromDailyHours(dailyPickupHours)
         }
     }
 }

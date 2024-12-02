@@ -8,7 +8,9 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import com.cs407.secondserve.model.Restaurant
+import com.cs407.secondserve.service.RestaurantService
 import java.util.Calendar
 
 
@@ -30,16 +32,14 @@ class RestaurantSearchView : SecondServeView() {
             finish()
         }
 
-        // TODO: Update to use Firebase
-//        UserAPI.fetchRestaurants(
-//            onSuccess = { fetchedRestaurants: List<Restaurant> ->
-//                updateRestaurants(fetchedRestaurants)
-//            },
-//            onError = { _: VolleyError, _: String ->
-//                restaurantListLayout.removeAllViews()
-//                Toast.makeText(baseContext, R.string.error_cannot_get_restaurants, Toast.LENGTH_SHORT).show()
-//            }
-//        )
+        RestaurantService.fetchAll(
+            onSuccess = { restaurants ->
+                updateRestaurants(restaurants)
+            },
+            onFailure = { exception ->
+                Toast.makeText(baseContext, exception.message, Toast.LENGTH_LONG).show()
+            }
+        )
     }
 
     private fun updateRestaurants(newRestaurants: List<Restaurant>) {

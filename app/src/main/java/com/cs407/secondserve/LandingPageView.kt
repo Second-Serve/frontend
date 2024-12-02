@@ -2,6 +2,7 @@ package com.cs407.secondserve
 
 import android.os.Bundle
 import android.widget.Button
+import com.cs407.secondserve.service.AccountService
 
 class LandingPageView : SecondServeView() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,7 +15,7 @@ class LandingPageView : SecondServeView() {
         super.onStart()
 
         // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = auth.currentUser
+        val currentUser = AccountService.auth.currentUser
         if (currentUser != null && !FORCE_LANDING_PAGE) {
             startActivityEmptyIntent(RestaurantSearchView::class.java)
         }
@@ -31,6 +32,6 @@ class LandingPageView : SecondServeView() {
     }
 
     companion object {
-        private const val FORCE_LANDING_PAGE = true // DEBUG: Ignore saved credentials, show landing page anyways
+        private const val FORCE_LANDING_PAGE = false // DEBUG: Ignore saved credentials, show landing page anyways
     }
 }

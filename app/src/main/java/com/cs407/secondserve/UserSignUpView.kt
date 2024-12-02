@@ -17,6 +17,8 @@ import com.google.android.gms.vision.Frame
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import android.Manifest
+import com.cs407.secondserve.model.AccountType
+import com.cs407.secondserve.service.AccountService
 
 class UserSignUpView : SecondServeView() {
 
@@ -55,11 +57,11 @@ class UserSignUpView : SecondServeView() {
         }
 
         signUpButton.setOnClickListener {
-            val firstName = firstNameField.text.toString().trim()
-            val lastName = lastNameField.text.toString().trim()
             val email = emailField.text.toString().trim()
             val password = passwordField.text.toString().trim()
             val confirmPassword = confirmPasswordField.text.toString().trim()
+            val firstName = firstNameField.text.toString().trim()
+            val lastName = lastNameField.text.toString().trim()
 
             if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
                 Toast.makeText(baseContext, "Please fill in all fields", Toast.LENGTH_SHORT).show()
@@ -87,16 +89,21 @@ class UserSignUpView : SecondServeView() {
                 return@setOnClickListener
             }
 
-            auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(baseContext, "Sign up successful!", Toast.LENGTH_SHORT).show()
-                        startActivityEmptyIntent(RestaurantSearchView::class.java)
-                        finish()
-                    } else {
-                        Toast.makeText(baseContext, task.exception?.message, Toast.LENGTH_LONG).show()
-                    }
+            AccountService.register(
+                email,
+                password,
+                firstName,
+                lastName,
+                AccountType.CUSTOMER,
+                onSuccess = {
+                    Toast.makeText(baseContext, "Welcome, $firstName!", Toast.LENGTH_SHORT).show()
+                    startActivityEmptyIntent(RestaurantSearchView::class.java)
+                    finish()
+                },
+                onFailure = { exception ->
+                    Toast.makeText(baseContext, exception.localizedMessage, Toast.LENGTH_LONG).show()
                 }
+            )
         }
     }
 
