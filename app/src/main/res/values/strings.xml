@@ -50,5 +50,7 @@
     <string name="pickup_hours_label">Pickup Hours:</string>
     <string name="restaurant_address_label">Address:</string>
     <string name="restaurant_name_label">Restaurant Name:</string>
+    <string name="pickup_hours_unavailable">Pickup hours unavailable</string>
+    <string name="location_unavailable">Location unavailable</string>
     <string name="restaurant_show_more_button">Show More</string>
 </resources>

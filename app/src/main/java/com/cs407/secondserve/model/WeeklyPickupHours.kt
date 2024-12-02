@@ -21,6 +21,7 @@ class WeeklyPickupHours(
         }
     }
 
+    @OptIn(kotlin.ExperimentalStdlibApi::class)
     fun onDay(weekday: Int) : DailyPickupHours {
         return onDay(Weekday.entries[weekday])
     }
