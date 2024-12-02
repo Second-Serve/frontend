@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.Manifest
@@ -17,7 +16,7 @@ import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import com.cs407.secondserve.model.AccountType
-import com.cs407.secondserve.model.UserRegistrationInfo
+import com.cs407.secondserve.service.AccountService
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -25,8 +24,7 @@ import com.google.android.gms.location.LocationServices
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-class SignUpUser : AppCompatActivity() {
-
+class UserSignUpView : SecondServeView() {
     companion object {
         private const val CAMERA_PERMISSION_CODE = 101
         private const val LOCATION_PERMISSION_CODE = 102
@@ -72,25 +70,19 @@ class SignUpUser : AppCompatActivity() {
             return
         }
 
-        val registrationInfo = UserRegistrationInfo(
-            accountType = AccountType.CUSTOMER,
+        AccountService.register(
             email = email,
             password = password,
             firstName = firstName,
             lastName = lastName,
-            latitude = userLocation?.latitude,
-            longitude = userLocation?.longitude
-        )
-
-        UserAPI.registerAccount(
-            registrationInfo,
+            accountType = AccountType.CUSTOMER,
             onSuccess = {
-                Toast.makeText(this, "Sign up successful!", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, RestaurantSearch::class.java))
+                Toast.makeText(baseContext, "Sign up successful!", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, RestaurantSearchView::class.java))
                 finish()
             },
-            onError = { _, message ->
-                Toast.makeText(this, "Error: $message", Toast.LENGTH_SHORT).show()
+            onFailure = { exception ->
+                Toast.makeText(baseContext, exception.message, Toast.LENGTH_SHORT).show()
             }
         )
     }

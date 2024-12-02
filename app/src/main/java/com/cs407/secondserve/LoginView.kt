@@ -1,20 +1,16 @@
 package com.cs407.secondserve
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.android.volley.VolleyError
-import com.cs407.secondserve.model.User
+import com.cs407.secondserve.service.AccountService
 
-class LoginActivity : AppCompatActivity() {
-
+class LoginView : SecondServeView() {
     private val LOCATION_PERMISSION_REQUEST_CODE = 100
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,31 +36,20 @@ class LoginActivity : AppCompatActivity() {
             val emailField: EditText = findViewById(R.id.login_email_field)
             val passwordField: EditText = findViewById(R.id.login_password_field)
 
-            tryLogIn(emailField.text.toString(), passwordField.text.toString())
+            trySignIn(emailField.text.toString(), passwordField.text.toString())
         }
     }
 
-    private fun tryLogIn(email: String, password: String) {
-        UserAPI.login(
+    private fun trySignIn(email: String, password: String) {
+        AccountService.signIn(
             email,
             password,
-            onSuccess = { _: User ->
-                UserAPI.saveUser(applicationContext)
-
-                val intent = Intent(this, RestaurantSearch::class.java)
-                startActivity(intent)
+            onSuccess = {
+                // We were able to sign in, so go to the search view
+                startActivityEmptyIntent(RestaurantSearchView::class.java)
             },
-            onError = { error: VolleyError, message: String ->
-                val messageToDisplay: String
-
-                if (error.networkResponse.statusCode == 400) {
-                    messageToDisplay = "Invalid username or password."
-                } else {
-                    messageToDisplay = message
-                }
-
-                // Show the error we just got
-                Toast.makeText(this, messageToDisplay, Toast.LENGTH_LONG).show()
+            onFailure = { exception ->
+                Toast.makeText(baseContext, exception.message, Toast.LENGTH_LONG).show()
             }
         )
     }
@@ -74,16 +59,11 @@ class LoginActivity : AppCompatActivity() {
 
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                navigateToSignUp()
+                startActivityEmptyIntent(UserSignUpView::class.java)
             } else {
                 // TODO: User denied our request for location. Need to figure out how to handle this.
             }
         }
-    }
-
-    private fun navigateToSignUp() {
-        val intent = Intent(this, SignUpUser::class.java)
-        startActivity(intent)
     }
 }
 
