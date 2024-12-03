@@ -19,8 +19,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.VolleyError
 import com.cs407.secondserve.model.User
 import com.cs407.secondserve.service.AccountService
+import com.google.firebase.auth.AuthResult
 
-class LoginActivity : AppCompatActivity() {
+class LoginView : AppCompatActivity() {
 
     private val LOCATION_PERMISSION_REQUEST_CODE = 100
     private lateinit var loginEmailField: EditText
@@ -33,48 +34,55 @@ class LoginActivity : AppCompatActivity() {
         val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val loginLayout = LinearLayout(this)
-        loginLayout.orientation = LinearLayout.VERTICAL
-        loginLayout.layoutParams = RecyclerView.LayoutParams(
-            RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT
-        )
+        val loginLayout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            layoutParams = RecyclerView.LayoutParams(
+                RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT
+            )
+        }
 
-        val logInTitle = TextView(this)
-        logInTitle.text = getString(R.string.log_in_title)
-        logInTitle.textSize = 36f
-        logInTitle.setTextColor(resources.getColor(R.color.accent))
+        val logInTitle = TextView(this).apply {
+            text = getString(R.string.log_in_title)
+            textSize = 36f
+            setTextColor(resources.getColor(R.color.accent, theme))
+        }
         loginLayout.addView(logInTitle)
 
-        val loginEmailLabel = TextView(this)
-        loginEmailLabel.text = getString(R.string.email_label)
-        loginEmailLabel.textSize = 18f
-        loginEmailLabel.setTextColor(resources.getColor(R.color.accent))
+        val loginEmailLabel = TextView(this).apply {
+            text = getString(R.string.email_label)
+            textSize = 18f
+            setTextColor(resources.getColor(R.color.accent, theme))
+        }
         loginLayout.addView(loginEmailLabel)
 
-        val loginEmailField = EditText(this)
-        loginEmailField.id = View.generateViewId()
-        loginEmailField.hint = getString(R.string.enter_email_hint)
-        loginEmailField.setBackgroundResource(R.drawable.rounded_border)
-        loginEmailField.inputType = android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+        loginEmailField = EditText(this).apply {
+            id = View.generateViewId()
+            hint = getString(R.string.enter_email_hint)
+            setBackgroundResource(R.drawable.rounded_border)
+            inputType = android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+        }
         loginLayout.addView(loginEmailField)
 
-        val loginPasswordLabel = TextView(this)
-        loginPasswordLabel.text = getString(R.string.password_label)
-        loginPasswordLabel.textSize = 18f
-        loginPasswordLabel.setTextColor(resources.getColor(R.color.accent))
+        val loginPasswordLabel = TextView(this).apply {
+            text = getString(R.string.password_label)
+            textSize = 18f
+            setTextColor(resources.getColor(R.color.accent, theme))
+        }
         loginLayout.addView(loginPasswordLabel)
 
-        val loginPasswordField = EditText(this)
-        loginPasswordField.id = View.generateViewId()
-        loginPasswordField.hint = getString(R.string.enter_password_hint)
-        loginPasswordField.setBackgroundResource(R.drawable.rounded_border)
-        loginPasswordField.inputType = android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
+        loginPasswordField = EditText(this).apply {
+            id = View.generateViewId()
+            hint = getString(R.string.enter_password_hint)
+            setBackgroundResource(R.drawable.rounded_border)
+            inputType = android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
+        }
         loginLayout.addView(loginPasswordField)
 
-        val logInButton = Button(this)
-        logInButton.text = getString(R.string.log_in_button)
-        logInButton.setBackgroundColor(resources.getColor(R.color.accent))
-        logInButton.setTextColor(resources.getColor(android.R.color.white))
+        val logInButton = Button(this).apply {
+            text = getString(R.string.log_in_button)
+            setBackgroundColor(resources.getColor(R.color.accent, theme))
+            setTextColor(resources.getColor(android.R.color.white, theme))
+        }
         loginLayout.addView(logInButton)
 
         recyclerView.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -84,34 +92,28 @@ class LoginActivity : AppCompatActivity() {
 
             override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {}
 
-            override fun getItemCount(): Int {
-                return 1
-            }
+            override fun getItemCount(): Int = 1
         }
+
         logInButton.setOnClickListener {
             if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
             ) {
                 ActivityCompat.requestPermissions(
                     this,
                     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                     LOCATION_PERMISSION_REQUEST_CODE
                 )
+            } else {
+                tryLogIn(loginEmailField.text.toString(), loginPasswordField.text.toString())
             }
-
-            val emailField = loginEmailField
-            val passwordField = loginPasswordField
-
-            tryLogIn(emailField.text.toString(), passwordField.text.toString())
         }
     }
 
     private fun tryLogIn(email: String, password: String) {
 
-        val email = loginEmailField.text.toString().trim()
-        val password = loginPasswordField.text.toString().trim()
 
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
@@ -121,12 +123,17 @@ class LoginActivity : AppCompatActivity() {
         AccountService.signIn(
             email,
             password,
-            onSuccess = { user: User ->
-                val intent = Intent(this, RestaurantSearchView::class.java)
-                startActivity(intent)
+            onSuccess = { authResult: AuthResult ->
+                val user = authResult.user
+                if (user != null) {
+                    val intent = Intent(this, RestaurantSearchView::class.java)
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(this, "Failed to retrieve user information", Toast.LENGTH_SHORT).show()
+                }
             },
 
-        )
+            )
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

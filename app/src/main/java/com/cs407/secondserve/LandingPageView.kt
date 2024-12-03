@@ -9,6 +9,7 @@ import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cs407.secondserve.service.AccountService
+import com.cs407.secondserve.LoginView
 
 class LandingPageView : SecondServeView() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +70,7 @@ class LandingPageView : SecondServeView() {
     }
 
     private fun loadLogIn() {
-        startActivity(Intent(this, LoginActivity::class.java))
+        startActivity(Intent(this, LoginView::class.java))
     }
 
     private fun loadRestaurantSearch() {

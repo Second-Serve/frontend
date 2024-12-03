@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cs407.secondserve.GetStartedView
-import com.cs407.secondserve.LoginActivity
+import com.cs407.secondserve.LoginView
 import com.cs407.secondserve.R
 import com.cs407.secondserve.RestaurantSearchView
 import com.cs407.secondserve.service.AccountService
@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadLogIn() {
-        startActivity(Intent(this, LoginActivity::class.java))
+        startActivity(Intent(this, LoginView::class.java))
     }
 
     private fun loadRestaurantSearch() {
