@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
@@ -20,101 +21,63 @@ import com.android.volley.VolleyError
 import com.cs407.secondserve.model.User
 import com.cs407.secondserve.service.AccountService
 import com.google.firebase.auth.AuthResult
+import android.widget.ScrollView
+import android.view.Gravity
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputEditText
 
 class LoginView : AppCompatActivity() {
 
     private val LOCATION_PERMISSION_REQUEST_CODE = 100
-    private lateinit var loginEmailField: EditText
-    private lateinit var loginPasswordField: EditText
+    private lateinit var emailEditText: TextInputEditText
+    private lateinit var passwordEditText: TextInputEditText
+    private lateinit var loginButton: MaterialButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_log_in)
 
-        val recyclerView: RecyclerView = findViewById(R.id.recycler_view)
+        // Get reference to RecyclerView
+        val recyclerView: RecyclerView = findViewById(R.id.loginRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val loginLayout = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            layoutParams = RecyclerView.LayoutParams(
-                RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT
-            )
+        // Inflate the login item layout directly without an adapter
+        val loginView = LayoutInflater.from(this).inflate(R.layout.login_item, recyclerView, false)
+
+        // Optionally, you can set up the elements directly here, e.g. add text to EditText
+        val emailEditText: TextInputEditText = loginView.findViewById(R.id.emailEditText)
+        val passwordEditText: TextInputEditText = loginView.findViewById(R.id.passwordEditText)
+        val loginButton: MaterialButton = loginView.findViewById(R.id.loginButton)
+
+        // Set up login button click listener
+        loginButton.setOnClickListener {
+            val email = emailEditText.text.toString()
+            val password = passwordEditText.text.toString()
+
+            // Handle login logic here
+            Toast.makeText(this, "Email: $email, Password: $password", Toast.LENGTH_SHORT).show()
         }
 
-        val logInTitle = TextView(this).apply {
-            text = getString(R.string.log_in_title)
-            textSize = 36f
-            setTextColor(resources.getColor(R.color.accent, theme))
-        }
-        loginLayout.addView(logInTitle)
-
-        val loginEmailLabel = TextView(this).apply {
-            text = getString(R.string.email_label)
-            textSize = 18f
-            setTextColor(resources.getColor(R.color.accent, theme))
-        }
-        loginLayout.addView(loginEmailLabel)
-
-        loginEmailField = EditText(this).apply {
-            id = View.generateViewId()
-            hint = getString(R.string.enter_email_hint)
-            setBackgroundResource(R.drawable.rounded_border)
-            inputType = android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-        }
-        loginLayout.addView(loginEmailField)
-
-        val loginPasswordLabel = TextView(this).apply {
-            text = getString(R.string.password_label)
-            textSize = 18f
-            setTextColor(resources.getColor(R.color.accent, theme))
-        }
-        loginLayout.addView(loginPasswordLabel)
-
-        loginPasswordField = EditText(this).apply {
-            id = View.generateViewId()
-            hint = getString(R.string.enter_password_hint)
-            setBackgroundResource(R.drawable.rounded_border)
-            inputType = android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
-        }
-        loginLayout.addView(loginPasswordField)
-
-        val logInButton = Button(this).apply {
-            text = getString(R.string.log_in_button)
-            setBackgroundColor(resources.getColor(R.color.accent, theme))
-            setTextColor(resources.getColor(android.R.color.white, theme))
-        }
-        loginLayout.addView(logInButton)
-
+        // Add the loginView to the RecyclerView
         recyclerView.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-                return object : RecyclerView.ViewHolder(loginLayout) {}
+            override fun onCreateViewHolder(
+                parent: ViewGroup,
+                viewType: Int
+            ): RecyclerView.ViewHolder {
+                return object : RecyclerView.ViewHolder(loginView) {}
             }
 
-            override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {}
+            override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+                // No data to bind here
+            }
 
-            override fun getItemCount(): Int = 1
-        }
-
-        logInButton.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    LOCATION_PERMISSION_REQUEST_CODE
-                )
-            } else {
-                tryLogIn(loginEmailField.text.toString(), loginPasswordField.text.toString())
+            override fun getItemCount(): Int {
+                return 1  // Since we're only showing one item
             }
         }
     }
 
     private fun tryLogIn(email: String, password: String) {
-
-
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
             return
@@ -133,7 +96,8 @@ class LoginView : AppCompatActivity() {
                 }
             },
 
-            )
+
+        )
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -152,5 +116,5 @@ class LoginView : AppCompatActivity() {
         val intent = Intent(this, UserSignUpView::class.java)
         startActivity(intent)
     }
-}
 
+}
