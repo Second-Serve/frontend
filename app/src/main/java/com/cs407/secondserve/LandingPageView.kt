@@ -1,37 +1,82 @@
 package com.cs407.secondserve
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.widget.Button
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.cs407.secondserve.service.AccountService
 
 class LandingPageView : SecondServeView() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
-        initializeActivity()
-    }
+        val prefs = getSharedPreferences("com.cs407.secondserve", Context.MODE_PRIVATE)
+        val savedEmail = prefs.getString(getString(R.string.saved_email_key), null)
+        val savedPassword = prefs.getString(getString(R.string.saved_password_key), null)
 
-    override fun onStart() {
-        super.onStart()
-
-        // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = AccountService.auth.currentUser
-        if (currentUser != null && !FORCE_LANDING_PAGE) {
-            startActivityEmptyIntent(RestaurantSearchView::class.java)
+        if (savedEmail != null && savedPassword != null && !FORCE_LANDING_PAGE) {
+            AccountService.signIn(
+                savedEmail,
+                savedPassword,
+                onSuccess = { loadRestaurantSearch() },
+                onFailure = { message -> loadRecyclerView()
+                }
+            )
+        } else {
+            loadRecyclerView()
         }
     }
 
-    private fun initializeActivity() {
+    private fun loadRecyclerView() {
         setContentView(R.layout.activity_main)
 
-        val userLogInButton: Button = findViewById(R.id.landing_log_in_button)
-        val userSignUpButton: Button = findViewById(R.id.landing_sign_up_button)
+        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
-        userSignUpButton.setOnClickListener { startActivityEmptyIntent(GetStartedView::class.java) }
-        userLogInButton.setOnClickListener { startActivityEmptyIntent(LoginView::class.java) }
+        val items = listOf("Log In", "Sign Up")
+        recyclerView.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+            override fun onCreateViewHolder(
+                parent: ViewGroup,
+                viewType: Int
+            ): RecyclerView.ViewHolder {
+                val view =
+                    LayoutInflater.from(parent.context).inflate(R.layout.button, parent, false)
+                return object : RecyclerView.ViewHolder(view) {}
+            }
+
+            override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+                val button = holder.itemView.findViewById<Button>(R.id.item_button)
+                button.text = items[position]
+                button.setOnClickListener {
+                    when (items[position]) {
+                        "Log In" -> loadLogIn()
+                        "Sign Up" -> loadSignUp()
+                    }
+                }
+            }
+
+            override fun getItemCount(): Int = items.size
+        }
+    }
+
+    private fun loadSignUp() {
+        startActivity(Intent(this, GetStartedView::class.java))
+    }
+
+    private fun loadLogIn() {
+        startActivity(Intent(this, LoginActivity::class.java))
+    }
+
+    private fun loadRestaurantSearch() {
+        startActivity(Intent(this, RestaurantSearchView::class.java))
     }
 
     companion object {
-        private const val FORCE_LANDING_PAGE = false // DEBUG: Ignore saved credentials, show landing page anyways
+        private const val FORCE_LANDING_PAGE = true
     }
 }

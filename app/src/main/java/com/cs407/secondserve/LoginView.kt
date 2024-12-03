@@ -18,10 +18,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.VolleyError
 import com.cs407.secondserve.model.User
+import com.cs407.secondserve.service.AccountService
 
 class LoginActivity : AppCompatActivity() {
 
     private val LOCATION_PERMISSION_REQUEST_CODE = 100
+    private lateinit var loginEmailField: EditText
+    private lateinit var loginPasswordField: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,27 +109,23 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun tryLogIn(email: String, password: String) {
-        UserAPI.login(
+
+        val email = loginEmailField.text.toString().trim()
+        val password = loginPasswordField.text.toString().trim()
+
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        AccountService.signIn(
             email,
             password,
-            onSuccess = { _: User ->
-                UserAPI.saveUser(applicationContext)
-
-                val intent = Intent(this, RestaurantSearch::class.java)
+            onSuccess = { user: User ->
+                val intent = Intent(this, RestaurantSearchView::class.java)
                 startActivity(intent)
             },
-            onError = { error: VolleyError, message: String ->
-                val messageToDisplay: String
 
-                if (error.networkResponse.statusCode == 400) {
-                    messageToDisplay = "Invalid username or password."
-                } else {
-                    messageToDisplay = message
-                }
-
-                // Show the error we just got
-                Toast.makeText(this, messageToDisplay, Toast.LENGTH_LONG).show()
-            }
         )
     }
 
@@ -143,7 +142,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun navigateToSignUp() {
-        val intent = Intent(this, SignUpUser::class.java)
+        val intent = Intent(this, UserSignUpView::class.java)
         startActivity(intent)
     }
 }

@@ -7,7 +7,6 @@
     android:background="@color/white"
     tools:context=".LoginActivity">
 
-    <!-- RecyclerView to display all form content -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="0dp"

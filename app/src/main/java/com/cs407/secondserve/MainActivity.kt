@@ -9,28 +9,28 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.cs407.secondserve.GetStarted
+import com.cs407.secondserve.GetStartedView
 import com.cs407.secondserve.LoginActivity
 import com.cs407.secondserve.R
-import com.cs407.secondserve.RestaurantSearch
-import com.cs407.secondserve.UserAPI
+import com.cs407.secondserve.RestaurantSearchView
+import com.cs407.secondserve.service.AccountService
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        UserAPI.init(this)
 
         val prefs = getSharedPreferences("com.cs407.secondserve", Context.MODE_PRIVATE)
         val savedEmail = prefs.getString(getString(R.string.saved_email_key), null)
         val savedPassword = prefs.getString(getString(R.string.saved_password_key), null)
 
         if (savedEmail != null && savedPassword != null && !FORCE_LANDING_PAGE) {
-            UserAPI.login(
+            AccountService.signIn(
                 savedEmail,
                 savedPassword,
                 onSuccess = { loadRestaurantSearch() },
-                onError = { _, _ -> loadRecyclerView() }
+                onFailure = { message -> loadRecyclerView()
+                }
             )
         } else {
             loadRecyclerView()
@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadSignUp() {
-        startActivity(Intent(this, GetStarted::class.java))
+        startActivity(Intent(this, GetStartedView::class.java))
     }
 
     private fun loadLogIn() {
@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadRestaurantSearch() {
-        startActivity(Intent(this, RestaurantSearch::class.java))
+        startActivity(Intent(this, RestaurantSearchView::class.java))
     }
 
     companion object {
