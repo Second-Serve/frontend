@@ -3,67 +3,85 @@ package com.cs407.secondserve
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import com.android.volley.VolleyError
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.cs407.secondserve.GetStarted
+import com.cs407.secondserve.LoginActivity
+import com.cs407.secondserve.R
+import com.cs407.secondserve.RestaurantSearch
+import com.cs407.secondserve.UserAPI
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        setContentView(R.layout.activity_main)
         UserAPI.init(this)
 
         val prefs = getSharedPreferences("com.cs407.secondserve", Context.MODE_PRIVATE)
         val savedEmail = prefs.getString(getString(R.string.saved_email_key), null)
         val savedPassword = prefs.getString(getString(R.string.saved_password_key), null)
 
-        // If we have saved credentials, try logging in with them.
         if (savedEmail != null && savedPassword != null && !FORCE_LANDING_PAGE) {
             UserAPI.login(
                 savedEmail,
                 savedPassword,
-                onSuccess = { _ ->
-                    // Our saved credentials worked, load the search page.
-                    loadRestaurantSearch()
-                },
-                onError = { _: VolleyError, _: String ->
-                    // Something bad happened while logging in (probably bad credentials). Load the
-                    // login page instead.
-                    loadLogIn()
-                }
+                onSuccess = { loadRestaurantSearch() },
+                onError = { _, _ -> loadRecyclerView() }
             )
         } else {
-            // We don't have any saved credentials. Load the landing page like normal.
-            initializeActivity()
+            loadRecyclerView()
         }
     }
 
-    private fun initializeActivity() {
+    private fun loadRecyclerView() {
         setContentView(R.layout.activity_main)
 
-        val userLogInButton: Button = findViewById(R.id.landing_log_in_button)
-        val userSignUpButton: Button = findViewById(R.id.landing_sign_up_button)
+        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
-        userSignUpButton.setOnClickListener { loadSignUp() }
-        userLogInButton.setOnClickListener { loadLogIn() }
+        val items = listOf("Log In", "Sign Up")
+        recyclerView.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+            override fun onCreateViewHolder(
+                parent: ViewGroup,
+                viewType: Int
+            ): RecyclerView.ViewHolder {
+                val view =
+                    LayoutInflater.from(parent.context).inflate(R.layout.button, parent, false)
+                return object : RecyclerView.ViewHolder(view) {}
+            }
+
+            override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+                val button = holder.itemView.findViewById<Button>(R.id.item_button)
+                button.text = items[position]
+                button.setOnClickListener {
+                    when (items[position]) {
+                        "Log In" -> loadLogIn()
+                        "Sign Up" -> loadSignUp()
+                    }
+                }
+            }
+
+            override fun getItemCount(): Int = items.size
+        }
     }
 
     private fun loadSignUp() {
-        val intent = Intent(this, GetStarted::class.java)
-        startActivity(intent)
+        startActivity(Intent(this, GetStarted::class.java))
     }
 
     private fun loadLogIn() {
-        val intent = Intent(this, LoginActivity::class.java)
-        startActivity(intent)
+        startActivity(Intent(this, LoginActivity::class.java))
     }
 
-    fun loadRestaurantSearch() {
-        val intent = Intent(this, RestaurantSearch::class.java)
-        startActivity(intent)
+    private fun loadRestaurantSearch() {
+        startActivity(Intent(this, RestaurantSearch::class.java))
     }
 
     companion object {
-        private const val FORCE_LANDING_PAGE = true // DEBUG: Ignore saved credentials, show landing page anyways
+        private const val FORCE_LANDING_PAGE = true
     }
 }

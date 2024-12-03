@@ -1,52 +1,30 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/accent_tint"
+    android:padding="16dp"
     tools:context=".MainActivity">
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="473dp"
-        android:layout_height="299dp"
-        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="fitCenter"
         android:contentDescription="@string/second_serve_logo_description"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/second_serve_logo_full"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/second_serve_logo_full" />
-
-    <Button
-        android:id="@+id/landing_log_in_button"
-        android:layout_width="181dp"
-        android:layout_height="70dp"
-        android:backgroundTint="@color/accent"
-        android:text="@string/log_in_button"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        app:cornerRadius="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/landing_sign_up_button"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/recyclerView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
-        android:id="@+id/landing_sign_up_button"
-        android:layout_width="181dp"
-        android:layout_height="70dp"
-        android:backgroundTint="@color/accent"
-        android:text="@string/sign_up_button"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        app:cornerRadius="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/imageView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/landing_log_in_button"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

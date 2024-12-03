@@ -6,4 +6,7 @@
     <color name="accent_tint">#0DA52A2A</color>
     <color name="clear">#00000000</color>
     <color name="light_gray">#B0B0B0</color>
+    <color name="default_button">#FF5722</color>
+    <color name="pressed_button">#E64A19</color>
+    <color name="button_focused">#FF7043</color>
 </resources>
