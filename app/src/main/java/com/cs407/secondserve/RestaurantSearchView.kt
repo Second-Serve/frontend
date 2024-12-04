@@ -85,10 +85,10 @@ class RestaurantSearchView : SecondServeView() {
             val pickupHoursToday = restaurant.pickupHours.onDay(currentDayOfWeek)
 
             restaurantPickupHoursLabel.text = getString(
-                    R.string.restaurant_pickup_hours,
-                    pickupHoursToday.startTime,
-                    pickupHoursToday.endTime
-                )
+                R.string.restaurant_pickup_hours,
+                pickupHoursToday.startTime,
+                pickupHoursToday.endTime
+            )
 
             val restaurantBagPriceLabel = itemView.findViewById<TextView>(R.id.list_restaurant_bag_price)
             restaurantBagPriceLabel.text = getString(R.string.restaurant_bag_price, restaurant.bagPrice)
@@ -133,15 +133,15 @@ class RestaurantSearchView : SecondServeView() {
 
     private fun requestLocationPermission() {
         if(ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED
-            )
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        )
         {
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    location_permission_code
+                location_permission_code
             )
         }
     }
