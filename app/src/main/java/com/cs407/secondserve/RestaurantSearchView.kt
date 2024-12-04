@@ -1,15 +1,9 @@
 package com.cs407.secondserve
 
-import CheckoutView
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.widget.Button
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -17,7 +11,6 @@ import com.cs407.secondserve.model.Restaurant
 import com.cs407.secondserve.service.RestaurantService
 import java.util.Calendar
 import android.Manifest
-import android.graphics.Rect
 import android.location.Geocoder
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
