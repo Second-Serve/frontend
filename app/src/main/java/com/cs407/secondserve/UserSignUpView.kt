@@ -26,9 +26,8 @@ import com.google.mlkit.vision.common.InputImage
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import androidx.camera.view.PreviewView
-import androidx.camera.core.Preview
 import com.cs407.secondserve.service.AccountService
-
+import com.google.firebase.auth.FirebaseAuth
 
 class UserSignUpView : AppCompatActivity() {
 
@@ -49,10 +48,13 @@ class UserSignUpView : AppCompatActivity() {
             }
         }
 
-    @androidx.camera.core.ExperimentalGetImage
+    private lateinit var firebaseAuth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_sign_up_user)
+
+        firebaseAuth = FirebaseAuth.getInstance()
 
         cameraExecutor = Executors.newSingleThreadExecutor()
 
@@ -81,7 +83,6 @@ class UserSignUpView : AppCompatActivity() {
             }
         }
 
-
         signUpButton.setOnClickListener {
             val firstName = firstNameField.text.toString().trim()
             val lastName = lastNameField.text.toString().trim()
@@ -109,20 +110,57 @@ class UserSignUpView : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            AccountService.register(
-                email,
-                password,
-                firstName,
-                lastName,
-                AccountType.CUSTOMER,
-                onSuccess = { user: User ->
-                    Toast.makeText(this, "Sign up successful!", Toast.LENGTH_SHORT).show()
+            firebaseAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        val user = firebaseAuth.currentUser
 
-                    val intent = Intent(this, RestaurantSearchView::class.java)
-                    startActivity(intent)
-                    finish()
+                        // Send email verification
+                        user?.sendEmailVerification()
+                            ?.addOnCompleteListener { verificationTask ->
+                                if (verificationTask.isSuccessful) {
+                                    Toast.makeText(
+                                        this,
+                                        "Verification email sent!",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+
+                                    // Now, proceed with registering the user in the AccountService
+                                    AccountService.register(
+                                        email,
+                                        password,
+                                        firstName,
+                                        lastName,
+                                        AccountType.CUSTOMER,
+                                        onSuccess = { user: User ->
+                                            Toast.makeText(
+                                                this,
+                                                "Sign up successful! Check your email for verification.",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+
+                                            val intent =
+                                                Intent(this, RestaurantSearchView::class.java)
+                                            startActivity(intent)
+                                            finish()
+                                        }
+                                    )
+                                } else {
+                                    Toast.makeText(
+                                        this,
+                                        "Failed to send verification email.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
+                    } else {
+                        Toast.makeText(
+                            this,
+                            "Authentication failed: ${task.exception?.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
-            )
         }
     }
 
@@ -168,7 +206,6 @@ class UserSignUpView : AppCompatActivity() {
                                 } else {
                                     Toast.makeText(this, "Invalid Barcode: $scannedBarcode", Toast.LENGTH_LONG).show()
                                 }
-
                             }
                         }
                         .addOnFailureListener { e ->
@@ -197,14 +234,6 @@ class UserSignUpView : AppCompatActivity() {
         }, ContextCompat.getMainExecutor(this))
     }
 
-
-
-    @ExperimentalGetImage
-    override fun onStart() {
-        super.onStart()
-//        startCamera()
-    }
-
     private fun processBarcode(bitmap: Bitmap) {
         val image = InputImage.fromBitmap(bitmap, 0)
         val scanner = BarcodeScanning.getClient()
@@ -226,29 +255,29 @@ class UserSignUpView : AppCompatActivity() {
     }
 
     private fun isValidBarcode(barcode: String): Boolean {
-        return barcode.length == 11 && barcode.startsWith("9") && barcode.all { it.isDigit() }
+        return barcode.length in 10..20
     }
 
-    @androidx.camera.core.ExperimentalGetImage
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
         if (requestCode == CAMERA_PERMISSION_CODE) {
-            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 val previewView = findViewById<PreviewView>(R.id.viewFinder)
                 previewView.visibility = View.VISIBLE
                 startCamera()
             } else {
-                Toast.makeText(this, "Camera permission is required", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onStop() {
+        super.onStop()
         cameraExecutor.shutdown()
     }
 }
