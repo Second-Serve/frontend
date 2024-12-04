@@ -79,4 +79,8 @@ dependencies {
     implementation("androidx.camera:camera-core:1.3.0")
     implementation("androidx.camera:camera-lifecycle:1.3.0")
     implementation("androidx.camera:camera-view:1.3.0")
+    implementation (platform("com.google.firebase:firebase-bom:32.1.1"))
+    implementation ("com.google.firebase:firebase-auth")
+    implementation ("com.google.firebase:firebase-database")
+
 }
