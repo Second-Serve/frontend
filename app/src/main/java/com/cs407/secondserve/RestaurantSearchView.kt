@@ -17,6 +17,7 @@ import com.cs407.secondserve.model.Restaurant
 import com.cs407.secondserve.service.RestaurantService
 import java.util.Calendar
 import android.Manifest
+import android.graphics.Rect
 import android.location.Geocoder
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -47,9 +48,10 @@ class RestaurantSearchView : SecondServeView() {
             val intent = Intent(this, CheckoutView::class.java)
             startActivity(intent)
         }
-        
+
         restaurantRecyclerView = findViewById(R.id.restaurantRecyclerView)
         restaurantRecyclerView.layoutManager = LinearLayoutManager(this)
+
 
         restaurantAdapter = RestaurantAdapter { restaurant ->
             val pickupHoursToday = restaurant.pickupHours.onDay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK))
@@ -65,6 +67,8 @@ class RestaurantSearchView : SecondServeView() {
             startActivity(intent)
         }
         restaurantRecyclerView.adapter = restaurantAdapter
+
+
         // When you hit the back arrow, go back
         val backArrow = findViewById<ImageView>(R.id.back_arrow)
         backArrow.setOnClickListener {

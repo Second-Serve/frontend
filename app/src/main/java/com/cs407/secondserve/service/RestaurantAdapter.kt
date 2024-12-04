@@ -38,7 +38,6 @@ class RestaurantAdapter(
         val restaurant = restaurants[position]
         val context = holder.itemView.context
 
-        // Restaurant name
         holder.nameTextView.text = restaurant.name
 
         // Pickup hours
