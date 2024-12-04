@@ -28,7 +28,7 @@
     <string name="save_button">Save</string>
     <string name="agree_to_terms_of_service">I agree to the Terms of Service</string>
     <string name="scan_wiscard_button">Scan Wiscard</string>
-    <string name="sign_up_label">Sign Up</string>
+    <string name="sign_up_label">Sign Up!</string>
     <string name="second_serve_logo_description">Second Serve logo</string>
     <string name="enter_location_label">Enter location:</string>
     <string name="enter_address_hint">Enter address</string>
@@ -40,8 +40,8 @@
     <string name="password_label">Password:</string>
     <string name="enter_password_hint">Enter password</string>
     <string name="enter_email_hint">Enter email</string>
-    <string name="first_name_hint">First Name</string>
-    <string name="last_name_hint">Last Name</string>
+    <string name="first_name_hint">First Name:</string>
+    <string name="last_name_hint">Last Name:</string>
     <string name="confirm_password_label">Confirm Password:</string>
     <string name="full_name_label">Your Name:</string>
     <string name="enter_restaurant_name_hint">Enter restaurant name</string>

@@ -1,8 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/accent_tint"
+    android:background="@color/white"
     android:gravity="center"
     android:orientation="vertical"
     android:padding="24dp">
@@ -18,40 +17,45 @@
         android:textColor="@color/accent"
         android:textSize="32sp" />
 
-    <LinearLayout
-        android:layout_width="250dp"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:orientation="horizontal">
+        android:layout_marginBottom="8dp"
+        android:text="@string/first_name_hint"
+        android:textColor="@color/accent"
+        android:textSize="18sp" />
 
-        <EditText
-            android:id="@+id/first_name_input"
-            android:layout_width="60dp"
-            android:layout_height="35dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:autofillHints=".AUTOFILL_HINT_PERSON_NAME_GIVEN"
-            android:background="@drawable/border"
-            android:hint="@string/first_name_hint"
-            android:inputType="textPersonName"
-            android:padding="10dp"
-            android:textColor="#000000"
-            android:textSize="16sp" />
+    <EditText
+        android:id="@+id/first_name_input"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/border"
+        android:hint="@string/first_name_hint"
+        android:inputType="textPersonName"
+        android:padding="10dp"
+        android:textColor="#000000"
+        android:textSize="16sp" />
 
-        <EditText
-            android:id="@+id/last_name_input"
-            android:layout_width="60dp"
-            android:layout_height="35dp"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1"
-            android:autofillHints=".AUTOFILL_HINT_PERSON_NAME_FAMILY"
-            android:background="@drawable/border"
-            android:hint="@string/last_name_hint"
-            android:inputType="textPersonName"
-            android:padding="10dp"
-            android:textColor="#000000"
-            android:textSize="16sp" />
-    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="@string/last_name_hint"
+        android:textColor="@color/accent"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/last_name_input"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/border"
+        android:hint="@string/last_name_hint"
+        android:inputType="textPersonName"
+        android:padding="10dp"
+        android:textColor="#000000"
+        android:textSize="16sp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -65,11 +69,11 @@
     <EditText
         android:id="@+id/email_input"
         android:layout_width="250dp"
-        android:layout_height="35dp"
+        android:layout_height="40dp"
         android:layout_marginBottom="16dp"
-        android:autofillHints="emailAddress"
         android:background="@drawable/border"
-        android:inputType="textEmailAddress" />
+        android:inputType="textEmailAddress"
+        android:padding="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -83,11 +87,11 @@
     <EditText
         android:id="@+id/password_input"
         android:layout_width="250dp"
-        android:layout_height="35dp"
+        android:layout_height="40dp"
         android:layout_marginBottom="16dp"
-        android:autofillHints="password"
         android:background="@drawable/border"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:padding="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -101,11 +105,11 @@
     <EditText
         android:id="@+id/confirm_password_input"
         android:layout_width="250dp"
-        android:layout_height="35dp"
+        android:layout_height="40dp"
         android:layout_marginBottom="16dp"
-        android:autofillHints="password"
         android:background="@drawable/border"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:padding="10dp" />
 
     <CheckBox
         android:id="@+id/terms_checkbox"
@@ -114,25 +118,25 @@
         android:layout_marginBottom="24dp"
         android:text="@string/agree_to_terms_of_service" />
 
-    <!-- TODO: Make this a button -->
     <Button
         android:id="@+id/scan_wiscard_button"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
+        android:backgroundTint="#FFFFFF"
         android:text="@string/scan_wiscard_button"
         android:textColor="@color/accent"
-        android:textColorHighlight="@color/accent" />
+        android:layout_marginBottom="16dp" />
 
     <Button
         android:id="@+id/sign_up_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#A52A2A"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:backgroundTint="@color/accent"
         android:paddingLeft="24dp"
         android:paddingRight="24dp"
         android:text="@string/sign_up_button"
-        android:textColor="#000000" />
+        android:textColor="@color/white"
+        android:textStyle="bold" />
 
     <androidx.camera.view.PreviewView
         android:id="@+id/viewFinder"
