@@ -1,12 +1,15 @@
 package com.cs407.secondserve
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.cs407.secondserve.model.AccountType
+import androidx.fragment.app.Fragment
 import com.cs407.secondserve.service.AccountService
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.FirebaseFirestore
@@ -143,9 +146,9 @@ class RestaurantSignUpView : SecondServeView() {
                             restaurantName,
                             address,
                             onSuccess = {
-                                Toast.makeText(baseContext, "Sign up successful!", Toast.LENGTH_SHORT).show()
-                                startActivityEmptyIntent(RestaurantSearchView::class.java)
-                                finish()
+                                Toast.makeText(this@RestaurantSignUpView, "Sign up successful!", Toast.LENGTH_SHORT).show()
+                                val intent = Intent(this@RestaurantSignUpView, RestaurantMainView::class.java)
+                                startActivity(intent)
                             },
                             onFailure = { exception ->
                                 Toast.makeText(baseContext, exception.message, Toast.LENGTH_LONG).show()
