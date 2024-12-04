@@ -9,28 +9,15 @@ import android.widget.Toast
 import com.cs407.secondserve.model.AccountType
 import com.cs407.secondserve.service.AccountService
 import com.google.android.gms.maps.model.LatLng
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
+import java.net.URL
+import java.net.URLEncoder
 
 class RestaurantSignUpView : SecondServeView() {
-
-    private val madisonBoundary = listOf(
-        LatLng(43.017086, -89.552289),
-        LatLng(43.165309, -89.276369),
-        LatLng(43.083675, -89.561704),
-        LatLng(43.095319, -89.483126),
-        LatLng(43.076189, -89.462627),
-        LatLng(43.162639, -89.365260),
-        LatLng(43.156824, -89.403410),
-        LatLng(43.146855, -89.332234),
-        LatLng(43.172606, -89.294654),
-        LatLng(43.106544, -89.247393),
-        LatLng(43.027508, -89.247963)
-    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,99 +29,35 @@ class RestaurantSignUpView : SecondServeView() {
         val restaurantAddressField: EditText = findViewById(R.id.restaurant_address_input)
         val signUpButton: Button = findViewById(R.id.restaurant_sign_up_button)
 
-        val checkboxMonday: CheckBox = findViewById(R.id.checkbox_monday)
-        val checkboxTuesday: CheckBox = findViewById(R.id.checkbox_tuesday)
-        val checkboxWednesday: CheckBox = findViewById(R.id.checkbox_wednesday)
-        val checkboxThursday: CheckBox = findViewById(R.id.checkbox_thursday)
-        val checkboxFriday: CheckBox = findViewById(R.id.checkbox_friday)
-        val checkboxSaturday: CheckBox = findViewById(R.id.checkbox_saturday)
-        val checkboxSunday: CheckBox = findViewById(R.id.checkbox_sunday)
-
-        val startTimeMonday: Spinner = findViewById(R.id.pickup_start_time_monday)
-        val endTimeMonday: Spinner = findViewById(R.id.pickup_end_time_monday)
-        val startTimeTuesday: Spinner = findViewById(R.id.pickup_start_time_tuesday)
-        val endTimeTuesday: Spinner = findViewById(R.id.pickup_end_time_tuesday)
-        val startTimeWednesday: Spinner = findViewById(R.id.pickup_start_time_wednesday)
-        val endTimeWednesday: Spinner = findViewById(R.id.pickup_end_time_wednesday)
-        val startTimeThursday: Spinner = findViewById(R.id.pickup_start_time_thursday)
-        val endTimeThursday: Spinner = findViewById(R.id.pickup_end_time_thursday)
-        val startTimeFriday: Spinner = findViewById(R.id.pickup_start_time_friday)
-        val endTimeFriday: Spinner = findViewById(R.id.pickup_end_time_friday)
-        val startTimeSaturday: Spinner = findViewById(R.id.pickup_start_time_saturday)
-        val endTimeSaturday: Spinner = findViewById(R.id.pickup_end_time_saturday)
-        val startTimeSunday: Spinner = findViewById(R.id.pickup_start_time_sunday)
-        val endTimeSunday: Spinner = findViewById(R.id.pickup_end_time_sunday)
-
-
         signUpButton.setOnClickListener {
             val email = emailField.text.toString().trim()
             val password = passwordField.text.toString().trim()
             val restaurantName = restaurantNameField.text.toString().trim()
             val address = restaurantAddressField.text.toString().trim()
 
-            val pickupHours = mutableMapOf<String, Pair<String, String>>()
-
-            if (checkboxMonday.isChecked) {
-                pickupHours["Monday"] = Pair(
-                    startTimeMonday.selectedItem.toString(),
-                    endTimeMonday.selectedItem.toString()
-                )
-            }
-            if (checkboxTuesday.isChecked) {
-                pickupHours["Tuesday"] = Pair(
-                    startTimeTuesday.selectedItem.toString(),
-                    endTimeTuesday.selectedItem.toString()
-                )
-            }
-            if (checkboxWednesday.isChecked) {
-                pickupHours["Wednesday"] = Pair(
-                    startTimeWednesday.selectedItem.toString(),
-                    endTimeWednesday.selectedItem.toString()
-                )
-            }
-            if (checkboxThursday.isChecked) {
-                pickupHours["Thursday"] = Pair(
-                    startTimeThursday.selectedItem.toString(),
-                    endTimeThursday.selectedItem.toString()
-                )
-            }
-            if (checkboxFriday.isChecked) {
-                pickupHours["Friday"] = Pair(
-                    startTimeFriday.selectedItem.toString(),
-                    endTimeFriday.selectedItem.toString()
-                )
-            }
-            if (checkboxSaturday.isChecked) {
-                pickupHours["Saturday"] = Pair(
-                    startTimeSaturday.selectedItem.toString(),
-                    endTimeSaturday.selectedItem.toString()
-                )
-            }
-            if (checkboxSunday.isChecked) {
-                pickupHours["Sunday"] = Pair(
-                    startTimeSunday.selectedItem.toString(),
-                    endTimeSunday.selectedItem.toString()
-                )
-            }
-
-            if (email.isEmpty() || password.isEmpty() || restaurantName.isEmpty() ||
-                address.isEmpty() || pickupHours.isEmpty()) {
-                Toast.makeText(baseContext, "Please fill in all fields and select at least one pickup day", Toast.LENGTH_SHORT).show()
+            if (email.isEmpty() || password.isEmpty() || restaurantName.isEmpty() || address.isEmpty()) {
+                Toast.makeText(baseContext, "Please fill in all fields", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            val pickupTimesString = pickupHours.entries.joinToString("; ") {
-                "${it.key}: ${it.value.first} - ${it.value.second}"
-            }
+            showToast("Starting geocoding for address: $address")
 
             CoroutineScope(Dispatchers.IO).launch {
-                val location = geocodeAddressWithFirebase(address)
-                println("Location from geocodeAddressWithFirebase: $location")
-                if (location == null || !isWithinPolygon(location, madisonBoundary)) {
+                val location = geocodeAddressUsingGoogleMaps(address)
+                withContext(Dispatchers.Main) {
+                    if (location == null) {
+                        showToast("Geocoding failed: Location is null")
+                    } else {
+                        showToast("Geocoded location: ${location.latitude}, ${location.longitude}")
+                    }
+                }
+
+                if (location == null || !isInMadison(location)) {
                     withContext(Dispatchers.Main) {
-                        Toast.makeText(baseContext, "Address is not within the Madison area.", Toast.LENGTH_SHORT).show()
+                        showToast("Address is not within the Madison area.")
                     }
                 } else {
+                    showToast("Location is within Madison: ${location.latitude}, ${location.longitude}")
                     withContext(Dispatchers.Main) {
                         AccountService.register(
                             email,
@@ -157,37 +80,91 @@ class RestaurantSignUpView : SecondServeView() {
         }
     }
 
-    private suspend fun geocodeAddressWithFirebase(address: String): LatLng? {
-        val normalizedAddress = address.trim().lowercase()
-        val firestore = FirebaseFirestore.getInstance()
+    private suspend fun geocodeAddressUsingGoogleMaps(address: String): LatLng? {
+        val apiKey = "AIzaSyDSN2PBeyfJCDx7ahH7z23-A-Nuy7h9nNs"
+        val encodedAddress = URLEncoder.encode(address, "UTF-8")
+        val url = "https://maps.googleapis.com/maps/api/geocode/json?address=$encodedAddress&key=$apiKey"
+
         return try {
-            val geoDoc = firestore.collection("geocodes").document(normalizedAddress).get().await()
-            if (geoDoc.exists()) {
-                val lat = geoDoc.getDouble("lat") ?: return null
-                val lng = geoDoc.getDouble("lng") ?: return null
-                LatLng(lat, lng)
-            } else {
-                null
+            withContext(Dispatchers.Main) {
+                showToast("Geocode API request: $url")
             }
+
+            val response = withContext(Dispatchers.IO) { URL(url).readText() }
+
+            withContext(Dispatchers.Main) {
+                showToast("Geocode API response: $response")
+            }
+
+            val jsonObject = JSONObject(response)
+
+            // Check for API errors in the response
+            val status = jsonObject.getString("status")
+            if (status != "OK") {
+                withContext(Dispatchers.Main) {
+                    showToast("Geocode API error: $status")
+                }
+                return null
+            }
+
+            val location = jsonObject.getJSONArray("results")
+                .getJSONObject(0)
+                .getJSONObject("geometry")
+                .getJSONObject("location")
+            val lat = location.getDouble("lat")
+            val lng = location.getDouble("lng")
+            LatLng(lat, lng)
         } catch (e: Exception) {
+            withContext(Dispatchers.Main) {
+                showToast("Error during geocoding: ${e.message}")
+            }
             e.printStackTrace()
             null
         }
     }
 
-    private fun isWithinPolygon(location: LatLng, polygon: List<LatLng>): Boolean {
-        var intersects = false
-        val x = location.longitude
-        val y = location.latitude
-        for (i in polygon.indices) {
-            val xi = polygon[i].longitude
-            val yi = polygon[i].latitude
-            val xj = polygon[(i + 1) % polygon.size].longitude
-            val yj = polygon[(i + 1) % polygon.size].latitude
-            val intersect = ((yi > y) != (yj > y)) &&
-                    (x < (xj - xi) * (y - yi) / (yj - yi) + xi)
-            if (intersect) intersects = !intersects
+    private suspend fun isInMadison(location: LatLng): Boolean {
+        val apiKey = "AIzaSyDSN2PBeyfJCDx7ahH7z23-A-Nuy7h9nNs"
+        val latLngString = "${location.latitude},${location.longitude}"
+        val url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=$latLngString&key=$apiKey"
+
+        return try {
+            withContext(Dispatchers.Main) {
+                showToast("Reverse Geocode API request URL: $url")
+            }
+            val response = withContext(Dispatchers.IO) { URL(url).readText() }
+            withContext(Dispatchers.Main) {
+                showToast("Reverse Geocode API response received")
+            }
+            val jsonObject = JSONObject(response)
+            val results = jsonObject.getJSONArray("results")
+
+            for (i in 0 until results.length()) {
+                val formattedAddress = results.getJSONObject(i).getString("formatted_address").lowercase()
+                withContext(Dispatchers.Main) {
+                    showToast("Checking address: $formattedAddress")
+                }
+                if (formattedAddress.contains("madison")) {
+                    withContext(Dispatchers.Main) {
+                        showToast("Address is in Madison")
+                    }
+                    return true
+                }
+            }
+            withContext(Dispatchers.Main) {
+                showToast("Address is not in Madison")
+            }
+            false
+        } catch (e: Exception) {
+            withContext(Dispatchers.Main) {
+                showToast("Error during reverse geocoding: ${e.message}")
+            }
+            e.printStackTrace()
+            false
         }
-        return intersects
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(baseContext, message, Toast.LENGTH_SHORT).show()
     }
 }
