@@ -21,23 +21,42 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import android.location.Location
 import android.util.Log
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import java.util.Locale
 
 class RestaurantSearchView : SecondServeView() {
     private val location_permission_code = 1
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var userLocation: Location? = null
-    lateinit var restaurantListLayout: LinearLayout
 
+    lateinit var restaurantRecyclerView: RecyclerView
     lateinit var restaurants: List<Restaurant>
+    lateinit var restaurantAdapter: RestaurantAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.fragment_restaurant_search)
 
-        restaurantListLayout = findViewById(R.id.restaurant_list)
+        restaurantRecyclerView = findViewById(R.id.restaurantRecyclerView)
+        restaurantRecyclerView.layoutManager = LinearLayoutManager(this)
 
+        restaurantAdapter = RestaurantAdapter { restaurant ->
+            val pickupHoursToday = restaurant.pickupHours.onDay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK))
+            val intent = Intent(this, RestaurantPageView::class.java).apply {
+                putExtra("restaurantName", restaurant.name)
+                putExtra("restaurantBagPrice", restaurant.bagPrice)
+                putExtra("restaurantBagCount", restaurant.bagsAvailable)
+                putExtra("restaurantPickupStart", pickupHoursToday.startTime)
+                putExtra("restaurantPickupEnd", pickupHoursToday.endTime)
+                putExtra("restaurantAddress", "TODO")
+                putExtra("restaurantBannerImagePath", restaurant.bannerImagePath)
+            }
+            startActivity(intent)
+        }
+        restaurantRecyclerView.adapter = restaurantAdapter
         // When you hit the back arrow, go back
         val backArrow = findViewById<ImageView>(R.id.back_arrow)
         backArrow.setOnClickListener {
@@ -58,78 +77,83 @@ class RestaurantSearchView : SecondServeView() {
         } else {
             requestLocationPermission()
         }
-    }
 
+    }
     private fun updateRestaurants(newRestaurants: List<Restaurant>) {
-        if (userLocation == null) {
-            Log.w(TAG, "Can't update restaurant distances, user has no location.")
-        }
-
         restaurants = newRestaurants
-
-        restaurantListLayout.removeAllViews()
-
-        val inflater = LayoutInflater.from(this)
-
-        for (restaurant in restaurants) {
-            val itemView: View = inflater.inflate(R.layout.restaurant_list_item, restaurantListLayout, false)
-
-            // Restaurant name
-            val restaurantNameLabel = itemView.findViewById<TextView>(R.id.list_restaurant_name)
-            restaurantNameLabel.text = restaurant.name
-
-            // Pickup hours
-            val restaurantPickupHoursLabel = itemView.findViewById<TextView>(R.id.list_restaurant_pickup_hours)
-            val calendar = Calendar.getInstance()
-            val currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
-            val pickupHoursToday = restaurant.pickupHours.onDay(currentDayOfWeek)
-
-            restaurantPickupHoursLabel.text = getString(
-                R.string.restaurant_pickup_hours,
-                pickupHoursToday.startTime,
-                pickupHoursToday.endTime
-            )
-
-            val restaurantBagPriceLabel = itemView.findViewById<TextView>(R.id.list_restaurant_bag_price)
-            restaurantBagPriceLabel.text = getString(R.string.restaurant_bag_price, restaurant.bagPrice)
-
-            val restaurantBagCountLabel = itemView.findViewById<TextView>(R.id.list_restaurant_bag_count)
-            restaurantBagCountLabel.text = getString(R.string.restaurant_bag_count, restaurant.bagsAvailable)
-
-            val distanceTextView = itemView.findViewById<TextView>(R.id.list_restaurant_distance)
-            if (userLocation != null) {
-                val distance = calculateDistance(
-                    userLocation!!,
-                    restaurant.location.latitude,
-                    restaurant.location.longitude
-                )
-
-                distanceTextView.text = if (distance >= 0) {
-                    getString(R.string.restaurant_distance_km, distance)
-                } else {
-                    getString(R.string.location_unavailable)
-                }
-            } else {
-                distanceTextView.text = getString(R.string.location_unavailable)
-            }
-
-            val addToCartButton = itemView.findViewById<Button>(R.id.list_restaurant_add_to_cart_button)
-            addToCartButton.setOnClickListener {
-                val intent = Intent(this, RestaurantPageView::class.java).apply {
-                    putExtra("restaurantName", restaurant.name)
-                    putExtra("restaurantBagPrice", restaurant.bagPrice)
-                    putExtra("restaurantBagCount", restaurant.bagsAvailable)
-                    putExtra("restaurantPickupStart", pickupHoursToday.startTime)
-                    putExtra("restaurantPickupEnd", pickupHoursToday.endTime)
-                    putExtra("restaurantAddress", "TODO") // TODO: Get address with new geo system
-                    putExtra("restaurantBannerImagePath", restaurant.bannerImagePath)
-                }
-                startActivity(intent)
-            }
-
-            restaurantListLayout.addView(itemView)
-        }
+        restaurantAdapter.updateRestaurants(newRestaurants)
     }
+
+//    private fun updateRestaurants(newRestaurants: List<Restaurant>) {
+//        if (userLocation == null) {
+//            Log.w(TAG, "Can't update restaurant distances, user has no location.")
+//        }
+//
+//        restaurants = newRestaurants
+//
+//        restaurantListLayout.removeAllViews()
+//
+//        val inflater = LayoutInflater.from(this)
+//
+//        for (restaurant in restaurants) {
+//            val itemView: View = inflater.inflate(R.layout.restaurant_list_item, restaurantListLayout, false)
+//
+//            // Restaurant name
+//            val restaurantNameLabel = itemView.findViewById<TextView>(R.id.list_restaurant_name)
+//            restaurantNameLabel.text = restaurant.name
+//
+//            // Pickup hours
+//            val restaurantPickupHoursLabel = itemView.findViewById<TextView>(R.id.list_restaurant_pickup_hours)
+//            val calendar = Calendar.getInstance()
+//            val currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+//            val pickupHoursToday = restaurant.pickupHours.onDay(currentDayOfWeek)
+//
+//            restaurantPickupHoursLabel.text = getString(
+//                R.string.restaurant_pickup_hours,
+//                pickupHoursToday.startTime,
+//                pickupHoursToday.endTime
+//            )
+//
+//            val restaurantBagPriceLabel = itemView.findViewById<TextView>(R.id.list_restaurant_bag_price)
+//            restaurantBagPriceLabel.text = getString(R.string.restaurant_bag_price, restaurant.bagPrice)
+//
+//            val restaurantBagCountLabel = itemView.findViewById<TextView>(R.id.list_restaurant_bag_count)
+//            restaurantBagCountLabel.text = getString(R.string.restaurant_bag_count, restaurant.bagsAvailable)
+//
+//            val distanceTextView = itemView.findViewById<TextView>(R.id.list_restaurant_distance)
+//            if (userLocation != null) {
+//                val distance = calculateDistance(
+//                    userLocation!!,
+//                    restaurant.location.latitude,
+//                    restaurant.location.longitude
+//                )
+//
+//                distanceTextView.text = if (distance >= 0) {
+//                    getString(R.string.restaurant_distance_km, distance)
+//                } else {
+//                    getString(R.string.location_unavailable)
+//                }
+//            } else {
+//                distanceTextView.text = getString(R.string.location_unavailable)
+//            }
+//
+//            val addToCartButton = itemView.findViewById<Button>(R.id.list_restaurant_add_to_cart_button)
+//            addToCartButton.setOnClickListener {
+//                val intent = Intent(this, RestaurantPageView::class.java).apply {
+//                    putExtra("restaurantName", restaurant.name)
+//                    putExtra("restaurantBagPrice", restaurant.bagPrice)
+//                    putExtra("restaurantBagCount", restaurant.bagsAvailable)
+//                    putExtra("restaurantPickupStart", pickupHoursToday.startTime)
+//                    putExtra("restaurantPickupEnd", pickupHoursToday.endTime)
+//                    putExtra("restaurantAddress", "TODO") // TODO: Get address with new geo system
+//                    putExtra("restaurantBannerImagePath", restaurant.bannerImagePath)
+//                }
+//                startActivity(intent)
+//            }
+//
+//            restaurantListLayout.addView(itemView)
+//        }
+//    }
 
     private fun requestLocationPermission() {
         if(ContextCompat.checkSelfPermission(
@@ -215,4 +239,8 @@ class RestaurantSearchView : SecondServeView() {
         }
         return userLocation.distanceTo(restaurantLocation) / 1000
     }
+    companion object {
+        private const val TAG = "RestaurantSearchView"
+    }
+
 }

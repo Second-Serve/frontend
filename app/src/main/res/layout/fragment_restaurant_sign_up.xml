@@ -346,6 +346,7 @@
 
         </LinearLayout>
 
+
         <Button
             android:id="@+id/restaurant_sign_up_button"
             android:layout_width="wrap_content"
