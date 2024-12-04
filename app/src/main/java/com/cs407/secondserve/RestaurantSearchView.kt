@@ -1,5 +1,6 @@
 package com.cs407.secondserve
 
+import CheckoutView
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -21,6 +22,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import android.location.Location
 import android.util.Log
+import android.widget.ImageButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.util.Locale
@@ -39,7 +41,13 @@ class RestaurantSearchView : SecondServeView() {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.fragment_restaurant_search)
+        val lockButton: ImageButton = findViewById(R.id.lockButton)
 
+        lockButton.setOnClickListener {
+            val intent = Intent(this, CheckoutView::class.java)
+            startActivity(intent)
+        }
+        
         restaurantRecyclerView = findViewById(R.id.restaurantRecyclerView)
         restaurantRecyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -83,77 +91,6 @@ class RestaurantSearchView : SecondServeView() {
         restaurants = newRestaurants
         restaurantAdapter.updateRestaurants(newRestaurants)
     }
-
-//    private fun updateRestaurants(newRestaurants: List<Restaurant>) {
-//        if (userLocation == null) {
-//            Log.w(TAG, "Can't update restaurant distances, user has no location.")
-//        }
-//
-//        restaurants = newRestaurants
-//
-//        restaurantListLayout.removeAllViews()
-//
-//        val inflater = LayoutInflater.from(this)
-//
-//        for (restaurant in restaurants) {
-//            val itemView: View = inflater.inflate(R.layout.restaurant_list_item, restaurantListLayout, false)
-//
-//            // Restaurant name
-//            val restaurantNameLabel = itemView.findViewById<TextView>(R.id.list_restaurant_name)
-//            restaurantNameLabel.text = restaurant.name
-//
-//            // Pickup hours
-//            val restaurantPickupHoursLabel = itemView.findViewById<TextView>(R.id.list_restaurant_pickup_hours)
-//            val calendar = Calendar.getInstance()
-//            val currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
-//            val pickupHoursToday = restaurant.pickupHours.onDay(currentDayOfWeek)
-//
-//            restaurantPickupHoursLabel.text = getString(
-//                R.string.restaurant_pickup_hours,
-//                pickupHoursToday.startTime,
-//                pickupHoursToday.endTime
-//            )
-//
-//            val restaurantBagPriceLabel = itemView.findViewById<TextView>(R.id.list_restaurant_bag_price)
-//            restaurantBagPriceLabel.text = getString(R.string.restaurant_bag_price, restaurant.bagPrice)
-//
-//            val restaurantBagCountLabel = itemView.findViewById<TextView>(R.id.list_restaurant_bag_count)
-//            restaurantBagCountLabel.text = getString(R.string.restaurant_bag_count, restaurant.bagsAvailable)
-//
-//            val distanceTextView = itemView.findViewById<TextView>(R.id.list_restaurant_distance)
-//            if (userLocation != null) {
-//                val distance = calculateDistance(
-//                    userLocation!!,
-//                    restaurant.location.latitude,
-//                    restaurant.location.longitude
-//                )
-//
-//                distanceTextView.text = if (distance >= 0) {
-//                    getString(R.string.restaurant_distance_km, distance)
-//                } else {
-//                    getString(R.string.location_unavailable)
-//                }
-//            } else {
-//                distanceTextView.text = getString(R.string.location_unavailable)
-//            }
-//
-//            val addToCartButton = itemView.findViewById<Button>(R.id.list_restaurant_add_to_cart_button)
-//            addToCartButton.setOnClickListener {
-//                val intent = Intent(this, RestaurantPageView::class.java).apply {
-//                    putExtra("restaurantName", restaurant.name)
-//                    putExtra("restaurantBagPrice", restaurant.bagPrice)
-//                    putExtra("restaurantBagCount", restaurant.bagsAvailable)
-//                    putExtra("restaurantPickupStart", pickupHoursToday.startTime)
-//                    putExtra("restaurantPickupEnd", pickupHoursToday.endTime)
-//                    putExtra("restaurantAddress", "TODO") // TODO: Get address with new geo system
-//                    putExtra("restaurantBannerImagePath", restaurant.bannerImagePath)
-//                }
-//                startActivity(intent)
-//            }
-//
-//            restaurantListLayout.addView(itemView)
-//        }
-//    }
 
     private fun requestLocationPermission() {
         if(ContextCompat.checkSelfPermission(
