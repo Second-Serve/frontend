@@ -14,9 +14,9 @@ class AccountService {
         fun register(
             email: String,
             password: String,
-            firstName: String,
-            lastName: String,
             accountType: AccountType,
+            firstName: String? = null,
+            lastName: String? = null,
             restaurantName: String? = null,
             address: String? = null,
             pickupStartTime: String? = null,
@@ -28,9 +28,13 @@ class AccountService {
                 .addOnSuccessListener { task ->
                     val userInfo = hashMapOf(
                         "account_type" to accountType.toString(),
-                        "first_name" to firstName,
-                        "last_name" to lastName
                     )
+
+                    // If the account we're registering is a customer, it should have a name
+                    if (accountType == AccountType.CUSTOMER) {
+                        userInfo["first_name"] = firstName!!
+                        userInfo["last_name"] = lastName!!
+                    }
 
                     // Try to add additional user info to the database
                     val uid = task.user!!.uid
@@ -41,9 +45,7 @@ class AccountService {
                             val user = User(
                                 id = uid,
                                 accountType,
-                                email,
-                                firstName,
-                                lastName
+                                email
                             )
 
                             // Have to create a restaurant if we're a business account
