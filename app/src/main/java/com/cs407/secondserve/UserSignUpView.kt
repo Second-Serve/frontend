@@ -26,18 +26,29 @@ import com.google.mlkit.vision.common.InputImage
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import androidx.camera.view.PreviewView
+import androidx.camera.core.Preview
 import com.cs407.secondserve.service.AccountService
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import android.location.Location
+import androidx.annotation.OptIn
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.common.api.ResolvableApiException
 import com.google.firebase.auth.FirebaseAuth
 
 class UserSignUpView : AppCompatActivity() {
 
     companion object {
         private const val CAMERA_PERMISSION_CODE = 101
+        private const val LOCATION_PERMISSION_CODE = 102
     }
 
     private var scannedBarcode: String? = null
 
     private lateinit var cameraExecutor: ExecutorService
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var userLocation: Location? = null
 
     private val takePictureLauncher =
         registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
@@ -57,6 +68,14 @@ class UserSignUpView : AppCompatActivity() {
         firebaseAuth = FirebaseAuth.getInstance()
 
         cameraExecutor = Executors.newSingleThreadExecutor()
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestLocationPermission()
+        } else {
+            getUserLocation()
+        }
 
         val firstNameField: EditText = findViewById(R.id.first_name_input)
         val lastNameField: EditText = findViewById(R.id.last_name_input)
@@ -164,6 +183,7 @@ class UserSignUpView : AppCompatActivity() {
         }
     }
 
+    @OptIn(ExperimentalGetImage::class)
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
@@ -234,6 +254,133 @@ class UserSignUpView : AppCompatActivity() {
         }, ContextCompat.getMainExecutor(this))
     }
 
+
+
+    private fun getUserLocation() {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestLocationPermission()
+            return
+        }
+
+
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location ->
+                if (location != null) {
+                    userLocation = location
+                    Toast.makeText(
+                        this,
+                        "Location fetched: Latitude: ${location.latitude}, Longitude: ${location.longitude}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
+                    requestLocationUpdates()
+                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Failed to fetch location: ${it.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+
+    private fun requestLocationUpdates() {
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestLocationPermission()
+            return
+        }
+
+
+        val locationRequest = LocationRequest.create().apply {
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            interval = 10000
+            fastestInterval = 5000
+        }
+
+
+        fusedLocationClient.requestLocationUpdates(
+            locationRequest,
+            object : com.google.android.gms.location.LocationCallback() {
+                override fun onLocationResult(locationResult: com.google.android.gms.location.LocationResult) {
+                    super.onLocationResult(locationResult)
+                    fusedLocationClient.removeLocationUpdates(this)
+                    val location = locationResult.lastLocation
+                    if (location != null) {
+                        userLocation = location
+                        Toast.makeText(
+                            this@UserSignUpView,
+                            "Location fetched: Latitude: ${location.latitude}, Longitude: ${location.longitude}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } else {
+                        Toast.makeText(this@UserSignUpView, "Failed to get location.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            },
+            null
+        )
+    }
+
+
+    private fun requestLocationPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ),
+            LOCATION_PERMISSION_CODE
+        )
+    }
+
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+
+        when (requestCode) {
+            LOCATION_PERMISSION_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getUserLocation()
+                } else {
+                    Toast.makeText(this, "Location permission is required.", Toast.LENGTH_SHORT).show()
+                }
+            }
+            CAMERA_PERMISSION_CODE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    val previewView = findViewById<PreviewView>(R.id.viewFinder)
+                    previewView.visibility = View.VISIBLE
+                    startCamera()
+                } else {
+                    Toast.makeText(this, "Camera permission is required.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        cameraExecutor.shutdown()
+    }
+
+
+    private fun isValidBarcode(barcode: String): Boolean {
+        return barcode.length == 11 && barcode.startsWith("9") && barcode.all { it.isDigit() }
+    }
+
+
+
     private fun processBarcode(bitmap: Bitmap) {
         val image = InputImage.fromBitmap(bitmap, 0)
         val scanner = BarcodeScanning.getClient()
@@ -254,27 +401,7 @@ class UserSignUpView : AppCompatActivity() {
             }
     }
 
-    private fun isValidBarcode(barcode: String): Boolean {
-        return barcode.length in 10..20
-    }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (requestCode == CAMERA_PERMISSION_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                val previewView = findViewById<PreviewView>(R.id.viewFinder)
-                previewView.visibility = View.VISIBLE
-                startCamera()
-            } else {
-                Toast.makeText(this, "Camera permission denied", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
 
     override fun onStop() {
         super.onStop()
