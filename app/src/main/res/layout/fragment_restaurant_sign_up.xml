@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="@string/full_name_label"
+            android:text="@string/restaurant_name_label"
             android:textColor="@color/accent"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
