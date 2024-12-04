@@ -70,7 +70,6 @@ class UserSignUpView : AppCompatActivity() {
         cameraExecutor = Executors.newSingleThreadExecutor()
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestLocationPermission()
         } else {
@@ -164,6 +163,10 @@ class UserSignUpView : AppCompatActivity() {
                                             finish()
                                         }
                                     )
+
+                                    // Check if email is verified
+                                    checkIfEmailVerified()
+
                                 } else {
                                     Toast.makeText(
                                         this,
@@ -180,6 +183,19 @@ class UserSignUpView : AppCompatActivity() {
                         ).show()
                     }
                 }
+        }
+    }
+
+    private fun checkIfEmailVerified() {
+        val user = firebaseAuth.currentUser
+        user?.reload()?.addOnCompleteListener { reloadTask ->
+            if (reloadTask.isSuccessful) {
+                if (user.isEmailVerified) {
+                    Toast.makeText(this, "Email is verified!", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Please verify your email.", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
@@ -254,134 +270,41 @@ class UserSignUpView : AppCompatActivity() {
         }, ContextCompat.getMainExecutor(this))
     }
 
-
-
     private fun getUserLocation() {
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
+            ) == PackageManager.PERMISSION_GRANTED
         ) {
-            requestLocationPermission()
-            return
-        }
-
-
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location ->
+            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
                 if (location != null) {
                     userLocation = location
-                    Toast.makeText(
-                        this,
-                        "Location fetched: Latitude: ${location.latitude}, Longitude: ${location.longitude}",
-                        Toast.LENGTH_LONG
-                    ).show()
-                } else {
-                    requestLocationUpdates()
                 }
             }
-            .addOnFailureListener {
-                Toast.makeText(this, "Failed to fetch location: ${it.message}", Toast.LENGTH_SHORT).show()
-            }
-    }
-
-
-    private fun requestLocationUpdates() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            requestLocationPermission()
-            return
         }
-
-
-        val locationRequest = LocationRequest.create().apply {
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-            interval = 10000
-            fastestInterval = 5000
-        }
-
-
-        fusedLocationClient.requestLocationUpdates(
-            locationRequest,
-            object : com.google.android.gms.location.LocationCallback() {
-                override fun onLocationResult(locationResult: com.google.android.gms.location.LocationResult) {
-                    super.onLocationResult(locationResult)
-                    fusedLocationClient.removeLocationUpdates(this)
-                    val location = locationResult.lastLocation
-                    if (location != null) {
-                        userLocation = location
-                        Toast.makeText(
-                            this@UserSignUpView,
-                            "Location fetched: Latitude: ${location.latitude}, Longitude: ${location.longitude}",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    } else {
-                        Toast.makeText(this@UserSignUpView, "Failed to get location.", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            },
-            null
-        )
     }
-
 
     private fun requestLocationPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+        ) {
+            Toast.makeText(this, "Location permission is required", Toast.LENGTH_SHORT).show()
+        }
         ActivityCompat.requestPermissions(
             this,
-            arrayOf(
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ),
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
             LOCATION_PERMISSION_CODE
         )
     }
-
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-
-        when (requestCode) {
-            LOCATION_PERMISSION_CODE -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getUserLocation()
-                } else {
-                    Toast.makeText(this, "Location permission is required.", Toast.LENGTH_SHORT).show()
-                }
-            }
-            CAMERA_PERMISSION_CODE -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    val previewView = findViewById<PreviewView>(R.id.viewFinder)
-                    previewView.visibility = View.VISIBLE
-                    startCamera()
-                } else {
-                    Toast.makeText(this, "Camera permission is required.", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-        cameraExecutor.shutdown()
-    }
-
 
     private fun isValidBarcode(barcode: String): Boolean {
         return barcode.length == 11 && barcode.startsWith("9") && barcode.all { it.isDigit() }
     }
 
 
-
-    private fun processBarcode(bitmap: Bitmap) {
+private fun processBarcode(bitmap: Bitmap) {
         val image = InputImage.fromBitmap(bitmap, 0)
         val scanner = BarcodeScanning.getClient()
 
@@ -400,7 +323,6 @@ class UserSignUpView : AppCompatActivity() {
                 e.printStackTrace()
             }
     }
-
 
 
     override fun onStop() {
