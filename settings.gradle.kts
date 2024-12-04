@@ -20,5 +20,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "secondserve"
-include(":app")
- 
+include(":app", ":payview")
