@@ -147,9 +147,9 @@ class UserSignUpView : AppCompatActivity() {
                                     AccountService.register(
                                         email,
                                         password,
+                                        AccountType.CUSTOMER,
                                         firstName,
                                         lastName,
-                                        AccountType.CUSTOMER,
                                         onSuccess = { user: User ->
                                             Toast.makeText(
                                                 this,
