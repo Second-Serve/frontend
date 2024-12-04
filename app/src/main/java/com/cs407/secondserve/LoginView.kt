@@ -25,6 +25,7 @@ import android.widget.ScrollView
 import android.view.Gravity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.FirebaseAuth
 
 class LoginView : AppCompatActivity() {
 
@@ -56,7 +57,7 @@ class LoginView : AppCompatActivity() {
             val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
 
-            Toast.makeText(this, "Email: $email, Password: $password", Toast.LENGTH_SHORT).show()
+            tryLogIn(email, password)
         }
 
         recyclerView.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -76,6 +77,40 @@ class LoginView : AppCompatActivity() {
         }
     }
 
+
+    object AccountService {
+        fun signIn(
+            context: android.content.Context, // Add context parameter
+            email: String,
+            password: String,
+            onSuccess: (AuthResult) -> Unit,
+
+
+            onFailure: (Exception) -> Unit = { exception ->
+                exception.printStackTrace() // Log the exception
+                Toast.makeText(
+                    context, // Use the passed context
+                    "Authentication failed: ${exception.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+
+        ) {
+            FirebaseAuth.getInstance()
+                .signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        onSuccess(task.result!!)
+                    } else {
+                        onFailure(task.exception ?: Exception("Unknown error occurred"))
+                    }
+                }
+        }
+    }
+
+
+
     private fun tryLogIn(email: String, password: String) {
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
@@ -83,21 +118,54 @@ class LoginView : AppCompatActivity() {
         }
 
         AccountService.signIn(
+            this,
             email,
             password,
             onSuccess = { authResult: AuthResult ->
                 val user = authResult.user
-                if (user != null) {
+                if (user != null && user.isEmailVerified) {
                     val intent = Intent(this, RestaurantSearchView::class.java)
                     startActivity(intent)
+                } else if (user != null && !user.isEmailVerified) {
+                    Toast.makeText(
+                        this,
+                        "Please verify your email before logging in.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    loginButton.isEnabled = false
+
+                    user.sendEmailVerification()
+                        .addOnCompleteListener { task ->
+                            loginButton.isEnabled = true
+                            if (task.isSuccessful) {
+                                Toast.makeText(
+                                    this,
+                                    "Verification email sent. Please check your inbox.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                Toast.makeText(
+                                    this,
+                                    "Failed to send verification email. Please try again later.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
                 } else {
                     Toast.makeText(this, "Failed to retrieve user information", Toast.LENGTH_SHORT).show()
                 }
             },
-
-
+            onFailure = { exception ->
+                Toast.makeText(
+                    this,
+                    "Authentication failed: ${exception.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         )
     }
+
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -106,7 +174,7 @@ class LoginView : AppCompatActivity() {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 navigateToSignUp()
             } else {
-                // TODO: User denied our request for location. Need to figure out how to handle this.
+                Toast.makeText(this, "Location permission is required for this feature.", Toast.LENGTH_SHORT).show()
             }
         }
     }
