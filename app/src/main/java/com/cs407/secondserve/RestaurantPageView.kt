@@ -43,14 +43,8 @@ class RestaurantPageView : SecondServeView() {
             // Address
             findViewById<TextView>(R.id.restaurant_location_text).text = extras.getString("restaurantAddress")
 
-            // Banner
             // TODO: Re-implement banner with Firebase
-//            val bannerImage = findViewById<NetworkImageView>(R.id.restaurant_banner_image)
-//            bannerImage.setDefaultImageResId(R.drawable.baseline_restaurant_menu_24)
-//            bannerImage.setImageUrl(
-//                extras.getString("restaurantBannerImagePath"),
-//                UserAPI.imageLoader
-//            )
+
         }
     }
 }
