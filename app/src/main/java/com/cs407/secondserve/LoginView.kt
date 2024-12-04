@@ -99,17 +99,17 @@ class LoginView : AppCompatActivity() {
         )
     }
 
-//    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//
-//        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-//            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                navigateToSignUp()
-//            } else {
-//                // TODO: User denied our request for location. Need to figure out how to handle this.
-//            }
-//        }
-//    }
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                navigateToSignUp()
+            } else {
+                // TODO: User denied our request for location. Need to figure out how to handle this.
+            }
+        }
+    }
 
     private fun navigateToSignUp() {
         val intent = Intent(this, UserSignUpView::class.java)
