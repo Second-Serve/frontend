@@ -41,6 +41,8 @@ xmlns:tools="http://schemas.android.com/tools">
         <activity android:name=".RestaurantSignUpView" />
         <activity android:name=".SaveLocationView" />
         <activity android:name=".SecondServeView" />
+        <activity android:name=".RestaurantMainView"/>
+
 
     </application>
 
