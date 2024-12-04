@@ -1,142 +1,132 @@
 package com.cs407.secondserve
 
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Location
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.provider.MediaStore
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.Manifest
 import android.view.View
-import androidx.annotation.OptIn
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.view.PreviewView
 import com.cs407.secondserve.model.AccountType
-import com.cs407.secondserve.service.AccountService
+import com.cs407.secondserve.model.User
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.common.InputImage
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import androidx.camera.view.PreviewView
+import androidx.camera.core.Preview
+import com.cs407.secondserve.service.AccountService
 
-class UserSignUpView : SecondServeView() {
+
+class UserSignUpView : AppCompatActivity() {
+
     companion object {
         private const val CAMERA_PERMISSION_CODE = 101
-        private const val LOCATION_PERMISSION_CODE = 102
     }
 
     private var scannedBarcode: String? = null
-    private lateinit var cameraExecutor: ExecutorService
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private var userLocation: Location? = null
 
+    private lateinit var cameraExecutor: ExecutorService
+
+    private val takePictureLauncher =
+        registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
+            if (bitmap != null) {
+                processBarcode(bitmap)
+            } else {
+                Toast.makeText(this, "No image data", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    @androidx.camera.core.ExperimentalGetImage
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_sign_up_user)
 
         cameraExecutor = Executors.newSingleThreadExecutor()
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            getUserLocation()
-        } else {
-            requestLocationPermission()
-        }
-
+        val firstNameField: EditText = findViewById(R.id.first_name_input)
+        val lastNameField: EditText = findViewById(R.id.last_name_input)
+        val emailField: EditText = findViewById(R.id.email_input)
+        val passwordField: EditText = findViewById(R.id.password_input)
+        val confirmPasswordField: EditText = findViewById(R.id.confirm_password_input)
+        val termsCheckbox: CheckBox = findViewById(R.id.terms_checkbox)
         val signUpButton: Button = findViewById(R.id.sign_up_button)
+        val scanWiscardButton: TextView = findViewById(R.id.scan_wiscard_button)
+
+        scanWiscardButton.setOnClickListener {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.CAMERA),
+                    CAMERA_PERMISSION_CODE
+                )
+            } else {
+                val previewView = findViewById<PreviewView>(R.id.viewFinder)
+                previewView.visibility = View.VISIBLE
+                startCamera()
+            }
+        }
+
+
         signUpButton.setOnClickListener {
-            handleUserSignUp()
-        }
-    }
+            val firstName = firstNameField.text.toString().trim()
+            val lastName = lastNameField.text.toString().trim()
+            val email = emailField.text.toString().trim()
+            val password = passwordField.text.toString().trim()
+            val confirmPassword = confirmPasswordField.text.toString().trim()
 
-    private fun handleUserSignUp() {
-        val email = findViewById<EditText>(R.id.email_input).text.toString().trim()
-        val password = findViewById<EditText>(R.id.password_input).text.toString().trim()
-        val firstName = findViewById<EditText>(R.id.first_name_input).text.toString().trim()
-        val lastName = findViewById<EditText>(R.id.last_name_input).text.toString().trim()
-
-        if (email.isEmpty() || password.isEmpty() || firstName.isEmpty() || lastName.isEmpty()) {
-            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        if (userLocation == null) {
-            Toast.makeText(this, "Unable to fetch location. Please try again.", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        AccountService.register(
-            email = email,
-            password = password,
-            firstName = firstName,
-            lastName = lastName,
-            accountType = AccountType.CUSTOMER,
-            onSuccess = {
-                Toast.makeText(baseContext, "Sign up successful!", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, RestaurantSearchView::class.java))
-                finish()
-            },
-            onFailure = { exception ->
-                Toast.makeText(baseContext, exception.message, Toast.LENGTH_SHORT).show()
+            if (email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
-        )
-    }
 
-    private fun getUserLocation() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            requestLocationPermission()
-            return
-        }
-
-        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
-            userLocation = location ?: run {
-                Toast.makeText(this, "Unable to fetch location.", Toast.LENGTH_SHORT).show()
-                null
+            if (password != confirmPassword) {
+                Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
-        }.addOnFailureListener {
-            Toast.makeText(this, "Failed to get location: ${it.message}", Toast.LENGTH_SHORT).show()
-        }
-    }
 
-    private fun requestLocationPermission() {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-            LOCATION_PERMISSION_CODE
-        )
-    }
+            if (!termsCheckbox.isChecked) {
+                Toast.makeText(this, "You must agree to the terms", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+            if (scannedBarcode.isNullOrEmpty() || !isValidBarcode(scannedBarcode!!)) {
+                Toast.makeText(this, "Please scan your wiscard", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
-        when (requestCode) {
-            LOCATION_PERMISSION_CODE -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getUserLocation()
-                } else {
-                    Toast.makeText(this, "Location permission is required for registration.", Toast.LENGTH_SHORT).show()
+            AccountService.register(
+                email,
+                password,
+                firstName,
+                lastName,
+                AccountType.CUSTOMER,
+                onSuccess = { user: User ->
+                    Toast.makeText(this, "Sign up successful!", Toast.LENGTH_SHORT).show()
+
+                    val intent = Intent(this, RestaurantSearchView::class.java)
+                    startActivity(intent)
+                    finish()
                 }
-            }
-            CAMERA_PERMISSION_CODE -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    startCamera()
-                } else {
-                    Toast.makeText(this, "Camera permission is required.", Toast.LENGTH_SHORT).show()
-                }
-            }
+            )
         }
     }
 
-    @OptIn(ExperimentalGetImage::class) private fun startCamera() {
+    private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
 
         cameraProviderFuture.addListener({
@@ -163,12 +153,27 @@ class UserSignUpView : SecondServeView() {
                     barcodeScanner.process(image)
                         .addOnSuccessListener { barcodes ->
                             if (barcodes.isNotEmpty()) {
-                                scannedBarcode = barcodes.first().displayValue
-                                Toast.makeText(this, "Scanned: $scannedBarcode", Toast.LENGTH_SHORT).show()
+                                val barcode = barcodes.first()
+                                scannedBarcode = barcode.displayValue
+
+                                previewView.visibility = View.GONE
+
+                                if (scannedBarcode != null && isValidBarcode(scannedBarcode!!)) {
+                                    val snackbar = com.google.android.material.snackbar.Snackbar.make(
+                                        findViewById(android.R.id.content),
+                                        "Valid Barcode: $scannedBarcode",
+                                        10000
+                                    )
+                                    snackbar.show()
+                                } else {
+                                    Toast.makeText(this, "Invalid Barcode: $scannedBarcode", Toast.LENGTH_LONG).show()
+                                }
+
                             }
                         }
-                        .addOnFailureListener {
-                            Toast.makeText(this, "Barcode scanning failed: ${it.message}", Toast.LENGTH_SHORT).show()
+                        .addOnFailureListener { e ->
+                            Toast.makeText(this, "Barcode detection failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                            e.printStackTrace()
                         }
                         .addOnCompleteListener {
                             imageProxy.close()
@@ -180,11 +185,66 @@ class UserSignUpView : SecondServeView() {
 
             try {
                 cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalysis)
+                cameraProvider.bindToLifecycle(
+                    this,
+                    cameraSelector,
+                    preview,
+                    imageAnalysis
+                )
             } catch (e: Exception) {
                 Toast.makeText(this, "Camera initialization failed: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }, ContextCompat.getMainExecutor(this))
+    }
+
+
+
+    @ExperimentalGetImage
+    override fun onStart() {
+        super.onStart()
+//        startCamera()
+    }
+
+    private fun processBarcode(bitmap: Bitmap) {
+        val image = InputImage.fromBitmap(bitmap, 0)
+        val scanner = BarcodeScanning.getClient()
+
+        scanner.process(image)
+            .addOnSuccessListener { barcodes ->
+                if (barcodes.isNotEmpty()) {
+                    val barcode = barcodes.first()
+                    scannedBarcode = barcode.displayValue
+                    Toast.makeText(this, "Scanned: $scannedBarcode", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(this, "No barcode detected", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Barcode detection failed: ${e.message}", Toast.LENGTH_SHORT).show()
+                e.printStackTrace()
+            }
+    }
+
+    private fun isValidBarcode(barcode: String): Boolean {
+        return barcode.length == 11 && barcode.startsWith("9") && barcode.all { it.isDigit() }
+    }
+
+    @androidx.camera.core.ExperimentalGetImage
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == CAMERA_PERMISSION_CODE) {
+            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                val previewView = findViewById<PreviewView>(R.id.viewFinder)
+                previewView.visibility = View.VISIBLE
+                startCamera()
+            } else {
+                Toast.makeText(this, "Camera permission is required", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     override fun onDestroy() {

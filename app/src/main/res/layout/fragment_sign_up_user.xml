@@ -117,7 +117,7 @@
     <!-- TODO: Make this a button -->
     <Button
         android:id="@+id/scan_wiscard_button"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:text="@string/scan_wiscard_button"
