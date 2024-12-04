@@ -271,32 +271,36 @@ class UserSignUpView : AppCompatActivity() {
     }
 
     private fun getUserLocation() {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
-                if (location != null) {
-                    userLocation = location
+
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+                    if (location != null) {
+                        userLocation = location
+                        Toast.makeText(this, "Your location: ${location.latitude}, ${location.longitude}", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this, "Unable to fetch location. Try again.", Toast.LENGTH_LONG).show()
+                    }
+                }.addOnFailureListener { e ->
+                    Toast.makeText(this, "Error fetching location: ${e.message}", Toast.LENGTH_LONG).show()
                 }
             }
-        }
+
     }
 
     private fun requestLocationPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                Toast.makeText(this, "Location permission is required to access your location", Toast.LENGTH_LONG).show()
+            }
+            ActivityCompat.requestPermissions(
                 this,
-                Manifest.permission.ACCESS_FINE_LOCATION
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_PERMISSION_CODE
             )
-        ) {
-            Toast.makeText(this, "Location permission is required", Toast.LENGTH_SHORT).show()
         }
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-            LOCATION_PERMISSION_CODE
-        )
     }
 
     private fun isValidBarcode(barcode: String): Boolean {
@@ -322,6 +326,22 @@ private fun processBarcode(bitmap: Bitmap) {
                 Toast.makeText(this, "Barcode detection failed: ${e.message}", Toast.LENGTH_SHORT).show()
                 e.printStackTrace()
             }
+    }
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == LOCATION_PERMISSION_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, fetch location
+                getUserLocation()
+            } else {
+                // Permission denied
+                Toast.makeText(this, "Location permission denied. Unable to fetch location.", Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
 

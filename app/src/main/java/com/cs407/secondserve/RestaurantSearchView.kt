@@ -17,6 +17,7 @@ import com.google.android.gms.location.LocationServices
 import android.location.Location
 import android.util.Log
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.util.Locale
@@ -123,7 +124,7 @@ class RestaurantSearchView : SecondServeView() {
     private fun getUserLocation() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        if (ContextCompat.checkSelfPermission(
+        if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
@@ -131,35 +132,31 @@ class RestaurantSearchView : SecondServeView() {
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                 if (location != null) {
                     userLocation = location
-                    Toast.makeText(
-                        this,
-                        "Location: ${location.latitude}, ${location.longitude}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
-                    // Reverse geocode the user's address (optional)
+                    // Update the user_location_text TextView with the fetched location
+                    val locationTextView: TextView = findViewById(R.id.user_location_text)
                     val geocoder = Geocoder(this, Locale.getDefault())
-                    try {
-                        val addresses = geocoder.getFromLocation(
-                            location.latitude,
-                            location.longitude,
-                            1
-                        )
 
+                    try {
+                        val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
                         if (!addresses.isNullOrEmpty()) {
                             val userAddress = addresses[0].getAddressLine(0)
-                            Log.d("UserLocation", "Address: $userAddress")
-                            Toast.makeText(this, "Address: $userAddress", Toast.LENGTH_LONG).show()
+                            locationTextView.text = "Your location: $userAddress"
+                        } else {
+                            locationTextView.text = "Unable to determine your address."
                         }
                     } catch (e: Exception) {
-                        Log.e("GeocodingError", "Failed to geocode: ${e.message}")
+                        locationTextView.text = "Error determining your location: ${e.message}"
+                        e.printStackTrace()
                     }
                 } else {
-                    Toast.makeText(this, "Unable to fetch location", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Unable to fetch location. Try again.", Toast.LENGTH_LONG).show()
+                    val locationTextView: TextView = findViewById(R.id.user_location_text)
+                    locationTextView.text = "Unable to fetch your location."
                 }
             }.addOnFailureListener { e ->
-                Log.e("LocationError", "Error fetching location: ${e.message}")
-                Toast.makeText(this, "Error fetching location: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Error fetching location: ${e.message}", Toast.LENGTH_LONG).show()
+                val locationTextView: TextView = findViewById(R.id.user_location_text)
+                locationTextView.text = "Error fetching location: ${e.message}"
             }
         } else {
             requestLocationPermission()
