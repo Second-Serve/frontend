@@ -2,7 +2,9 @@ package com.cs407.secondserve
 
 import android.os.Bundle
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.Spinner
 import android.widget.Toast
 import com.cs407.secondserve.model.AccountType
 import com.cs407.secondserve.service.AccountService
@@ -34,30 +36,95 @@ class RestaurantSignUpView : SecondServeView() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_restaurant_sign_up)
 
-        val firstNameField: EditText = findViewById(R.id.restaurant_first_name_input)
-        val lastNameField: EditText = findViewById(R.id.restaurant_last_name_input)
         val emailField: EditText = findViewById(R.id.restaurant_email_input)
         val passwordField: EditText = findViewById(R.id.restaurant_password_input)
         val restaurantNameField: EditText = findViewById(R.id.restaurant_name_input)
         val restaurantAddressField: EditText = findViewById(R.id.restaurant_address_input)
-        val restaurantPickupHoursStartField: EditText = findViewById(R.id.restaurant_pickup_hours_start_time_input)
-        val restaurantPickupHoursEndField: EditText = findViewById(R.id.restaurant_pickup_hours_end_time_input)
         val signUpButton: Button = findViewById(R.id.restaurant_sign_up_button)
 
+        val checkboxMonday: CheckBox = findViewById(R.id.checkbox_monday)
+        val checkboxTuesday: CheckBox = findViewById(R.id.checkbox_tuesday)
+        val checkboxWednesday: CheckBox = findViewById(R.id.checkbox_wednesday)
+        val checkboxThursday: CheckBox = findViewById(R.id.checkbox_thursday)
+        val checkboxFriday: CheckBox = findViewById(R.id.checkbox_friday)
+        val checkboxSaturday: CheckBox = findViewById(R.id.checkbox_saturday)
+        val checkboxSunday: CheckBox = findViewById(R.id.checkbox_sunday)
+
+        val startTimeMonday: Spinner = findViewById(R.id.pickup_start_time_monday)
+        val endTimeMonday: Spinner = findViewById(R.id.pickup_end_time_monday)
+        val startTimeTuesday: Spinner = findViewById(R.id.pickup_start_time_tuesday)
+        val endTimeTuesday: Spinner = findViewById(R.id.pickup_end_time_tuesday)
+        val startTimeWednesday: Spinner = findViewById(R.id.pickup_start_time_wednesday)
+        val endTimeWednesday: Spinner = findViewById(R.id.pickup_end_time_wednesday)
+        val startTimeThursday: Spinner = findViewById(R.id.pickup_start_time_thursday)
+        val endTimeThursday: Spinner = findViewById(R.id.pickup_end_time_thursday)
+        val startTimeFriday: Spinner = findViewById(R.id.pickup_start_time_friday)
+        val endTimeFriday: Spinner = findViewById(R.id.pickup_end_time_friday)
+        val startTimeSaturday: Spinner = findViewById(R.id.pickup_start_time_saturday)
+        val endTimeSaturday: Spinner = findViewById(R.id.pickup_end_time_saturday)
+        val startTimeSunday: Spinner = findViewById(R.id.pickup_start_time_sunday)
+        val endTimeSunday: Spinner = findViewById(R.id.pickup_end_time_sunday)
+
+
         signUpButton.setOnClickListener {
-            val firstName = firstNameField.text.toString().trim()
-            val lastName = lastNameField.text.toString().trim()
             val email = emailField.text.toString().trim()
             val password = passwordField.text.toString().trim()
             val restaurantName = restaurantNameField.text.toString().trim()
             val address = restaurantAddressField.text.toString().trim()
-            val pickupStartTime = restaurantPickupHoursStartField.text.toString().trim()
-            val pickupEndTime = restaurantPickupHoursEndField.text.toString().trim()
 
-            if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty() ||
-                restaurantName.isEmpty() || address.isEmpty() || pickupStartTime.isEmpty() || pickupEndTime.isEmpty()) {
-                Toast.makeText(baseContext, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+            val pickupHours = mutableMapOf<String, Pair<String, String>>()
+
+            if (checkboxMonday.isChecked) {
+                pickupHours["Monday"] = Pair(
+                    startTimeMonday.selectedItem.toString(),
+                    endTimeMonday.selectedItem.toString()
+                )
+            }
+            if (checkboxTuesday.isChecked) {
+                pickupHours["Tuesday"] = Pair(
+                    startTimeTuesday.selectedItem.toString(),
+                    endTimeTuesday.selectedItem.toString()
+                )
+            }
+            if (checkboxWednesday.isChecked) {
+                pickupHours["Wednesday"] = Pair(
+                    startTimeWednesday.selectedItem.toString(),
+                    endTimeWednesday.selectedItem.toString()
+                )
+            }
+            if (checkboxThursday.isChecked) {
+                pickupHours["Thursday"] = Pair(
+                    startTimeThursday.selectedItem.toString(),
+                    endTimeThursday.selectedItem.toString()
+                )
+            }
+            if (checkboxFriday.isChecked) {
+                pickupHours["Friday"] = Pair(
+                    startTimeFriday.selectedItem.toString(),
+                    endTimeFriday.selectedItem.toString()
+                )
+            }
+            if (checkboxSaturday.isChecked) {
+                pickupHours["Saturday"] = Pair(
+                    startTimeSaturday.selectedItem.toString(),
+                    endTimeSaturday.selectedItem.toString()
+                )
+            }
+            if (checkboxSunday.isChecked) {
+                pickupHours["Sunday"] = Pair(
+                    startTimeSunday.selectedItem.toString(),
+                    endTimeSunday.selectedItem.toString()
+                )
+            }
+
+            if (email.isEmpty() || password.isEmpty() || restaurantName.isEmpty() ||
+                address.isEmpty() || pickupHours.isEmpty()) {
+                Toast.makeText(baseContext, "Please fill in all fields and select at least one pickup day", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
+            }
+
+            val pickupTimesString = pickupHours.entries.joinToString("; ") {
+                "${it.key}: ${it.value.first} - ${it.value.second}"
             }
 
             CoroutineScope(Dispatchers.IO).launch {
@@ -72,13 +139,9 @@ class RestaurantSignUpView : SecondServeView() {
                         AccountService.register(
                             email,
                             password,
-                            firstName,
-                            lastName,
                             AccountType.BUSINESS,
                             restaurantName,
                             address,
-                            pickupStartTime,
-                            pickupEndTime,
                             onSuccess = {
                                 Toast.makeText(baseContext, "Sign up successful!", Toast.LENGTH_SHORT).show()
                                 startActivityEmptyIntent(RestaurantSearchView::class.java)
