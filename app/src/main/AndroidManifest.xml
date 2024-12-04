@@ -43,6 +43,7 @@ xmlns:tools="http://schemas.android.com/tools">
         <activity android:name=".SecondServeView" />
         <activity android:name=".RestaurantMainView"/>
         <activity android:name=".CheckoutView"/>
+        <activity android:name=".PaymentView"/>
 
 
     </application>
