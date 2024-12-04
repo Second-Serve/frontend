@@ -37,28 +37,28 @@ class LoginView : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_log_in)
 
-        // Get reference to RecyclerView
         val recyclerView: RecyclerView = findViewById(R.id.loginRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // Inflate the login item layout directly without an adapter
         val loginView = LayoutInflater.from(this).inflate(R.layout.login_item, recyclerView, false)
 
-        // Optionally, you can set up the elements directly here, e.g. add text to EditText
         val emailEditText: TextInputEditText = loginView.findViewById(R.id.emailEditText)
         val passwordEditText: TextInputEditText = loginView.findViewById(R.id.passwordEditText)
         val loginButton: MaterialButton = loginView.findViewById(R.id.loginButton)
 
-        // Set up login button click listener
+        val signUpTextView: TextView = loginView.findViewById(R.id.signUpTextView)
+        signUpTextView.setOnClickListener {
+            val intent = Intent(this, GetStartedView::class.java)
+            startActivity(intent)
+        }
+
         loginButton.setOnClickListener {
             val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
 
-            // Handle login logic here
             Toast.makeText(this, "Email: $email, Password: $password", Toast.LENGTH_SHORT).show()
         }
 
-        // Add the loginView to the RecyclerView
         recyclerView.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             override fun onCreateViewHolder(
                 parent: ViewGroup,
@@ -68,11 +68,10 @@ class LoginView : AppCompatActivity() {
             }
 
             override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-                // No data to bind here
             }
 
             override fun getItemCount(): Int {
-                return 1  // Since we're only showing one item
+                return 1
             }
         }
     }
