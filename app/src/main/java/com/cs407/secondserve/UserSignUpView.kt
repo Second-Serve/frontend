@@ -123,7 +123,7 @@ class UserSignUpView : AppCompatActivity() {
             }
 
             val isValidBarcode = !scannedBarcode.isNullOrEmpty() && isValidBarcode(scannedBarcode!!)
-            if (!Debug.SKIP_WISCARD_SCANNING && isValidBarcode) {
+            if (!Debug.SKIP_WISCARD_SCANNING && !isValidBarcode) {
                 Toast.makeText(this, "Please scan your wiscard", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
