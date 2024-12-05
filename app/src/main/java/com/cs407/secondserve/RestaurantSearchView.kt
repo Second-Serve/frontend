@@ -15,8 +15,13 @@ import android.location.Geocoder
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import android.location.Location
+import android.util.Log
 import android.widget.ImageButton
+import android.widget.Spinner
 import android.widget.TextView
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.util.Locale
@@ -30,26 +35,24 @@ class RestaurantSearchView : SecondServeView() {
     lateinit var restaurants: List<Restaurant>
     lateinit var restaurantAdapter: RestaurantAdapter
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.fragment_restaurant_search)
-        val lockButton: ImageButton = findViewById(R.id.lockButton)
 
+        val lockButton: ImageButton = findViewById(R.id.lockButton)
+        // Set up RecyclerView
         lockButton.setOnClickListener {
             val intent = Intent(this, CheckoutView::class.java)
             startActivity(intent)
         }
-
         restaurantRecyclerView = findViewById(R.id.restaurantRecyclerView)
         restaurantRecyclerView.layoutManager = LinearLayoutManager(this)
 
-
         restaurantAdapter = RestaurantAdapter { restaurant ->
             val pickupHoursToday = restaurant.pickupHours.onDay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK))
+                ?: throw IllegalArgumentException("Pickup hours not found for the current day")
             val intent = Intent(this, RestaurantPageView::class.java).apply {
-                putExtra("restaurantId", restaurant.id)
                 putExtra("restaurantName", restaurant.name)
                 putExtra("restaurantBagPrice", restaurant.bagPrice)
                 putExtra("restaurantBagCount", restaurant.bagsAvailable)
@@ -62,13 +65,31 @@ class RestaurantSearchView : SecondServeView() {
         }
         restaurantRecyclerView.adapter = restaurantAdapter
 
-
-        // When you hit the back arrow, go back
         val backArrow = findViewById<ImageView>(R.id.back_arrow)
         backArrow.setOnClickListener {
             finish()
         }
 
+        val filterSpinner = findViewById<Spinner>(R.id.filterSpinner)
+        val options = arrayOf("Price: Lowest to Highest", "Price: Highest to Lowest")
+        val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, options)
+        filterSpinner.adapter = spinnerAdapter
+        filterSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                if (::restaurants.isInitialized) {
+                    when (position) {
+                        0 -> sortRestaurantsByPriceAscending()
+                        1 -> sortRestaurantsByPriceDescending()
+                    }
+                } else {
+                    Log.w(TAG, "Restaurants not initialized yet!")
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+
+        // Fetch Restaurants
         RestaurantService.fetchAll(
             onSuccess = { restaurants ->
                 updateRestaurants(restaurants)
@@ -78,25 +99,39 @@ class RestaurantSearchView : SecondServeView() {
             }
         )
 
+        // Handle Location Permissions
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             getUserLocation()
         } else {
             requestLocationPermission()
         }
-
     }
+
     private fun updateRestaurants(newRestaurants: List<Restaurant>) {
         restaurants = newRestaurants
-        restaurantAdapter.updateRestaurants(newRestaurants)
+        if (::restaurantAdapter.isInitialized) {
+            restaurantAdapter.updateRestaurants(newRestaurants)
+        } else {
+            Log.e(TAG, "Adapter is not initialized!")
+        }
+    }
+
+    private fun sortRestaurantsByPriceAscending() {
+        val sorted = restaurants.sortedBy { it.bagPrice }
+        restaurantAdapter.updateRestaurants(sorted)
+    }
+
+    private fun sortRestaurantsByPriceDescending() {
+        val sorted = restaurants.sortedByDescending { it.bagPrice }
+        restaurantAdapter.updateRestaurants(sorted)
     }
 
     private fun requestLocationPermission() {
-        if(ContextCompat.checkSelfPermission(
+        if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
-        )
-        {
+        ) {
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
@@ -111,11 +146,10 @@ class RestaurantSearchView : SecondServeView() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if(requestCode == location_permission_code){
-            if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        if (requestCode == location_permission_code) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getUserLocation()
-            }
-            else{
+            } else {
                 Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show()
             }
         }
@@ -132,7 +166,6 @@ class RestaurantSearchView : SecondServeView() {
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                 if (location != null) {
                     userLocation = location
-                    // Update the user_location_text TextView with the fetched location
                     val locationTextView: TextView = findViewById(R.id.user_location_text)
                     val geocoder = Geocoder(this, Locale.getDefault())
 
@@ -163,15 +196,16 @@ class RestaurantSearchView : SecondServeView() {
         }
     }
 
-    private fun calculateDistance(userLocation: Location, restaurantLat: Double, restaurantLng: Double): Float{
+    private fun calculateDistance(userLocation: Location, restaurantLat: Double, restaurantLng: Double): Float {
         val restaurantLocation = Location("").apply {
             latitude = restaurantLat
             longitude = restaurantLng
         }
         return userLocation.distanceTo(restaurantLocation) / 1000
     }
+
     companion object {
         private const val TAG = "RestaurantSearchView"
     }
-
 }
+
