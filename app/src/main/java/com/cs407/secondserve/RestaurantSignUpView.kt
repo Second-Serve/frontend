@@ -42,8 +42,10 @@ class RestaurantSignUpView : SecondServeView() {
                 email,
                 password,
                 AccountType.BUSINESS,
-                restaurantName,
-                address,
+                restaurantName = restaurantName,
+                pickupStartTime = "09:00", // TODO: Make these configurable
+                pickupEndTime = "21:00",
+                address = address,
                 onSuccess = {
                     Toast.makeText(this@RestaurantSignUpView, "Sign up successful!", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this@RestaurantSignUpView, RestaurantMainView::class.java)
@@ -80,11 +82,28 @@ class RestaurantSignUpView : SecondServeView() {
             LatLng(latitude, longitude)
         } catch (e: Exception) {
             withContext(Dispatchers.Main) {
-                showToast("Error during geocoding: ${e.message}")
+                Toast.makeText(baseContext, "Error during geocoding: ${e.message}", Toast.LENGTH_LONG).show()
             }
             e.printStackTrace()
             null
         }
+    }
+
+    private suspend fun isAddressValid(address: String) {
+        try {
+            val result = Firebase.functions
+                .getHttpsCallable("isAddressValid")
+                .call(hashMapOf(
+                    "address" to address
+                ))
+                .addOnFailureListener { exception ->
+                    exception.printStackTrace()
+                }
+                .await()
+
+            val data = JSONObject(result.getData() as MutableMap<Any?, Any?>)
+            val isValid = data.getBoolean("isValid")
+
     }
 
     private fun showToast(message: String) {
