@@ -1,28 +1,16 @@
 package com.cs407.secondserve
 
-import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.View
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.VolleyError
-import com.cs407.secondserve.model.User
-import com.cs407.secondserve.service.AccountService
 import com.google.firebase.auth.AuthResult
-import android.widget.ScrollView
-import android.view.Gravity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
@@ -44,7 +32,7 @@ class LoginView : AppCompatActivity() {
         val loginView = LayoutInflater.from(this).inflate(R.layout.login_item, recyclerView, false)
         val emailEditText: TextInputEditText = loginView.findViewById(R.id.emailEditText)
         val passwordEditText: TextInputEditText = loginView.findViewById(R.id.passwordEditText)
-        val loginButton: MaterialButton = loginView.findViewById(R.id.loginButton)
+        loginButton = loginView.findViewById(R.id.loginButton)
 
         val signUpTextView: TextView = loginView.findViewById(R.id.signUpTextView)
         signUpTextView.setOnClickListener {

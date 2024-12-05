@@ -1,10 +1,13 @@
 package com.cs407.secondserve.model
 
 data class CartItem(
-    val restaurant: Restaurant,
+    val restaurantId: String,
+    val restaurantName: String,
+    val restaurantAddress: String,
+    val costPerBag: Double,
     val quantity: Int
 ) {
     fun getTotalPrice(): Double {
-        return (restaurant.bagPrice ?: 0.0) * quantity
+        return costPerBag * quantity
     }
 }

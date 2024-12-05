@@ -15,7 +15,6 @@ import android.location.Geocoder
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import android.location.Location
-import android.util.Log
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -50,6 +49,7 @@ class RestaurantSearchView : SecondServeView() {
         restaurantAdapter = RestaurantAdapter { restaurant ->
             val pickupHoursToday = restaurant.pickupHours.onDay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK))
             val intent = Intent(this, RestaurantPageView::class.java).apply {
+                putExtra("restaurantId", restaurant.id)
                 putExtra("restaurantName", restaurant.name)
                 putExtra("restaurantBagPrice", restaurant.bagPrice)
                 putExtra("restaurantBagCount", restaurant.bagsAvailable)

@@ -9,12 +9,23 @@ class Cart {
                 throw IllegalArgumentException("Count must be greater than 0")
             }
 
-            items += CartItem(restaurant, count)
+            val cartItem = CartItem(
+                restaurantId = restaurant.id,
+                restaurantName = restaurant.name,
+                restaurantAddress = restaurant.address,
+                costPerBag = restaurant.bagPrice ?: 0.0,
+                quantity = count
+            )
+            addItemToCart(cartItem)
+        }
+
+        fun addItemToCart(item: CartItem) {
+            items += item
         }
 
         fun removeRestaurantFromCart(restaurant: Restaurant) {
             for (item in items) {
-                if (item.restaurant == restaurant) {
+                if (item.restaurantId == restaurant.id) {
                     items -= item
                     return
                 }
