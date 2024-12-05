@@ -39,7 +39,7 @@ class RestaurantSearchView : SecondServeView() {
         val lockButton: ImageButton = findViewById(R.id.lockButton)
 
         lockButton.setOnClickListener {
-            val intent = Intent(this, PaymentView::class.java)
+            val intent = Intent(this, CheckoutView::class.java)
             startActivity(intent)
         }
 
