@@ -19,7 +19,7 @@ class RestaurantMainView : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_restaurant_page)
+        setContentView(R.layout.restaurant_main_page)
 
         bagPriceInput = findViewById(R.id.bag_price_input)
         setPriceButton = findViewById(R.id.set_price_button)
