@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cs407.secondserve.service.AccountService
 import com.cs407.secondserve.LoginView
+import com.cs407.secondserve.util.Debug
 
 class LandingPageView : SecondServeView() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +21,7 @@ class LandingPageView : SecondServeView() {
         val savedEmail = prefs.getString(getString(R.string.saved_email_key), null)
         val savedPassword = prefs.getString(getString(R.string.saved_password_key), null)
 
-        if (savedEmail != null && savedPassword != null && !FORCE_LANDING_PAGE) {
+        if (savedEmail != null && savedPassword != null && !Debug.FORCE_LANDING_PAGE) {
             AccountService.signIn(
                 savedEmail,
                 savedPassword,
@@ -75,9 +76,5 @@ class LandingPageView : SecondServeView() {
 
     private fun loadRestaurantSearch() {
         startActivity(Intent(this, RestaurantSearchView::class.java))
-    }
-
-    companion object {
-        private const val FORCE_LANDING_PAGE = true
     }
 }
