@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.android.tools.build.jetifier.core.utils.Log
 import com.cs407.secondserve.model.AccountType
 import com.cs407.secondserve.service.AccountService
 import com.google.android.gms.maps.model.LatLng
@@ -47,11 +48,14 @@ class RestaurantSignUpView : SecondServeView() {
                 pickupEndTime = "21:00",
                 address = address,
                 onSuccess = {
+                    Log.d("SignUp", "onSuccess called")
                     Toast.makeText(this@RestaurantSignUpView, "Sign up successful!", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this@RestaurantSignUpView, RestaurantMainView::class.java)
                     startActivity(intent)
+                    finish()
                 },
                 onFailure = { exception ->
+                    Log.e("SignUp", "onFailure called: ${exception.message}")
                     Toast.makeText(baseContext, exception.message, Toast.LENGTH_LONG).show()
                 }
             )
