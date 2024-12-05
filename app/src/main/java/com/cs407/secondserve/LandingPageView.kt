@@ -9,13 +9,18 @@ import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cs407.secondserve.service.AccountService
-import com.cs407.secondserve.LoginView
 import com.cs407.secondserve.util.Debug
+import com.google.firebase.functions.ktx.functions
+import com.google.firebase.ktx.Firebase
 
 class LandingPageView : SecondServeView() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        if (Debug.USE_FIREBASE_EMULATOR) {
+            Firebase.functions.useEmulator("10.0.2.2", 5001)
+        }
 
         val prefs = getSharedPreferences("com.cs407.secondserve", Context.MODE_PRIVATE)
         val savedEmail = prefs.getString(getString(R.string.saved_email_key), null)
