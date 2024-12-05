@@ -67,16 +67,16 @@ class LoginView : AppCompatActivity() {
 
     object AccountService {
         fun signIn(
-            context: android.content.Context, // Add context parameter
+            context: android.content.Context,
             email: String,
             password: String,
             onSuccess: (AuthResult) -> Unit,
 
 
             onFailure: (Exception) -> Unit = { exception ->
-                exception.printStackTrace() // Log the exception
+                exception.printStackTrace()
                 Toast.makeText(
-                    context, // Use the passed context
+                    context,
                     "Authentication failed: ${exception.message}",
                     Toast.LENGTH_SHORT
                 ).show()
