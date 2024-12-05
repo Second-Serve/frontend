@@ -4,32 +4,12 @@ class Cart {
     companion object {
         private var items: List<CartItem> = mutableListOf()
 
-        fun addRestaurantToCart(restaurant: Restaurant, count: Int) {
-            if (count <= 0) {
-                throw IllegalArgumentException("Count must be greater than 0")
-            }
-
-            val cartItem = CartItem(
-                restaurantId = restaurant.id,
-                restaurantName = restaurant.name,
-                restaurantAddress = restaurant.address,
-                costPerBag = restaurant.bagPrice ?: 0.0,
-                quantity = count
-            )
-            addItemToCart(cartItem)
-        }
-
         fun addItemToCart(item: CartItem) {
             items += item
         }
 
-        fun removeRestaurantFromCart(restaurant: Restaurant) {
-            for (item in items) {
-                if (item.restaurantId == restaurant.id) {
-                    items -= item
-                    return
-                }
-            }
+        fun removeItemFromCart(item: CartItem) {
+            items -= item
         }
 
         fun getItems(): List<CartItem> {
@@ -42,6 +22,22 @@ class Cart {
                 totalPrice += item.getTotalPrice()
             }
             return totalPrice
+        }
+
+        fun toMap(): MutableMap<String, Any> {
+            val items = mutableListOf<MutableMap<String, Any>>()
+            for (item in getItems()) {
+                val itemMap = mutableMapOf<String, Any>(
+                    "restaurantId" to item.restaurantId,
+                    "quantity" to item.quantity
+                )
+                items.add(itemMap)
+            }
+
+            val map = mutableMapOf<String, Any>(
+                "items" to items
+            )
+            return map
         }
     }
 }
