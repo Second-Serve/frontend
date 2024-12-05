@@ -62,4 +62,5 @@
     <string name="saturday">Saturday</string>
     <string name="sunday">Sunday</string>
     <string name="bag_price">Enter Price of Bags</string>
+    <string name="view_previous_orders">View Orders</string>
 </resources>
