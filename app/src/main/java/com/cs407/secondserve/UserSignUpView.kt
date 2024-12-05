@@ -32,9 +32,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import android.location.Location
 import androidx.annotation.OptIn
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationSettingsRequest
-import com.google.android.gms.common.api.ResolvableApiException
+import com.cs407.secondserve.util.Debug
 import com.google.firebase.auth.FirebaseAuth
 
 class UserSignUpView : AppCompatActivity() {
@@ -123,7 +121,8 @@ class UserSignUpView : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            if (scannedBarcode.isNullOrEmpty() || !isValidBarcode(scannedBarcode!!)) {
+            val isValidBarcode = !scannedBarcode.isNullOrEmpty() && isValidBarcode(scannedBarcode!!)
+            if (!Debug.SKIP_WISCARD_SCANNING && isValidBarcode) {
                 Toast.makeText(this, "Please scan your wiscard", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
