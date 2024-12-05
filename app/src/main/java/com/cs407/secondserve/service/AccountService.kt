@@ -1,5 +1,6 @@
 package com.cs407.secondserve.service
 
+import android.util.Log
 import com.cs407.secondserve.model.AccountType
 import com.cs407.secondserve.model.User
 import com.google.firebase.auth.AuthResult
@@ -107,36 +108,34 @@ class AccountService {
         ) {
             val db = Firebase.firestore
             db.collection("users")
-                .whereEqualTo("id", authResult.user!!.uid)
+                .document(authResult.user!!.uid)
                 .get()
-                .addOnSuccessListener { userData ->
-                    if (!userData.isEmpty) {
-                        val userDocument = userData.documents[0]
-                        val accountType =
-                            AccountType.valueOf(userDocument.data!!["account_type"] as String)
+                .addOnSuccessListener { userDocument ->
+                    Log.d("AccountService", "User data: $userDocument")
 
-                        var user = User(
-                            userDocument.id,
-                            accountType,
-                            authResult.user!!.email!!
+                    val accountType = AccountType.fromString(userDocument.data!!["account_type"] as String)
+
+                    var user = User(
+                        userDocument.id,
+                        accountType,
+                        authResult.user!!.email!!
+                    )
+
+                    if (accountType == AccountType.BUSINESS) {
+                        RestaurantService.fetchByUserId(
+                            authResult.user!!.uid,
+                            onSuccess = { restaurant ->
+                                user.restaurant = restaurant
+                                onSuccess?.invoke(user)
+                            },
+                            onFailure = { exception ->
+                                onFailure?.invoke(exception)
+                            }
                         )
-
-                        if (accountType == AccountType.BUSINESS) {
-                            RestaurantService.fetchByUserId(
-                                authResult.user!!.uid,
-                                onSuccess = { restaurant ->
-                                    user.restaurant = restaurant
-                                    onSuccess?.invoke(user)
-                                },
-                                onFailure = { exception ->
-                                    onFailure?.invoke(exception)
-                                }
-                            )
-                        } else {
-                            user.firstName = userDocument.data!!["first_name"] as String?
-                            user.lastName = userDocument.data!!["last_name"] as String?
-                            onSuccess?.invoke(user)
-                        }
+                    } else {
+                        user.firstName = userDocument.data!!["first_name"] as String?
+                        user.lastName = userDocument.data!!["last_name"] as String?
+                        onSuccess?.invoke(user)
                     }
                 }
                 .addOnFailureListener { exception ->

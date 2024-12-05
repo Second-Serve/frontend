@@ -118,6 +118,7 @@ class PaymentView : AppCompatActivity() {
         if (isFormValid()) {
             // If all fields are valid, proceed with payment processing (or another action)
             val orderData = Cart.toMap()
+            Log.d("PaymentView", "Order Data: $orderData")
             Firebase.functions.getHttpsCallable("placeOrder")
                 .call(orderData)
                 .addOnSuccessListener { result ->

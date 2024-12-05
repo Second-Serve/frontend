@@ -103,7 +103,7 @@ class RestaurantService {
 
         fun fetchByUserId(
             userId: String,
-            onSuccess: ((Restaurant) -> Unit)? = null,
+            onSuccess: ((Restaurant?) -> Unit)? = null,
             onFailure: ((Exception) -> Unit)? = null
         ) {
             val db = Firebase.firestore
@@ -112,6 +112,9 @@ class RestaurantService {
                 .get()
 
             future.addOnSuccessListener { result ->
+                if (result.documents.isEmpty()) {
+                    onSuccess?.invoke(null)
+                }
                 val restaurant = Restaurant.fromFetchedDocument(result.documents[0])
                 onSuccess?.invoke(restaurant)
             }
