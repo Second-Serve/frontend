@@ -21,9 +21,9 @@ class RestaurantMainView : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.restaurant_main_page)
 
-        bagPriceInput = findViewById(R.id.bag_price_input)
-        setPriceButton = findViewById(R.id.set_price_button)
-        userListRecyclerView = findViewById(R.id.user_list_recycler_view)
+//        bagPriceInput = findViewById(R.id.bag_price_input)
+//        setPriceButton = findViewById(R.id.set_price_button)
+//        userListRecyclerView = findViewById(R.id.user_list_recycler_view)
 
         userListRecyclerView.layoutManager = LinearLayoutManager(this)
         userAdapter = RestaurantViewAdapter()
