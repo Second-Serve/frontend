@@ -89,13 +89,15 @@ class RestaurantSignUpView : SecondServeView() {
         }
     }
 
-    private suspend fun isAddressValid(address: String) {
+    private suspend fun isAddressValid(address: String): Boolean {
         try {
             val result = Firebase.functions
                 .getHttpsCallable("isAddressValid")
-                .call(hashMapOf(
-                    "address" to address
-                ))
+                .call(
+                    hashMapOf(
+                        "address" to address
+                    )
+                )
                 .addOnFailureListener { exception ->
                     exception.printStackTrace()
                 }
@@ -103,7 +105,14 @@ class RestaurantSignUpView : SecondServeView() {
 
             val data = JSONObject(result.getData() as MutableMap<Any?, Any?>)
             val isValid = data.getBoolean("isValid")
-
+            return isValid
+        } catch (e: Exception) {
+            withContext(Dispatchers.Main) {
+                Toast.makeText(baseContext, "Error during address validation: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+            e.printStackTrace()
+            return false
+        }
     }
 
     private fun showToast(message: String) {
