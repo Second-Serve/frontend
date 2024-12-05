@@ -42,7 +42,6 @@ class LoginView : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         val loginView = LayoutInflater.from(this).inflate(R.layout.login_item, recyclerView, false)
-
         val emailEditText: TextInputEditText = loginView.findViewById(R.id.emailEditText)
         val passwordEditText: TextInputEditText = loginView.findViewById(R.id.passwordEditText)
         val loginButton: MaterialButton = loginView.findViewById(R.id.loginButton)

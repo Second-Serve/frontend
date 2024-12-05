@@ -17,99 +17,88 @@
         android:textColor="@color/accent"
         android:textSize="32sp" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/firstNameInputLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="@string/first_name_hint"
-        android:textColor="@color/accent"
-        android:textSize="18sp" />
-
-    <EditText
-        android:id="@+id/first_name_input"
-        android:layout_width="250dp"
-        android:layout_height="40dp"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/border"
-        android:hint="@string/first_name_hint"
-        android:inputType="textPersonName"
-        android:padding="10dp"
-        android:textColor="#000000"
-        android:textSize="16sp" />
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-    <TextView
-        android:layout_width="wrap_content"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/first_name_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/first_name_hint"
+            android:inputType="textPersonName"
+            android:textColor="#000000"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/lastNameInputLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="@string/last_name_hint"
-        android:textColor="@color/accent"
-        android:textSize="18sp" />
-
-    <EditText
-        android:id="@+id/last_name_input"
-        android:layout_width="250dp"
-        android:layout_height="40dp"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/border"
-        android:hint="@string/last_name_hint"
-        android:inputType="textPersonName"
-        android:padding="10dp"
-        android:textColor="#000000"
-        android:textSize="16sp" />
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-    <TextView
-        android:layout_width="wrap_content"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/last_name_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/last_name_hint"
+            android:inputType="textPersonName"
+            android:textColor="#000000"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/emailInputLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:labelFor="@id/email_input"
-        android:text="@string/email_label"
-        android:textColor="@color/accent"
-        android:textSize="18sp" />
-
-    <EditText
-        android:id="@+id/email_input"
-        android:layout_width="250dp"
-        android:layout_height="40dp"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/border"
-        android:inputType="textEmailAddress"
-        android:padding="10dp" />
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-    <TextView
-        android:layout_width="wrap_content"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/emailEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/email_label"
+            android:inputType="textEmailAddress" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/passwordInputLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:labelFor="@id/password_input"
-        android:text="@string/password_label"
-        android:textColor="@color/accent"
-        android:textSize="18sp" />
-
-    <EditText
-        android:id="@+id/password_input"
-        android:layout_width="250dp"
-        android:layout_height="40dp"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/border"
-        android:inputType="textPassword"
-        android:padding="10dp" />
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-    <TextView
-        android:layout_width="wrap_content"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/password_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/password_label"
+            android:inputType="textPassword"
+            android:textColor="#000000"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/confirmPasswordInputLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:labelFor="@id/confirm_password_input"
-        android:text="@string/confirm_password_label"
-        android:textColor="@color/accent"
-        android:textSize="18sp" />
-
-    <EditText
-        android:id="@+id/confirm_password_input"
-        android:layout_width="250dp"
-        android:layout_height="40dp"
         android:layout_marginBottom="16dp"
-        android:background="@drawable/border"
-        android:inputType="textPassword"
-        android:padding="10dp" />
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/confirm_password_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/confirm_password_label"
+            android:inputType="textPassword"
+            android:textColor="#000000"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <CheckBox
         android:id="@+id/terms_checkbox"
