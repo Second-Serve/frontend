@@ -3,6 +3,7 @@ package com.cs407.secondserve
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import com.cs407.secondserve.CartAdapter
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -22,6 +23,7 @@ import android.widget.TextView
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.util.Locale
@@ -45,6 +47,13 @@ class RestaurantSearchView : SecondServeView() {
         // Set up RecyclerView
         lockButton.setOnClickListener {
             val intent = Intent(this, CheckoutView::class.java)
+            startActivity(intent)
+        }
+
+
+        val viewOrdersButton: Button = findViewById(R.id.view_previous_orders_button)
+        viewOrdersButton.setOnClickListener {
+            val intent = Intent(this, CheckoutView::class.java) // Replace with the actual activity
             startActivity(intent)
         }
         restaurantRecyclerView = findViewById(R.id.restaurantRecyclerView)
