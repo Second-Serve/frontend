@@ -16,18 +16,17 @@ class Restaurant(
 ) {
     companion object {
         fun fromFetchedDocument(document: DocumentSnapshot) : Restaurant {
-            println(document.getString("name")!!)
             return Restaurant(
                 document.id,
-                document.getString("name")!!,
-                document.getString("address")!!,
-                document.getGeoPoint("location")!!,
+                document.getString("name") ?: "Unknown name",
+                document.getString("address") ?: "Unknown address",
+                document.getGeoPoint("location") ?: GeoPoint(0.0, 0.0),
                 WeeklyPickupHours.fromDailyHours(
-                    document.getString("pickup_start_time")!!,
-                    document.getString("pickup_end_time")!!
+                    document.getString("pickup_start_time") ?: "0:00",
+                    document.getString("pickup_end_time") ?: "0:00"
                 ),
-                document.getDouble("bag_price"),
-                document.getLong("bags_available")!!.toInt(),
+                document.getDouble("bag_price") ?: 0.0,
+                (document.getLong("bags_available") ?: 0).toInt(),
                 (document.getLong("bags_claimed") ?: 0).toInt()
             )
         }
