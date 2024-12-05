@@ -63,6 +63,7 @@ class RestaurantSearchView : SecondServeView() {
             val pickupHoursToday = restaurant.pickupHours.onDay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK))
                 ?: throw IllegalArgumentException("Pickup hours not found for the current day")
             val intent = Intent(this, RestaurantPageView::class.java).apply {
+                putExtra("restaurantId", restaurant.id)
                 putExtra("restaurantName", restaurant.name)
                 putExtra("restaurantBagPrice", restaurant.bagPrice)
                 putExtra("restaurantBagCount", restaurant.bagsAvailable)
