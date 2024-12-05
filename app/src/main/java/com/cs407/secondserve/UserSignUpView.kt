@@ -34,6 +34,7 @@ import android.location.Location
 import androidx.annotation.OptIn
 import com.cs407.secondserve.util.Debug
 import com.google.firebase.auth.FirebaseAuth
+import com.google.android.material.textfield.TextInputLayout
 
 class UserSignUpView : AppCompatActivity() {
 
@@ -74,11 +75,11 @@ class UserSignUpView : AppCompatActivity() {
             getUserLocation()
         }
 
-        val firstNameField: EditText = findViewById(R.id.first_name_input)
-        val lastNameField: EditText = findViewById(R.id.last_name_input)
-        val emailField: EditText = findViewById(R.id.email_input)
-        val passwordField: EditText = findViewById(R.id.password_input)
-        val confirmPasswordField: EditText = findViewById(R.id.confirm_password_input)
+        val firstNameField: EditText = findViewById<TextInputLayout>(R.id.firstNameInputLayout).editText!!
+        val lastNameField: EditText = findViewById<TextInputLayout>(R.id.lastNameInputLayout).editText!!
+        val emailField: EditText = findViewById<TextInputLayout>(R.id.email_input).editText!!
+        val passwordField: EditText = findViewById<TextInputLayout>(R.id.passwordInputLayout).editText!!
+        val confirmPasswordField: EditText = findViewById<TextInputLayout>(R.id.confirmPasswordInputLayout).editText!!
         val termsCheckbox: CheckBox = findViewById(R.id.terms_checkbox)
         val signUpButton: Button = findViewById(R.id.sign_up_button)
         val scanWiscardButton: TextView = findViewById(R.id.scan_wiscard_button)

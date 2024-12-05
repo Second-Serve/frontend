@@ -18,7 +18,7 @@ class RestaurantPageView : SecondServeView() {
             val intent = Intent(this, CheckoutView::class.java)
             startActivity(intent)
         }
-        
+
         val backArrow = findViewById<ImageView>(R.id.back_arrow)
         backArrow.setOnClickListener {
             finish()
