@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.util.Locale
 
+
 class RestaurantSearchView : SecondServeView() {
     private val location_permission_code = 1
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -71,7 +72,12 @@ class RestaurantSearchView : SecondServeView() {
         }
 
         val filterSpinner = findViewById<Spinner>(R.id.filterSpinner)
-        val options = arrayOf("Price: Lowest to Highest", "Price: Highest to Lowest")
+        val options = arrayOf(
+            "Price: Lowest to Highest",
+            "Price: Highest to Lowest",
+            "Alphabetical: A-Z",
+            "Alphabetical: Z-A"
+        )
         val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, options)
         filterSpinner.adapter = spinnerAdapter
         filterSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -80,6 +86,8 @@ class RestaurantSearchView : SecondServeView() {
                     when (position) {
                         0 -> sortRestaurantsByPriceAscending()
                         1 -> sortRestaurantsByPriceDescending()
+                        2 -> sortRestaurantsAlphabeticallyAZ()
+                        3 -> sortRestaurantsAlphabeticallyZA()
                     }
                 } else {
                     Log.w(TAG, "Restaurants not initialized yet!")
@@ -88,8 +96,6 @@ class RestaurantSearchView : SecondServeView() {
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
-
-        // Fetch Restaurants
         RestaurantService.fetchAll(
             onSuccess = { restaurants ->
                 updateRestaurants(restaurants)
@@ -99,7 +105,6 @@ class RestaurantSearchView : SecondServeView() {
             }
         )
 
-        // Handle Location Permissions
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             getUserLocation()
         } else {
@@ -123,6 +128,16 @@ class RestaurantSearchView : SecondServeView() {
 
     private fun sortRestaurantsByPriceDescending() {
         val sorted = restaurants.sortedByDescending { it.bagPrice }
+        restaurantAdapter.updateRestaurants(sorted)
+    }
+
+    private fun sortRestaurantsAlphabeticallyAZ() {
+        val sorted = restaurants.sortedBy { it.name.lowercase(Locale.getDefault()) }
+        restaurantAdapter.updateRestaurants(sorted)
+    }
+
+    private fun sortRestaurantsAlphabeticallyZA() {
+        val sorted = restaurants.sortedByDescending { it.name.lowercase(Locale.getDefault()) }
         restaurantAdapter.updateRestaurants(sorted)
     }
 
@@ -208,4 +223,3 @@ class RestaurantSearchView : SecondServeView() {
         private const val TAG = "RestaurantSearchView"
     }
 }
-
