@@ -6,6 +6,7 @@ import com.google.firebase.firestore.GeoPoint
 class Restaurant(
     val id: String,
     val name: String,
+    val address: String,
     val location: GeoPoint,
     val pickupHours: WeeklyPickupHours,
     val bagPrice: Double? = null,
@@ -19,6 +20,7 @@ class Restaurant(
             return Restaurant(
                 document.id,
                 document.getString("name")!!,
+                document.getString("address")!!,
                 document.getGeoPoint("location")!!,
                 WeeklyPickupHours.fromDailyHours(
                     document.getString("pickup_start_time")!!,
