@@ -1,6 +1,8 @@
 package com.cs407.secondserve
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 
@@ -10,6 +12,13 @@ class RestaurantPageView : SecondServeView() {
 
         setContentView(R.layout.fragment_restaurant_page)
 
+        val lockButton: ImageButton = findViewById(R.id.lockButton)
+
+        lockButton.setOnClickListener {
+            val intent = Intent(this, CheckoutView::class.java)
+            startActivity(intent)
+        }
+        
         val backArrow = findViewById<ImageView>(R.id.back_arrow)
         backArrow.setOnClickListener {
             finish()
