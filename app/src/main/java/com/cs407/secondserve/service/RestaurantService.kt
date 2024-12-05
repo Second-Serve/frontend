@@ -114,6 +114,7 @@ class RestaurantService {
             future.addOnSuccessListener { result ->
                 if (result.documents.isEmpty()) {
                     onSuccess?.invoke(null)
+                    return@addOnSuccessListener
                 }
                 val restaurant = Restaurant.fromFetchedDocument(result.documents[0])
                 onSuccess?.invoke(restaurant)
