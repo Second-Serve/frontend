@@ -49,6 +49,25 @@ class RestaurantService {
                 }
         }
 
+        fun fetch(
+            id: String,
+            onSuccess: ((Restaurant) -> Unit)? = null,
+            onFailure: ((Exception) -> Unit)? = null
+        ) {
+            val db = Firebase.firestore
+            val future = db.collection("restaurants")
+                .document(id)
+                .get()
+
+            future.addOnSuccessListener { result ->
+                val restaurant = Restaurant.fromFetchedDocument(result)
+                onSuccess?.invoke(restaurant)
+            }
+            future.addOnFailureListener { exception ->
+                onFailure?.invoke(exception)
+            }
+        }
+
         fun fetchAll(
             onSuccess: ((List<Restaurant>) -> Unit)? = null,
             onFailure: ((Exception) -> Unit)? = null
@@ -77,6 +96,25 @@ class RestaurantService {
                 onSuccess?.invoke(restaurants)
             }
 
+            future.addOnFailureListener { exception ->
+                onFailure?.invoke(exception)
+            }
+        }
+
+        fun fetchByUserId(
+            userId: String,
+            onSuccess: ((Restaurant) -> Unit)? = null,
+            onFailure: ((Exception) -> Unit)? = null
+        ) {
+            val db = Firebase.firestore
+            val future = db.collection("restaurants")
+                .whereEqualTo("owner.id", userId)
+                .get()
+
+            future.addOnSuccessListener { result ->
+                val restaurant = Restaurant.fromFetchedDocument(result.documents[0])
+                onSuccess?.invoke(restaurant)
+            }
             future.addOnFailureListener { exception ->
                 onFailure?.invoke(exception)
             }

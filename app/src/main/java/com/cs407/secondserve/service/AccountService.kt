@@ -83,12 +83,61 @@ class AccountService {
         fun signIn(
             email: String,
             password: String,
-            onSuccess: ((AuthResult) -> Unit)? = null,
+            onSuccess: ((AuthResult, User) -> Unit)? = null,
             onFailure: ((Exception) -> Unit)? = null
         ) {
             auth.signInWithEmailAndPassword(email, password)
-                .addOnSuccessListener { task ->
-                    onSuccess?.invoke(task)
+                .addOnSuccessListener { result ->
+                    getUserFromAuthResult(
+                        result,
+                        onSuccess = { user ->
+                            onSuccess?.invoke(result, user)
+                        }
+                    )
+                }
+                .addOnFailureListener { exception ->
+                    onFailure?.invoke(exception)
+                }
+        }
+
+        private fun getUserFromAuthResult(
+            authResult: AuthResult,
+            onSuccess: ((User) -> Unit)? = null,
+            onFailure: ((Exception) -> Unit)? = null
+        ) {
+            val db = Firebase.firestore
+            db.collection("users")
+                .whereEqualTo("id", authResult.user!!.uid)
+                .get()
+                .addOnSuccessListener { userData ->
+                    if (!userData.isEmpty) {
+                        val userDocument = userData.documents[0]
+                        val accountType =
+                            AccountType.valueOf(userDocument.data!!["account_type"] as String)
+
+                        var user = User(
+                            userDocument.id,
+                            accountType,
+                            authResult.user!!.email!!
+                        )
+
+                        if (accountType == AccountType.BUSINESS) {
+                            RestaurantService.fetchByUserId(
+                                authResult.user!!.uid,
+                                onSuccess = { restaurant ->
+                                    user.restaurant = restaurant
+                                    onSuccess?.invoke(user)
+                                },
+                                onFailure = { exception ->
+                                    onFailure?.invoke(exception)
+                                }
+                            )
+                        } else {
+                            user.firstName = userDocument.data!!["first_name"] as String?
+                            user.lastName = userDocument.data!!["last_name"] as String?
+                            onSuccess?.invoke(user)
+                        }
+                    }
                 }
                 .addOnFailureListener { exception ->
                     onFailure?.invoke(exception)

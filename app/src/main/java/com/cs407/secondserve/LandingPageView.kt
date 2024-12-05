@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cs407.secondserve.service.AccountService
 import com.cs407.secondserve.util.Debug
+import com.google.firebase.database.ktx.database
 import com.google.firebase.functions.ktx.functions
 import com.google.firebase.ktx.Firebase
 
@@ -19,6 +20,8 @@ class LandingPageView : SecondServeView() {
         setContentView(R.layout.activity_main)
 
         if (Debug.USE_FIREBASE_EMULATOR) {
+//            Firebase.auth.useEmulator("10.0.2.2", 9099)
+            Firebase.database.useEmulator("10.0.2.2", 9000)
             Firebase.functions.useEmulator("10.0.2.2", 5001)
         }
 
@@ -30,9 +33,8 @@ class LandingPageView : SecondServeView() {
             AccountService.signIn(
                 savedEmail,
                 savedPassword,
-                onSuccess = { loadRestaurantSearch() },
-                onFailure = { message -> loadRecyclerView()
-                }
+                onSuccess = { _, _ -> loadRestaurantSearch() },
+                onFailure = { _ -> loadRecyclerView() }
             )
         } else {
             loadRecyclerView()

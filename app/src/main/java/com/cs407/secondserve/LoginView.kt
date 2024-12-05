@@ -10,10 +10,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.AuthResult
+import com.cs407.secondserve.service.AccountService
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
-import com.google.firebase.auth.FirebaseAuth
 
 class LoginView : AppCompatActivity() {
 
@@ -64,40 +63,6 @@ class LoginView : AppCompatActivity() {
         }
     }
 
-
-    object AccountService {
-        fun signIn(
-            context: android.content.Context,
-            email: String,
-            password: String,
-            onSuccess: (AuthResult) -> Unit,
-
-
-            onFailure: (Exception) -> Unit = { exception ->
-                exception.printStackTrace()
-                Toast.makeText(
-                    context,
-                    "Authentication failed: ${exception.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-
-
-        ) {
-            FirebaseAuth.getInstance()
-                .signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        onSuccess(task.result!!)
-                    } else {
-                        onFailure(task.exception ?: Exception("Unknown error occurred"))
-                    }
-                }
-        }
-    }
-
-
-
     private fun tryLogIn(email: String, password: String) {
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
@@ -105,43 +70,49 @@ class LoginView : AppCompatActivity() {
         }
 
         AccountService.signIn(
-            this,
             email,
             password,
-            onSuccess = { authResult: AuthResult ->
-                val user = authResult.user
-                if (user != null && user.isEmailVerified) {
+            onSuccess = { authResult, user ->
+                val authUser = authResult.user
+
+                if (authUser == null) {
+                    Toast.makeText(this, "Failed to retrieve user information", Toast.LENGTH_SHORT).show()
+                    return@signIn
+                }
+
+                // If the user's email is verified, navigate to the restaurant search view
+                if (authUser.isEmailVerified) {
                     val intent = Intent(this, RestaurantSearchView::class.java)
                     startActivity(intent)
-                } else if (user != null && !user.isEmailVerified) {
-                    Toast.makeText(
-                        this,
-                        "Please verify your email before logging in.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
-                    loginButton.isEnabled = false
-
-                    user.sendEmailVerification()
-                        .addOnCompleteListener { task ->
-                            loginButton.isEnabled = true
-                            if (task.isSuccessful) {
-                                Toast.makeText(
-                                    this,
-                                    "Verification email sent. Please check your inbox.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            } else {
-                                Toast.makeText(
-                                    this,
-                                    "Failed to send verification email. Please try again later.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
-                } else {
-                    Toast.makeText(this, "Failed to retrieve user information", Toast.LENGTH_SHORT).show()
+                    return@signIn
                 }
+
+                // If the user's email is not verified, show a message and disable the login button
+                Toast.makeText(
+                    this,
+                    "Please verify your email before logging in.",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                loginButton.isEnabled = false
+
+                authUser.sendEmailVerification()
+                    .addOnCompleteListener { task ->
+                        loginButton.isEnabled = true
+                        if (task.isSuccessful) {
+                            Toast.makeText(
+                                this,
+                                "Verification email sent. Please check your inbox.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            Toast.makeText(
+                                this,
+                                "Failed to send verification email. Please try again later.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
             },
             onFailure = { exception ->
                 Toast.makeText(

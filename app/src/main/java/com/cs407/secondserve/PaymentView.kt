@@ -8,6 +8,13 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.button.MaterialButton
 import android.text.InputFilter
+import android.util.Log
+import android.view.View
+import com.cs407.secondserve.model.Cart
+import com.google.firebase.functions.ktx.functions
+import com.google.firebase.ktx.Firebase
+import com.google.gson.Gson
+import org.json.JSONObject
 
 class PaymentView : AppCompatActivity() {
 
@@ -34,16 +41,7 @@ class PaymentView : AppCompatActivity() {
         submitPaymentButton = findViewById(R.id.submitPaymentButton)
 
         // Set click listener for the submit button
-        submitPaymentButton.setOnClickListener {
-            // Perform validation
-            if (isFormValid()) {
-                // If all fields are valid, proceed with payment processing (or another action)
-                Toast.makeText(this, "Payment Submitted Successfully", Toast.LENGTH_SHORT).show()
-            } else {
-                // If validation fails, show a message
-                Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show()
-            }
-        }
+        submitPaymentButton.setOnClickListener(this::submitPayment)
 
         // Limit the card number input to 16 digits (ensure it's numeric)
         cardNumberEditText.filters = arrayOf(InputFilter.LengthFilter(16))
@@ -68,6 +66,7 @@ class PaymentView : AppCompatActivity() {
                     }
 
                     // If the length is less than 16, show a toast reminder
+                    // TODO: This spams the toast every time the user types a digit
                     if (editable.length < 16) {
                         Toast.makeText(this@PaymentView, "Card number must be 16 digits", Toast.LENGTH_SHORT).show()
                     }
@@ -114,4 +113,26 @@ class PaymentView : AppCompatActivity() {
                 zipCode.isNotEmpty()
     }
 
+    private fun submitPayment(view: View) {
+        // Perform validation
+        if (isFormValid()) {
+            // If all fields are valid, proceed with payment processing (or another action)
+            val orderData = Cart.toMap()
+            Firebase.functions.getHttpsCallable("placeOrder")
+                .call(orderData)
+                .addOnSuccessListener { result ->
+                    val g = Gson()
+                    val data = g.fromJson(result.getData().toString(), JSONObject::class.java)
+                    Log.d("PaymentView", "Success: $data")
+                }
+                .addOnFailureListener {
+                    Log.d("PaymentView", "Failure: $it")
+                }
+
+            Toast.makeText(this, "Your order has been placed!", Toast.LENGTH_SHORT).show()
+        } else {
+            // If validation fails, show a message
+            Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show()
+        }
+    }
 }
