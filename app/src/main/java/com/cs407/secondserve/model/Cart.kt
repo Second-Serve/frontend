@@ -1,15 +1,25 @@
 package com.cs407.secondserve.model
 
+import com.cs407.secondserve.CartAdapter
+
 class Cart {
+
     companion object {
-        private var items: List<CartItem> = mutableListOf()
+        private val items: MutableList<CartItem> = mutableListOf()
+        private var cartAdapter: CartAdapter? = null
+
+        fun setAdapter(adapter: CartAdapter) {
+            cartAdapter = adapter
+        }
 
         fun addItemToCart(item: CartItem) {
-            items += item
+            items.add(item)
+            cartAdapter?.updateCart()
         }
 
         fun removeItemFromCart(item: CartItem) {
-            items -= item
+            items.remove(item)
+            cartAdapter?.updateCart()
         }
 
         fun getItems(): List<CartItem> {
@@ -17,27 +27,17 @@ class Cart {
         }
 
         fun getTotalPrice(): Double {
-            var totalPrice = 0.0
-            for (item in items) {
-                totalPrice += item.getTotalPrice()
-            }
-            return totalPrice
+            return items.sumOf { it.getTotalPrice() }
         }
 
         fun toMap(): MutableMap<String, Any> {
-            val items = mutableListOf<MutableMap<String, Any>>()
-            for (item in getItems()) {
-                val itemMap = mutableMapOf<String, Any>(
-                    "restaurantId" to item.restaurantId,
-                    "quantity" to item.quantity
+            val itemsMap = items.map {
+                mutableMapOf(
+                    "restaurantId" to it.restaurantId,
+                    "quantity" to it.quantity
                 )
-                items.add(itemMap)
             }
-
-            val map = mutableMapOf<String, Any>(
-                "items" to items
-            )
-            return map
+            return mutableMapOf("items" to itemsMap)
         }
     }
 }
