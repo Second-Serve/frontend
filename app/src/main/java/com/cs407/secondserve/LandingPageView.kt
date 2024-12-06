@@ -3,21 +3,50 @@ package com.cs407.secondserve
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cs407.secondserve.service.AccountService
+import com.cs407.secondserve.service.LocationService
+import com.cs407.secondserve.service.LocationService.Companion
 import com.cs407.secondserve.util.Debug
 import com.google.firebase.database.ktx.database
 import com.google.firebase.functions.ktx.functions
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.tasks.await
 
 class LandingPageView : SecondServeView() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+//        runBlocking{
+//            suspend fun validateAddress(address: String): Boolean {
+//                if (address.isBlank()) {
+//                    Log.d(LocationService.TAG, "Address is empty or null")
+//                    return false
+//                }
+//
+//                try {
+//                    val data = hashMapOf("address" to address)
+//                    val result = Firebase.functions
+//                        .getHttpsCallable("isAddressValid")
+//                        .call(data)
+//                        .await()
+//                    val resultMap = result.getData() as? Map<*, *>
+//                    val isValid = resultMap?.get("isValid") as? Boolean ?: false
+//
+//                    Log.d(LocationService.TAG, "Address validation result for '$address': $isValid")
+//                    return isValid
+//                } catch (e: Exception) {
+//                    Log.e(LocationService.TAG, "Error validating address: ${e.message}", e)
+//                    return false
+//                }
+//            }
 
         if (Debug.USE_FIREBASE_EMULATOR) {
 //            Firebase.auth.useEmulator("10.0.2.2", 9099)
