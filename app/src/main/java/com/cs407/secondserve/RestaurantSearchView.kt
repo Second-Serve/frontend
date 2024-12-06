@@ -3,13 +3,17 @@ package com.cs407.secondserve
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import com.cs407.secondserve.CartAdapter
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.cs407.secondserve.model.Restaurant
 import com.cs407.secondserve.service.RestaurantService
+import com.cs407.secondserve.service.LocationService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Calendar
 import android.Manifest
 import android.location.Geocoder
@@ -28,7 +32,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.util.Locale
 
-
 class RestaurantSearchView : SecondServeView() {
     private val location_permission_code = 1
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -44,42 +47,55 @@ class RestaurantSearchView : SecondServeView() {
         setContentView(R.layout.fragment_restaurant_search)
 
         val lockButton: ImageButton = findViewById(R.id.lockButton)
-        // Set up RecyclerView
         lockButton.setOnClickListener {
             val intent = Intent(this, CheckoutView::class.java)
             startActivity(intent)
         }
 
-
         val viewOrdersButton: Button = findViewById(R.id.view_previous_orders_button)
         viewOrdersButton.setOnClickListener {
-            val intent = Intent(this, CheckoutView::class.java) // Replace with the actual activity
+            val intent = Intent(this, CheckoutView::class.java)
             startActivity(intent)
         }
+
         restaurantRecyclerView = findViewById(R.id.restaurantRecyclerView)
         restaurantRecyclerView.layoutManager = LinearLayoutManager(this)
 
+        // Adapter with validation logic added
         restaurantAdapter = RestaurantAdapter { restaurant ->
-            val pickupHoursToday = restaurant.pickupHours.onDay(Calendar.getInstance().get(Calendar.DAY_OF_WEEK))
-                ?: throw IllegalArgumentException("Pickup hours not found for the current day")
-            val intent = Intent(this, RestaurantPageView::class.java).apply {
-                putExtra("restaurantId", restaurant.id)
-                putExtra("restaurantName", restaurant.name)
-                putExtra("restaurantBagPrice", restaurant.bagPrice)
-                putExtra("restaurantBagCount", restaurant.bagsAvailable)
-                putExtra("restaurantPickupStart", pickupHoursToday.startTime)
-                putExtra("restaurantPickupEnd", pickupHoursToday.endTime)
-                putExtra("restaurantAddress", "TODO")
-                putExtra("restaurantBannerImagePath", restaurant.bannerImagePath)
+            CoroutineScope(Dispatchers.IO).launch {
+                val isValidAddress = LocationService.validateAddress(restaurant.address)
+                withContext(Dispatchers.Main) {
+                    if (!isValidAddress) {
+                        Toast.makeText(
+                            this@RestaurantSearchView,
+                            "Invalid restaurant address. Cannot proceed.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } else {
+                        val pickupHoursToday = restaurant.pickupHours.onDay(
+                            Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
+                        ) ?: throw IllegalArgumentException("Pickup hours not found for the current day")
+
+                        val intent = Intent(this@RestaurantSearchView, RestaurantPageView::class.java).apply {
+                            putExtra("restaurantId", restaurant.id)
+                            putExtra("restaurantName", restaurant.name)
+                            putExtra("restaurantBagPrice", restaurant.bagPrice)
+                            putExtra("restaurantBagCount", restaurant.bagsAvailable)
+                            putExtra("restaurantPickupStart", pickupHoursToday.startTime)
+                            putExtra("restaurantPickupEnd", pickupHoursToday.endTime)
+                            putExtra("restaurantAddress", restaurant.address)
+                            putExtra("restaurantBannerImagePath", restaurant.bannerImagePath)
+                        }
+                        startActivity(intent)
+                    }
+                }
             }
-            startActivity(intent)
         }
         restaurantRecyclerView.adapter = restaurantAdapter
 
         val backArrow = findViewById<ImageView>(R.id.back_arrow)
-        backArrow.setOnClickListener {
-            finish()
-        }
+        backArrow.setOnClickListener { finish() }
 
         val filterSpinner = findViewById<Spinner>(R.id.filterSpinner)
         val options = arrayOf(
@@ -88,8 +104,14 @@ class RestaurantSearchView : SecondServeView() {
             "Alphabetical: A-Z",
             "Alphabetical: Z-A"
         )
-        val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, options)
+        val spinnerAdapter = ArrayAdapter(
+            this@RestaurantSearchView,
+            android.R.layout.simple_spinner_item,
+            options
+        )
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         filterSpinner.adapter = spinnerAdapter
+
         filterSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 if (::restaurants.isInitialized) {
@@ -106,6 +128,7 @@ class RestaurantSearchView : SecondServeView() {
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+
         RestaurantService.fetchAll(
             onSuccess = { restaurants ->
                 updateRestaurants(restaurants)
@@ -152,11 +175,7 @@ class RestaurantSearchView : SecondServeView() {
     }
 
     private fun requestLocationPermission() {
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
@@ -165,11 +184,7 @@ class RestaurantSearchView : SecondServeView() {
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == location_permission_code) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -183,11 +198,7 @@ class RestaurantSearchView : SecondServeView() {
     private fun getUserLocation() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                 if (location != null) {
                     userLocation = location
@@ -208,25 +219,11 @@ class RestaurantSearchView : SecondServeView() {
                     }
                 } else {
                     Toast.makeText(this, "Unable to fetch location. Try again.", Toast.LENGTH_LONG).show()
-                    val locationTextView: TextView = findViewById(R.id.user_location_text)
-                    locationTextView.text = "Unable to fetch your location."
                 }
-            }.addOnFailureListener { e ->
-                Toast.makeText(this, "Error fetching location: ${e.message}", Toast.LENGTH_LONG).show()
-                val locationTextView: TextView = findViewById(R.id.user_location_text)
-                locationTextView.text = "Error fetching location: ${e.message}"
             }
         } else {
             requestLocationPermission()
         }
-    }
-
-    private fun calculateDistance(userLocation: Location, restaurantLat: Double, restaurantLng: Double): Float {
-        val restaurantLocation = Location("").apply {
-            latitude = restaurantLat
-            longitude = restaurantLng
-        }
-        return userLocation.distanceTo(restaurantLocation) / 1000
     }
 
     companion object {
