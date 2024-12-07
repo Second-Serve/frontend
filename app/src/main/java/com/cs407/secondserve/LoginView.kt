@@ -13,6 +13,7 @@ import com.cs407.secondserve.service.AccountService
 import com.cs407.secondserve.service.LocationService
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
+import com.cs407.secondserve.model.AccountType
 
 class LoginView : AppCompatActivity() {
     private lateinit var emailEditText: TextInputEditText
@@ -81,7 +82,8 @@ class LoginView : AppCompatActivity() {
                 }
 
                 // If the user's email is verified, navigate to the restaurant search view
-                if (authUser.isEmailVerified) {
+                // Alternatively, if it's a business account, no need for email verification
+                if (authUser.isEmailVerified || user.accountType == AccountType.BUSINESS) {
                     val intent = Intent(this, RestaurantSearchView::class.java)
                     startActivity(intent)
                     return@signIn
