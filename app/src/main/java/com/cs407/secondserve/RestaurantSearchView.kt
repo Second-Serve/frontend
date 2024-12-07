@@ -25,10 +25,11 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.cs407.secondserve.service.LocationService
 import java.util.Locale
 
 class RestaurantSearchView : SecondServeView() {
-    private val location_permission_code = 1
+    private val locationPermissionCode = 1
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var userLocation: Location? = null
 
@@ -53,6 +54,8 @@ class RestaurantSearchView : SecondServeView() {
             startActivity(intent)
         }
 
+        LocationService.requestLocation(this)
+
         restaurantRecyclerView = findViewById(R.id.restaurantRecyclerView)
         restaurantRecyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -72,8 +75,10 @@ class RestaurantSearchView : SecondServeView() {
                 putExtra("restaurantAddress", restaurant.address)
                 putExtra("restaurantBannerImagePath", restaurant.bannerImagePath)
             }
+
             startActivity(intent)
         }
+
         restaurantRecyclerView.adapter = restaurantAdapter
 
         val backArrow = findViewById<ImageView>(R.id.back_arrow)
@@ -123,7 +128,7 @@ class RestaurantSearchView : SecondServeView() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             getUserLocation()
         } else {
-            requestLocationPermission()
+            LocationService.requestLocation(this)
         }
     }
 
@@ -156,19 +161,9 @@ class RestaurantSearchView : SecondServeView() {
         restaurantAdapter.updateRestaurants(sorted)
     }
 
-    private fun requestLocationPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                location_permission_code
-            )
-        }
-    }
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == location_permission_code) {
+        if (requestCode == locationPermissionCode) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getUserLocation()
             } else {
@@ -204,7 +199,7 @@ class RestaurantSearchView : SecondServeView() {
                 }
             }
         } else {
-            requestLocationPermission()
+            LocationService.requestLocation(this)
         }
     }
 

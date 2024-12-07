@@ -1,7 +1,6 @@
 package com.cs407.secondserve
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -11,12 +10,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cs407.secondserve.service.AccountService
+import com.cs407.secondserve.service.LocationService
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 
 class LoginView : AppCompatActivity() {
-
-    private val LOCATION_PERMISSION_REQUEST_CODE = 100
     private lateinit var emailEditText: TextInputEditText
     private lateinit var passwordEditText: TextInputEditText
     private lateinit var loginButton: MaterialButton
@@ -24,6 +22,8 @@ class LoginView : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_log_in)
+
+        LocationService.requestLocation(this)
 
         val recyclerView: RecyclerView = findViewById(R.id.loginRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -122,19 +122,6 @@ class LoginView : AppCompatActivity() {
                 ).show()
             }
         )
-    }
-
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                navigateToSignUp()
-            } else {
-                Toast.makeText(this, "Location permission is required for this feature.", Toast.LENGTH_SHORT).show()
-            }
-        }
     }
 
     private fun navigateToSignUp() {

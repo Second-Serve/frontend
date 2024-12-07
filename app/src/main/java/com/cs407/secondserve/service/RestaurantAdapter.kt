@@ -1,8 +1,6 @@
 package com.cs407.secondserve
 
-import android.content.Context
-import android.content.Intent
-import android.location.Location
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +8,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.cs407.secondserve.model.Restaurant
+import com.cs407.secondserve.service.LocationService
 import java.util.Calendar
 
 class RestaurantAdapter(
@@ -17,7 +16,7 @@ class RestaurantAdapter(
 ) : RecyclerView.Adapter<RestaurantAdapter.RestaurantViewHolder>() {
 
     private var restaurants: List<Restaurant> = listOf()
-    private var userLocation: Location? = null
+    private lateinit var view: View
 
     class RestaurantViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val nameTextView: TextView = view.findViewById(R.id.list_restaurant_name)
@@ -63,27 +62,23 @@ class RestaurantAdapter(
             restaurant.bagsAvailable
         )
 
-        // Distance
-        if (userLocation != null) {
-            val distance = calculateDistance(
-                userLocation!!,
-                restaurant.location.latitude,
-                restaurant.location.longitude
-            )
-
-            holder.distanceTextView.text = if (distance >= 0) {
-                context.getString(R.string.restaurant_distance_km, distance)
-            } else {
-                context.getString(R.string.location_unavailable)
-            }
-        } else {
-            holder.distanceTextView.text = context.getString(R.string.location_unavailable)
-        }
-
         // Add to cart button
         holder.addToCartButton.setOnClickListener {
             onRestaurantClick(restaurant)
         }
+
+        // Distance
+        LocationService.getDistanceToRestaurant(
+            restaurant.id,
+            onSuccess = { distance ->
+                Log.d("RestaurantAdapter", "Distance to restaurant: $distance")
+                holder.distanceTextView.text = if (distance >= 0) {
+                    context.getString(R.string.restaurant_distance_mi, distance)
+                } else {
+                    context.getString(R.string.location_unavailable)
+                }
+            }
+        )
     }
 
     override fun getItemCount(): Int = restaurants.size
@@ -91,18 +86,5 @@ class RestaurantAdapter(
     fun updateRestaurants(newRestaurants: List<Restaurant>) {
         restaurants = newRestaurants
         notifyDataSetChanged()
-    }
-
-    fun updateUserLocation(location: Location?) {
-        userLocation = location
-        notifyDataSetChanged()
-    }
-
-    private fun calculateDistance(userLocation: Location, restaurantLat: Double, restaurantLng: Double): Float {
-        val restaurantLocation = Location("").apply {
-            latitude = restaurantLat
-            longitude = restaurantLng
-        }
-        return userLocation.distanceTo(restaurantLocation) / 1000
     }
 }

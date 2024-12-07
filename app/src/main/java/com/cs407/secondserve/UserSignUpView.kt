@@ -1,17 +1,13 @@
 package com.cs407.secondserve
 
-import android.app.Activity
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.provider.MediaStore
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.Manifest
@@ -32,11 +28,12 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import android.location.Location
 import androidx.annotation.OptIn
+import com.cs407.secondserve.service.LocationService
 import com.cs407.secondserve.util.Debug
 import com.google.firebase.auth.FirebaseAuth
 import com.google.android.material.textfield.TextInputLayout
 
-class UserSignUpView : AppCompatActivity() {
+class UserSignUpView : SecondServeView() {
 
     companion object {
         private const val CAMERA_PERMISSION_CODE = 101
@@ -70,7 +67,7 @@ class UserSignUpView : AppCompatActivity() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestLocationPermission()
+            LocationService.requestLocation(this)
         } else {
             getUserLocation()
         }
@@ -128,61 +125,36 @@ class UserSignUpView : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            firebaseAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this) { task ->
-                    if (task.isSuccessful) {
-                        val user = firebaseAuth.currentUser
+            // Now, proceed with registering the user in the AccountService
+            AccountService.register(
+                email,
+                password,
+                AccountType.CUSTOMER,
+                firstName,
+                lastName,
+                onSuccess = { user: User ->
+                    firebaseAuth.currentUser?.sendEmailVerification()
+                        ?.addOnCompleteListener { verificationTask ->
+                            if (verificationTask.isSuccessful) {
+                                Toast.makeText(
+                                    this,
+                                    "Sign up successful! Check your email for verification.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
 
-                        // Send email verification
-                        user?.sendEmailVerification()
-                            ?.addOnCompleteListener { verificationTask ->
-                                if (verificationTask.isSuccessful) {
-                                    Toast.makeText(
-                                        this,
-                                        "Verification email sent!",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                startActivityEmptyIntent(LoginView::class.java)
+                                finish()
 
-                                    // Now, proceed with registering the user in the AccountService
-                                    AccountService.register(
-                                        email,
-                                        password,
-                                        AccountType.CUSTOMER,
-                                        firstName,
-                                        lastName,
-                                        onSuccess = { user: User ->
-                                            Toast.makeText(
-                                                this,
-                                                "Sign up successful! Check your email for verification.",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-
-                                            val intent =
-                                                Intent(this, RestaurantSearchView::class.java)
-                                            startActivity(intent)
-                                            finish()
-                                        }
-                                    )
-
-                                    // Check if email is verified
-                                    checkIfEmailVerified()
-
-                                } else {
-                                    Toast.makeText(
-                                        this,
-                                        "Failed to send verification email.",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
+                            } else {
+                                Toast.makeText(
+                                    this,
+                                    "Failed to send verification email.",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
-                    } else {
-                        Toast.makeText(
-                            this,
-                            "Authentication failed: ${task.exception?.message}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+                        }
                 }
+            )
         }
     }
 
@@ -287,20 +259,6 @@ class UserSignUpView : AppCompatActivity() {
                 }
             }
 
-    }
-
-    private fun requestLocationPermission() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-                Toast.makeText(this, "Location permission is required to access your location", Toast.LENGTH_LONG).show()
-            }
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                LOCATION_PERMISSION_CODE
-            )
-        }
     }
 
     private fun isValidBarcode(barcode: String): Boolean {

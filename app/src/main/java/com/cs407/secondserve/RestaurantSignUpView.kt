@@ -74,14 +74,9 @@ class RestaurantSignUpView : SecondServeView() {
                 }
                 .await()
 
-            val data = JSONObject(result.getData() as MutableMap<Any?, Any?>)
-            val location = data
-                .getJSONArray("results")
-                .getJSONObject(0)
-                .getJSONObject("geometry")
-                .getJSONObject("location")
-            val latitude = location.getDouble("lat")
-            val longitude = location.getDouble("lng")
+            val data = JSONObject(result.getData() as Map<*, *>)
+            val latitude = data.getDouble("lat")
+            val longitude = data.getDouble("lng")
 
             LatLng(latitude, longitude)
         } catch (e: Exception) {
@@ -90,32 +85,6 @@ class RestaurantSignUpView : SecondServeView() {
             }
             e.printStackTrace()
             null
-        }
-    }
-
-    private suspend fun isAddressValid(address: String): Boolean {
-        try {
-            val result = Firebase.functions
-                .getHttpsCallable("isAddressValid")
-                .call(
-                    hashMapOf(
-                        "address" to address
-                    )
-                )
-                .addOnFailureListener { exception ->
-                    exception.printStackTrace()
-                }
-                .await()
-
-            val data = JSONObject(result.getData() as MutableMap<Any?, Any?>)
-            val isValid = data.getBoolean("isValid")
-            return isValid
-        } catch (e: Exception) {
-            withContext(Dispatchers.Main) {
-                Toast.makeText(baseContext, "Error during address validation: ${e.message}", Toast.LENGTH_LONG).show()
-            }
-            e.printStackTrace()
-            return false
         }
     }
 
