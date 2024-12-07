@@ -7,6 +7,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.appbar.MaterialToolbar
 
 class CheckoutView : SecondServeView() {
 
@@ -19,14 +20,23 @@ class CheckoutView : SecondServeView() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.checkout)
 
+        val toolbar: MaterialToolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+
+        toolbar.setNavigationOnClickListener {
+            finish()
+        }
+
         cartRecyclerView = findViewById(R.id.cartRecyclerView)
         totalPriceText = findViewById(R.id.total_price_text)
         checkoutButton = findViewById(R.id.checkout_button)
 
-        // Setup RecyclerView
         val cartAdapter = CartAdapter()
         cartRecyclerView.layoutManager = LinearLayoutManager(this)
         cartRecyclerView.adapter = cartAdapter
+
 
         cartAdapter.updateCart()
         // Calculate Total Price

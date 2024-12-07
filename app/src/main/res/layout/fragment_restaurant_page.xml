@@ -12,6 +12,7 @@
         android:background="@android:color/transparent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:titleCentered="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:navigationIcon="@drawable/back_arrow">
 
