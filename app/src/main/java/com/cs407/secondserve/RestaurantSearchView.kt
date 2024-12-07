@@ -9,11 +9,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.cs407.secondserve.model.Restaurant
 import com.cs407.secondserve.service.RestaurantService
-import com.cs407.secondserve.service.LocationService
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.Calendar
 import android.Manifest
 import android.location.Geocoder
@@ -63,34 +58,21 @@ class RestaurantSearchView : SecondServeView() {
 
         // Adapter with validation logic added
         restaurantAdapter = RestaurantAdapter { restaurant ->
-            CoroutineScope(Dispatchers.IO).launch {
-                val isValidAddress = LocationService.validateAddress(restaurant.address)
-                withContext(Dispatchers.Main) {
-                    if (!isValidAddress) {
-                        Toast.makeText(
-                            this@RestaurantSearchView,
-                            "Invalid restaurant address. Cannot proceed.",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    } else {
-                        val pickupHoursToday = restaurant.pickupHours.onDay(
-                            Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
-                        ) ?: throw IllegalArgumentException("Pickup hours not found for the current day")
+            val pickupHoursToday = restaurant.pickupHours.onDay(
+                Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
+            )
 
-                        val intent = Intent(this@RestaurantSearchView, RestaurantPageView::class.java).apply {
-                            putExtra("restaurantId", restaurant.id)
-                            putExtra("restaurantName", restaurant.name)
-                            putExtra("restaurantBagPrice", restaurant.bagPrice)
-                            putExtra("restaurantBagCount", restaurant.bagsAvailable)
-                            putExtra("restaurantPickupStart", pickupHoursToday.startTime)
-                            putExtra("restaurantPickupEnd", pickupHoursToday.endTime)
-                            putExtra("restaurantAddress", restaurant.address)
-                            putExtra("restaurantBannerImagePath", restaurant.bannerImagePath)
-                        }
-                        startActivity(intent)
-                    }
-                }
+            val intent = Intent(this@RestaurantSearchView, RestaurantPageView::class.java).apply {
+                putExtra("restaurantId", restaurant.id)
+                putExtra("restaurantName", restaurant.name)
+                putExtra("restaurantBagPrice", restaurant.bagPrice)
+                putExtra("restaurantBagCount", restaurant.bagsAvailable)
+                putExtra("restaurantPickupStart", pickupHoursToday.startTime)
+                putExtra("restaurantPickupEnd", pickupHoursToday.endTime)
+                putExtra("restaurantAddress", restaurant.address)
+                putExtra("restaurantBannerImagePath", restaurant.bannerImagePath)
             }
+            startActivity(intent)
         }
         restaurantRecyclerView.adapter = restaurantAdapter
 
