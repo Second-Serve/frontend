@@ -9,6 +9,7 @@ import android.widget.TextView
 import com.cs407.secondserve.model.Cart
 import com.cs407.secondserve.model.CartItem
 import com.cs407.secondserve.model.Restaurant
+import com.google.android.material.appbar.MaterialToolbar
 
 class RestaurantPageView : SecondServeView() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,9 +23,12 @@ class RestaurantPageView : SecondServeView() {
             val intent = Intent(this, CheckoutView::class.java)
             startActivity(intent)
         }
+        val toolbar: MaterialToolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(findViewById(R.id.toolbar))
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        val backArrow = findViewById<ImageView>(R.id.back_arrow)
-        backArrow.setOnClickListener {
+        toolbar.setNavigationOnClickListener {
             finish()
         }
 

@@ -25,7 +25,7 @@ class RestaurantMainView : AppCompatActivity() {
         updateBagPriceButton.setOnClickListener {
             val bagPriceText = bagPriceInput.text.toString()
             if (bagPriceText.isNotEmpty()) {
-                val bagPrice = bagPriceText.toFloatOrNull() 
+                val bagPrice = bagPriceText.toFloatOrNull()
                 if (bagPrice != null) {
                     //save the price here
                 } else {
