@@ -1,18 +1,24 @@
 package com.cs407.secondserve.service
 
 import android.Manifest
+import android.R.attr.bitmap
+import android.R.attr.data
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.location.Location
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.cs407.secondserve.model.MapImageType
 import com.google.android.gms.location.LocationServices
 import com.google.firebase.functions.ktx.functions
 import com.google.firebase.ktx.Firebase
 import org.json.JSONObject
+
 
 class LocationService {
     companion object {
@@ -100,6 +106,38 @@ class LocationService {
             }
 
             getDistanceToRestaurant(userLocation!!, restaurantId, onSuccess, onFailure)
+        }
+
+        fun getRestaurantMapImage(restaurantId: String, type: MapImageType) {
+            val args = hashMapOf(
+                "restaurantId" to restaurantId,
+                "type" to type.toString()
+            )
+            Firebase.functions.getHttpsCallable("getRestaurantMapImage")
+                .call(args)
+                .addOnSuccessListener { result ->
+                    val data = JSONObject(result.getData() as Map<*, *>)
+                    val imageString = data.getString("image")
+//                    val image = decodeImage(imageString)
+//                    Log.d("LocationService", image.toString())
+                }
+                .addOnFailureListener { exception ->
+                    exception.printStackTrace()
+                }
+        }
+
+        private fun decodeImage(image: String): Bitmap {
+            val opts = BitmapFactory.Options()
+
+            opts.inPreferredConfig = Bitmap.Config.ARGB_8888
+
+            val imageByteArray = image.toByteArray()
+            return BitmapFactory.decodeByteArray(
+                imageByteArray,
+                0,
+                imageByteArray.size,
+                opts
+            )
         }
 
         fun updateUserLocation(location: Location?) {
