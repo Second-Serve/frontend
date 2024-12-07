@@ -42,7 +42,7 @@ class RestaurantAdapter(
         // Pickup hours
         val calendar = Calendar.getInstance()
         val currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
-        val pickupHoursToday = restaurant.pickupHours.onDay(currentDayOfWeek)
+        val pickupHoursToday = restaurant.pickupHours.onDay(currentDayOfWeek - 1)
 
         holder.pickupHoursTextView.text = context.getString(
             R.string.restaurant_pickup_hours,

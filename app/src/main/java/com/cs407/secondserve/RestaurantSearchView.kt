@@ -62,7 +62,7 @@ class RestaurantSearchView : SecondServeView() {
         // Adapter with validation logic added
         restaurantAdapter = RestaurantAdapter { restaurant ->
             val pickupHoursToday = restaurant.pickupHours.onDay(
-                Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
+                Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1
             )
 
             val intent = Intent(this@RestaurantSearchView, RestaurantPageView::class.java).apply {
