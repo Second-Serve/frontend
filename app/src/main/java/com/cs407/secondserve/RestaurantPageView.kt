@@ -67,6 +67,5 @@ class RestaurantPageView : SecondServeView() {
         // Address
         findViewById<TextView>(R.id.restaurant_location_text).text = extras.getString("restaurantAddress")
 
-        // TODO: Re-implement banner with Firebase
     }
 }

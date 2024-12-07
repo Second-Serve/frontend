@@ -24,10 +24,11 @@ class CheckoutView : SecondServeView() {
         checkoutButton = findViewById(R.id.checkout_button)
 
         // Setup RecyclerView
-        val cartAdapter = CartAdapter(cartItems)
+        val cartAdapter = CartAdapter()
         cartRecyclerView.layoutManager = LinearLayoutManager(this)
         cartRecyclerView.adapter = cartAdapter
 
+        cartAdapter.updateCart()
         // Calculate Total Price
 //        val totalPrice = cartItems.sumOf { it.price * it.quantity }
 //        totalPriceText.text = "Total: $${"%.2f".format(totalPrice)}"
