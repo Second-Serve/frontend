@@ -18,18 +18,23 @@ import com.google.android.gms.location.LocationServices
 import com.google.firebase.functions.ktx.functions
 import com.google.firebase.ktx.Firebase
 import org.json.JSONObject
-
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class LocationService {
     companion object {
         const val TAG = "LocationService"
 
         private const val MILES_PER_METER = 1 / 1609.34
-
         private const val LOCATION_PERMISSION_CODE = 102
 
         var userLocation: Location? = null
 
+        /**
+         * Validates the given address using Firebase.
+         */
         fun validateAddress(
             address: String,
             onSuccess: ((Boolean, String?) -> Unit)? = null,
@@ -38,6 +43,7 @@ class LocationService {
             if (address.isBlank()) {
                 Log.d(TAG, "Address is empty or null")
                 onSuccess?.invoke(false, null)
+                return
             }
 
             try {
@@ -50,9 +56,7 @@ class LocationService {
                         val isValidAddress = resultMap?.get("isValid") as? Boolean ?: false
                         val reason: String? = if (!isValidAddress) {
                             resultMap?.get("reason") as? String
-                        } else {
-                            null
-                        }
+                        } else null
                         onSuccess?.invoke(isValidAddress, reason)
                     }
                     .addOnFailureListener { exception ->
@@ -65,7 +69,7 @@ class LocationService {
         }
 
         /**
-         * Gets the distance to the restaurant with the given ID from the given starting point in miles.
+         * Fetches the distance to the restaurant from a given starting location.
          */
         fun getDistanceToRestaurant(
             startingPoint: Location,
@@ -89,7 +93,7 @@ class LocationService {
                     onSuccess?.invoke(distanceMiles)
                 }
                 .addOnFailureListener { exception ->
-                    exception.printStackTrace()
+                    Log.e(TAG, "Error fetching distance: ${exception.message}", exception)
                     onFailure?.invoke(exception)
                 }
         }
@@ -108,10 +112,13 @@ class LocationService {
             getDistanceToRestaurant(userLocation!!, restaurantId, onSuccess, onFailure)
         }
 
+        /**
+         * Fetches the map image for a restaurant and returns it as a Bitmap.
+         */
         fun getRestaurantMapImage(
             restaurantId: String,
             type: MapImageType,
-            onSuccess: (String) -> Unit,
+            onSuccess: (Bitmap) -> Unit,
             onFailure: (Exception) -> Unit
         ) {
             val args = hashMapOf(
@@ -123,38 +130,56 @@ class LocationService {
                 .call(args)
                 .addOnSuccessListener { result ->
                     try {
-                        val data = JSONObject(result.getData() as Map<*, *>)
-                        val imageString = data.getString("image")
-                        onSuccess(imageString)
+                        // Assuming backend returns an image URL
+                        val imageUrl = result.getData() as String
+                        fetchImageFromUrl(imageUrl, onSuccess, onFailure)
                     } catch (e: Exception) {
-                        Log.e(TAG, "Error parsing map image response: ${e.message}", e)
+                        Log.e(TAG, "Error parsing map image response: ${e.message}")
                         onFailure(e)
                     }
                 }
                 .addOnFailureListener { exception ->
-                    Log.e(TAG, "Failed to fetch restaurant map image: ${exception.message}", exception)
+                    Log.e(TAG, "Failed to fetch restaurant map image: ${exception.message}")
                     onFailure(exception)
                 }
         }
 
-        private fun decodeImage(image: String): Bitmap {
-            val opts = BitmapFactory.Options()
-
-            opts.inPreferredConfig = Bitmap.Config.ARGB_8888
-
-            val imageByteArray = image.toByteArray()
-            return BitmapFactory.decodeByteArray(
-                imageByteArray,
-                0,
-                imageByteArray.size,
-                opts
-            )
+        /**
+         * Fetches an image from a URL and decodes it into a Bitmap.
+         */
+        private fun fetchImageFromUrl(
+            imageUrl: String,
+            onSuccess: (Bitmap) -> Unit,
+            onFailure: (Exception) -> Unit
+        ) {
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    val connection = java.net.URL(imageUrl).openConnection()
+                    connection.connect()
+                    val inputStream = connection.getInputStream()
+                    val bitmap = BitmapFactory.decodeStream(inputStream)
+                    withContext(Dispatchers.Main) {
+                        onSuccess(bitmap)
+                    }
+                } catch (e: Exception) {
+                    Log.e(TAG, "Error fetching image from URL: ${e.message}")
+                    withContext(Dispatchers.Main) {
+                        onFailure(e)
+                    }
+                }
+            }
         }
 
+        /**
+         * Updates the user's location.
+         */
         fun updateUserLocation(location: Location?) {
             userLocation = location
         }
 
+        /**
+         * Checks whether the app has location permissions.
+         */
         fun hasLocationPermissions(context: Context): Boolean {
             return ActivityCompat.checkSelfPermission(
                 context,
@@ -165,13 +190,17 @@ class LocationService {
             ) == PackageManager.PERMISSION_GRANTED
         }
 
+        /**
+         * Gets the device's last known location.
+         */
         fun getDeviceLocation(
             context: Context,
-            onComplete: ((Location?) -> Unit)? = null,
+            onComplete: ((Location?) -> Unit)? = null
         ) {
             val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
             if (!hasLocationPermissions(context)) {
                 onComplete?.invoke(null)
+                return
             }
 
             try {
@@ -180,17 +209,24 @@ class LocationService {
                         onComplete?.invoke(location)
                     }
             } catch (exception: SecurityException) {
-                // This will never happen due to our check, but we still need to handle it
+                Log.e(TAG, "Error fetching device location: ${exception.message}", exception)
+                onComplete?.invoke(null)
             }
         }
 
+        /**
+         * Requests location permissions.
+         */
         fun requestLocation(
             activity: Activity,
-            onComplete: ((Location?) -> Unit)? = null,
+            onComplete: ((Location?) -> Unit)? = null
         ) {
             val fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
 
-            val fineLocationPermission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION)
+            val fineLocationPermission = ActivityCompat.checkSelfPermission(
+                activity,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
             if (fineLocationPermission == PackageManager.PERMISSION_GRANTED) {
                 fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                     if (location != null) {
@@ -201,17 +237,11 @@ class LocationService {
                     }
                 }
             } else {
-                val permission = ContextCompat.checkSelfPermission(
+                ActivityCompat.requestPermissions(
                     activity,
-                    Manifest.permission.ACCESS_FINE_LOCATION
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    LOCATION_PERMISSION_CODE
                 )
-                if (permission != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(
-                        activity,
-                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                        LOCATION_PERMISSION_CODE
-                    )
-                }
             }
         }
     }
