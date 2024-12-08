@@ -12,6 +12,7 @@ class CartAdapter : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
     private var cartItems: List<CartItem> = Cart.getItems()
 
+
     class CartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val itemName: TextView = itemView.findViewById(R.id.item_name_text)
         val itemPrice: TextView = itemView.findViewById(R.id.item_price_text)

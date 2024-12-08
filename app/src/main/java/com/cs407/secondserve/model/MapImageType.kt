@@ -4,7 +4,7 @@ enum class MapImageType(val type: String) {
     BANNER("banner"),
     ICON("icon");
 
-    override fun toString() : String {
+    override fun toString(): String {
         return type
     }
 }

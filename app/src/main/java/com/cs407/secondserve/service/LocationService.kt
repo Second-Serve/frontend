@@ -108,21 +108,32 @@ class LocationService {
             getDistanceToRestaurant(userLocation!!, restaurantId, onSuccess, onFailure)
         }
 
-        fun getRestaurantMapImage(restaurantId: String, type: MapImageType) {
+        fun getRestaurantMapImage(
+            restaurantId: String,
+            type: MapImageType,
+            onSuccess: (String) -> Unit,
+            onFailure: (Exception) -> Unit
+        ) {
             val args = hashMapOf(
                 "restaurantId" to restaurantId,
                 "type" to type.toString()
             )
+
             Firebase.functions.getHttpsCallable("getRestaurantMapImage")
                 .call(args)
                 .addOnSuccessListener { result ->
-                    val data = JSONObject(result.getData() as Map<*, *>)
-                    val imageString = data.getString("image")
-//                    val image = decodeImage(imageString)
-//                    Log.d("LocationService", image.toString())
+                    try {
+                        val data = JSONObject(result.getData() as Map<*, *>)
+                        val imageString = data.getString("image")
+                        onSuccess(imageString)
+                    } catch (e: Exception) {
+                        Log.e(TAG, "Error parsing map image response: ${e.message}", e)
+                        onFailure(e)
+                    }
                 }
                 .addOnFailureListener { exception ->
-                    exception.printStackTrace()
+                    Log.e(TAG, "Failed to fetch restaurant map image: ${exception.message}", exception)
+                    onFailure(exception)
                 }
         }
 
