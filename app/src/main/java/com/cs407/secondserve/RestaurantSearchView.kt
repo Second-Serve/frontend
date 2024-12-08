@@ -26,6 +26,7 @@ import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cs407.secondserve.service.LocationService
+import com.google.android.material.appbar.MaterialToolbar
 import java.util.Locale
 
 class RestaurantSearchView : SecondServeView() {
@@ -37,10 +38,12 @@ class RestaurantSearchView : SecondServeView() {
     lateinit var restaurants: List<Restaurant>
     lateinit var restaurantAdapter: RestaurantAdapter
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.fragment_restaurant_search)
+
 
         val lockButton: ImageButton = findViewById(R.id.lockButton)
         lockButton.setOnClickListener {
