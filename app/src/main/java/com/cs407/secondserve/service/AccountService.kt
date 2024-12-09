@@ -12,6 +12,8 @@ class AccountService {
     companion object {
         lateinit var auth: FirebaseAuth
 
+        var currentUser: User? = null
+
         fun register(
             email: String,
             password: String,
@@ -92,7 +94,11 @@ class AccountService {
                     getUserFromAuthResult(
                         result,
                         onSuccess = { user ->
+                            currentUser = user
                             onSuccess?.invoke(result, user)
+                        },
+                        onFailure = { exception ->
+                            onFailure?.invoke(exception)
                         }
                     )
                 }

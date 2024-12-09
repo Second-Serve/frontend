@@ -2,7 +2,9 @@ package com.cs407.secondserve.service
 
 import com.cs407.secondserve.model.Restaurant
 import com.cs407.secondserve.model.User
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.functions.ktx.functions
 import com.google.firebase.ktx.Firebase
 
 class RestaurantService {
@@ -68,6 +70,14 @@ class RestaurantService {
             }
         }
 
+        fun fetch(
+            onSuccess: ((Restaurant) -> Unit)? = null,
+            onFailure: ((Exception) -> Unit)? = null
+        ) {
+            val currentUserId = Firebase.auth.currentUser!!.uid
+            fetchByUserId(currentUserId, onSuccess, onFailure)
+        }
+
         fun fetchAll(
             onSuccess: ((List<Restaurant>) -> Unit)? = null,
             onFailure: ((Exception) -> Unit)? = null
@@ -103,25 +113,72 @@ class RestaurantService {
 
         fun fetchByUserId(
             userId: String,
-            onSuccess: ((Restaurant?) -> Unit)? = null,
+            onSuccess: ((Restaurant) -> Unit)? = null,
             onFailure: ((Exception) -> Unit)? = null
         ) {
             val db = Firebase.firestore
+            val userDocument = db.collection("users").document(userId)
             val future = db.collection("restaurants")
-                .whereEqualTo("owner.id", userId)
+                .whereEqualTo("owner", userDocument)
                 .get()
 
             future.addOnSuccessListener { result ->
-                if (result.documents.isEmpty()) {
-                    onSuccess?.invoke(null)
-                    return@addOnSuccessListener
+                try {
+                    val restaurant = Restaurant.fromFetchedDocument(result.documents[0])
+                    onSuccess?.invoke(restaurant)
+                } catch (e: Exception) {
+                    onFailure?.invoke(e)
                 }
-                val restaurant = Restaurant.fromFetchedDocument(result.documents[0])
-                onSuccess?.invoke(restaurant)
             }
             future.addOnFailureListener { exception ->
                 onFailure?.invoke(exception)
             }
+        }
+
+        fun updateRestaurantInformation(
+            name: String? = null,
+            address: String? = null,
+            bagPrice: Double? = null,
+            bagsAvailable: Int? = null,
+            onSuccess: (() -> Unit)? = null,
+            onFailure: ((String) -> Unit)? = null,
+            onException: ((Exception) -> Unit)? = null
+        ) {
+            val data = hashMapOf<String, Any>()
+
+            if (name != null) {
+                data["name"] = name
+            }
+
+            if (address != null) {
+                data["address"] = address
+            }
+
+            if (bagPrice != null) {
+                data["bag_price"] = bagPrice
+            }
+
+            if (bagsAvailable != null) {
+                data["bags_available"] = bagsAvailable
+            }
+
+            Firebase.functions.getHttpsCallable("updateRestaurantInformation")
+                .call(data)
+                .addOnSuccessListener { result ->
+                    val resultMap = result.getData() as? Map<*, *>
+                    val success = resultMap?.get("success") as? Boolean
+
+                    if (success == true) {
+                        onSuccess?.invoke()
+                    } else {
+                        val message = resultMap?.get("reason") as? String
+                        onFailure?.invoke(message ?: "Unknown error")
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    onException?.invoke(exception)
+                }
+
         }
     }
 }

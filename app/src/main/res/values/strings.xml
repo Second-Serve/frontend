@@ -65,4 +65,8 @@
     <string name="view_previous_orders">View Previous Orders</string>
     <string name="minus"> -</string>
     <string name="plus"> +</string>
+    <string name="restaurant_update_information">Update information</string>
+    <string name="restaurant_information">Restaurant information</string>
+    <string name="bags_available_per_day">Bags available per day</string>
+    <string name="price_per_bag">Price per bag</string>
 </resources>

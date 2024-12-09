@@ -1,11 +1,12 @@
 package com.cs407.secondserve
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.cs407.secondserve.service.AccountService
+import com.cs407.secondserve.service.RestaurantService
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 
@@ -25,9 +26,21 @@ class RestaurantMainView : AppCompatActivity() {
         updateBagPriceButton.setOnClickListener {
             val bagPriceText = bagPriceInput.text.toString()
             if (bagPriceText.isNotEmpty()) {
-                val bagPrice = bagPriceText.toFloatOrNull()
+                val bagPrice = bagPriceText.toDoubleOrNull()
                 if (bagPrice != null) {
-                    //save the price here
+                    RestaurantService.updateRestaurantInformation(
+                        bagsAvailable = quantity,
+                        bagPrice = bagPrice,
+                        onSuccess = {
+                            Toast.makeText(this, "Information updated successfully", Toast.LENGTH_SHORT).show()
+                        },
+                        onFailure = { reason ->
+                            Toast.makeText(this, reason, Toast.LENGTH_SHORT).show()
+                        },
+                        onException = { exception ->
+                            Toast.makeText(this, exception.message, Toast.LENGTH_SHORT).show()
+                        }
+                    )
                 } else {
                     Toast.makeText(this, "Invalid price", Toast.LENGTH_SHORT).show()
                 }
@@ -47,7 +60,18 @@ class RestaurantMainView : AppCompatActivity() {
             quantity++
             quantityText.text = quantity.toString()
         }
+
+        updateViewWithRestaurantInfo(bagPriceInput, quantityText)
     }
 
-
+    private fun updateViewWithRestaurantInfo(bagPriceInput: TextInputEditText, quantityText: TextView) {
+        val user = AccountService.currentUser!!
+        user.restaurant?.bagPrice?.let {
+            bagPriceInput.setText(it.toString())
+        }
+        user.restaurant?.bagsAvailable.let {
+            quantityText.text = it.toString()
+            quantity = it ?: 0
+        }
+    }
 }

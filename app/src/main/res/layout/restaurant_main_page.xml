@@ -54,7 +54,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Set Daily Bag Price"
+                        android:text="@string/restaurant_information"
                         android:textColor="@color/accent"
                         android:textSize="18sp"
                         android:textStyle="bold"
@@ -72,7 +72,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="numberDecimal"
-                            android:hint="Enter price per bag"/>
+                            android:hint="@string/price_per_bag"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <LinearLayout
@@ -88,7 +88,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="Bags For the Day"
+                            android:text="@string/bags_available_per_day"
                             android:textColor="@color/accent"
                             android:textSize="16sp"/>
 
@@ -142,7 +142,7 @@
                         android:id="@+id/update_bag_price_button"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Update Bag Price"
+                        android:text="@string/update_bag_price"
                         android:layout_marginTop="8dp"
                         style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
                 </LinearLayout>
