@@ -11,6 +11,6 @@ Second Serve is a mobile app designed to reduce food waste by connecting restaur
 - **Owen**: 
 - **Aditi**: Implemented Wiscard scanning using CameraX and ML Kit for barcode detection. Integrated Firebase for email verification, ensuring only verified users can log in. Developed the payment section and contributed to overall debugging and resolving common issues.
 - **Diya**: 
-- **Arushi**:
+- **Arushi**: Completed the UI development, implemented all the necessary XML layouts, and designed RecyclerView adapters to integrate data from the backend.
 
 ---
