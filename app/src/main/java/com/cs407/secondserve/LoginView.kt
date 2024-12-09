@@ -81,15 +81,16 @@ class LoginView : AppCompatActivity() {
                     return@signIn
                 }
 
-                // If the user's email is verified, navigate to the restaurant search view
-                // Alternatively, if it's a business account, no need for email verification
-                if (authUser.isEmailVerified || user.accountType == AccountType.BUSINESS) {
+                if (user.accountType == AccountType.BUSINESS) {
+                    val intent = Intent(this, RestaurantMainView::class.java)
+                    startActivity(intent)
+                    return@signIn
+                } else if (authUser.isEmailVerified) {
                     val intent = Intent(this, RestaurantSearchView::class.java)
                     startActivity(intent)
                     return@signIn
                 }
 
-                // If the user's email is not verified, show a message and disable the login button
                 Toast.makeText(
                     this,
                     "Please verify your email before logging in.",
@@ -125,6 +126,7 @@ class LoginView : AppCompatActivity() {
             }
         )
     }
+
 
     private fun navigateToSignUp() {
         val intent = Intent(this, UserSignUpView::class.java)
