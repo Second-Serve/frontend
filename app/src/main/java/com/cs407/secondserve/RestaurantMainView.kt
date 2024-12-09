@@ -73,5 +73,16 @@ class RestaurantMainView : AppCompatActivity() {
             quantityText.text = it.toString()
             quantity = it ?: 0
         }
+
+        RestaurantService.getRestaurantDashboardInformation(
+            onSuccess = { info ->
+                val earningsLast24HoursText = getString(R.string.restaurant_earnings, info.earningsLast24Hours)
+                val earningsAllTime = getString(R.string.restaurant_earnings, info.earningsAllTime)
+                findViewById<TextView>(R.id.orders_last_24_hours).text = info.ordersLast24Hours.toString()
+                findViewById<TextView>(R.id.earnings_last_24_hours).text = earningsLast24HoursText
+                findViewById<TextView>(R.id.orders_all_time).text = info.ordersAllTime.toString()
+                findViewById<TextView>(R.id.earnings_all_time).text = earningsAllTime
+            }
+        )
     }
 }

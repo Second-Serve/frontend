@@ -22,6 +22,7 @@
     <string name="pickup_only">Pickup only</string>
     <string name="restaurant_bag_count">%1$d bags available</string>
     <string name="restaurant_bag_price">$%1$.2f</string>
+    <string name="restaurant_earnings">$%1$.2f</string>
     <string name="restaurant_banner_content_description">Restaurant Banner</string>
     <string name="log_in_button">Log In</string>
     <string name="sign_up_button">Sign Up</string>
@@ -70,4 +71,8 @@
     <string name="bags_available_per_day">Bags available per day</string>
     <string name="price_per_bag">Price per bag</string>
     <string name="update_bag_price">Update bag price</string>
+    <string name="orders_last_24_hours">Orders (last 24 hours)</string>
+    <string name="earnings_last_24_hours">Earnings (last 24 hours)</string>
+    <string name="total_orders">Total orders</string>
+    <string name="total_earnings">Total earnings</string>
 </resources>

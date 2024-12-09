@@ -1,6 +1,7 @@
 package com.cs407.secondserve.service
 
 import com.cs407.secondserve.model.Restaurant
+import com.cs407.secondserve.model.RestaurantDashboardInformation
 import com.cs407.secondserve.model.User
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -179,6 +180,30 @@ class RestaurantService {
                     onException?.invoke(exception)
                 }
 
+        }
+
+        fun getRestaurantDashboardInformation(
+            onSuccess: ((RestaurantDashboardInformation) -> Unit)? = null,
+            onFailure: ((Exception) -> Unit)? = null
+        ) {
+            Firebase.functions.getHttpsCallable("getRestaurantDashboardInformation")
+                .call()
+                .addOnSuccessListener {
+                    val result = it.getData() as? Map<*, *>
+                    result?.let {
+                        // .toDouble() is a stupid hack only necessary because of how JS serializes numbers
+                        val dashboardInfo = RestaurantDashboardInformation(
+                            result["ordersLast24Hours"] as Int,
+                            (result["earningsLast24Hours"] as? Number)?.toDouble() ?: 0.0,
+                            result["ordersAllTime"] as Int,
+                            (result["earningsAllTime"] as? Number)?.toDouble() ?: 0.0
+                        )
+                        onSuccess?.invoke(dashboardInfo)
+                    }
+                }
+                .addOnFailureListener {
+                    onFailure?.invoke(it)
+                }
         }
     }
 }
