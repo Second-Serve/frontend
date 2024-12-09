@@ -53,7 +53,7 @@ class RestaurantSearchView : SecondServeView() {
 
         val viewOrdersButton: Button = findViewById(R.id.view_previous_orders_button)
         viewOrdersButton.setOnClickListener {
-            val intent = Intent(this, CheckoutView::class.java)
+            val intent = Intent(this, PreviousOrdersView::class.java)
             startActivity(intent)
         }
 
