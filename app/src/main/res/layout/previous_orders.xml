@@ -56,7 +56,6 @@
             android:layout_marginTop="8dp"/>
     </LinearLayout>
 
-    <!-- RecyclerView to display list of orders -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ordersRecyclerView"
         android:layout_width="0dp"
