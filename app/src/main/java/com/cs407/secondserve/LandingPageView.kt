@@ -29,7 +29,13 @@ class LandingPageView : SecondServeView() {
         if (Firebase.auth.currentUser != null && !Debug.FORCE_LANDING_PAGE) {
             AccountService.signIn(
                 Firebase.auth.currentUser!!,
-                onSuccess = { _, _ -> loadRestaurantSearch() },
+                onSuccess = { _, user ->
+                    if (user.restaurant != null) {
+                        startActivityEmptyIntent(RestaurantMainView::class.java)
+                    } else {
+                        startActivityEmptyIntent(RestaurantSearchView::class.java)
+                    }
+                },
                 onFailure = { _ -> loadRecyclerView() }
             )
         } else {
