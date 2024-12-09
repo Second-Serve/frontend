@@ -48,7 +48,6 @@
             android:text="Qty: 1"
             android:textSize="14sp"
             android:textColor="#666666"
-            android:drawableStart="@drawable/ic_quantity"
             android:drawablePadding="8dp"
             android:gravity="center_vertical"
             android:layout_marginTop="8dp"
