@@ -73,14 +73,7 @@ class LoginView : AppCompatActivity() {
         AccountService.signIn(
             email,
             password,
-            onSuccess = { authResult, user ->
-                val authUser = authResult.user
-
-                if (authUser == null) {
-                    Toast.makeText(this, "Failed to retrieve user information", Toast.LENGTH_SHORT).show()
-                    return@signIn
-                }
-
+            onSuccess = { authUser, user ->
                 if (user.accountType == AccountType.BUSINESS) {
                     val intent = Intent(this, RestaurantMainView::class.java)
                     startActivity(intent)

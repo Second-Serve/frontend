@@ -69,4 +69,5 @@
     <string name="restaurant_information">Restaurant information</string>
     <string name="bags_available_per_day">Bags available per day</string>
     <string name="price_per_bag">Price per bag</string>
+    <string name="update_bag_price">Update bag price</string>
 </resources>
