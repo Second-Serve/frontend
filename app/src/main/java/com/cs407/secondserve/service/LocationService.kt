@@ -1,13 +1,9 @@
 package com.cs407.secondserve.service
 
 import android.Manifest
-import android.R.attr.bitmap
-import android.R.attr.data
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.location.Location
 import android.util.Log
 import android.widget.Toast
@@ -18,7 +14,6 @@ import com.google.android.gms.location.LocationServices
 import com.google.firebase.functions.ktx.functions
 import com.google.firebase.ktx.Firebase
 import org.json.JSONObject
-
 
 class LocationService {
     companion object {
@@ -111,8 +106,8 @@ class LocationService {
         fun getRestaurantMapImage(
             restaurantId: String,
             type: MapImageType,
-            onSuccess: (String) -> Unit,
-            onFailure: (Exception) -> Unit
+            onSuccess: ((String) -> Unit)? = null,
+            onFailure: ((Exception) -> Unit)? = null
         ) {
             val args = hashMapOf(
                 "restaurantId" to restaurantId,
@@ -124,31 +119,17 @@ class LocationService {
                 .addOnSuccessListener { result ->
                     try {
                         val data = JSONObject(result.getData() as Map<*, *>)
-                        val imageString = data.getString("image")
-                        onSuccess(imageString)
+                        val imageUrl = data.getString("image")
+                        onSuccess?.invoke(imageUrl)
                     } catch (e: Exception) {
                         Log.e(TAG, "Error parsing map image response: ${e.message}", e)
-                        onFailure(e)
+                        onFailure?.invoke(e)
                     }
                 }
                 .addOnFailureListener { exception ->
                     Log.e(TAG, "Failed to fetch restaurant map image: ${exception.message}", exception)
-                    onFailure(exception)
+                    onFailure?.invoke(exception)
                 }
-        }
-
-        private fun decodeImage(image: String): Bitmap {
-            val opts = BitmapFactory.Options()
-
-            opts.inPreferredConfig = Bitmap.Config.ARGB_8888
-
-            val imageByteArray = image.toByteArray()
-            return BitmapFactory.decodeByteArray(
-                imageByteArray,
-                0,
-                imageByteArray.size,
-                opts
-            )
         }
 
         fun updateUserLocation(location: Location?) {

@@ -17,6 +17,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import com.bumptech.glide.Glide
 
 class RestaurantPageView : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -99,10 +100,9 @@ class RestaurantPageView : AppCompatActivity() {
         LocationService.getRestaurantMapImage(
             restaurantId = restaurantId,
             type = MapImageType.BANNER,
-            onSuccess = { mapImageBase64 ->
-                val mapBitmap = decodeBase64ToBitmap(mapImageBase64)
+            onSuccess = { url ->
                 runOnUiThread {
-                    bannerImageView.setImageBitmap(mapBitmap)
+                    Glide.with(this).load(url).into(bannerImageView);
                 }
             },
             onFailure = { exception ->

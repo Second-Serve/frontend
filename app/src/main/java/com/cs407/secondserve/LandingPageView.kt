@@ -82,8 +82,4 @@ class LandingPageView : SecondServeView() {
     private fun loadLogIn() {
         startActivity(Intent(this, LoginView::class.java))
     }
-
-    private fun loadRestaurantSearch() {
-        startActivity(Intent(this, RestaurantSearchView::class.java))
-    }
 }
