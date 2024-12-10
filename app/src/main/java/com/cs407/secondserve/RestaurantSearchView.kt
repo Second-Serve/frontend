@@ -120,8 +120,9 @@ class RestaurantSearchView : SecondServeView() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-        val searchView: SearchView = findViewById(R.id.searchView)
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        val searchView: androidx.appcompat.widget.SearchView = findViewById(R.id.searchView)
+
+        searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return true
             }
