@@ -3,14 +3,16 @@ package com.cs407.secondserve.service
 import android.util.Log
 import com.cs407.secondserve.model.AccountType
 import com.cs407.secondserve.model.User
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class AccountService {
     companion object {
         lateinit var auth: FirebaseAuth
+
+        var currentUser: User? = null
 
         fun register(
             email: String,
@@ -84,31 +86,43 @@ class AccountService {
         fun signIn(
             email: String,
             password: String,
-            onSuccess: ((AuthResult, User) -> Unit)? = null,
+            onSuccess: ((FirebaseUser, User) -> Unit)? = null,
             onFailure: ((Exception) -> Unit)? = null
         ) {
             auth.signInWithEmailAndPassword(email, password)
                 .addOnSuccessListener { result ->
-                    getUserFromAuthResult(
-                        result,
-                        onSuccess = { user ->
-                            onSuccess?.invoke(result, user)
-                        }
-                    )
+                    signIn(result.user!!, onSuccess, onFailure)
                 }
                 .addOnFailureListener { exception ->
                     onFailure?.invoke(exception)
                 }
         }
 
-        private fun getUserFromAuthResult(
-            authResult: AuthResult,
+        fun signIn(
+            authUser: FirebaseUser,
+            onSuccess: ((FirebaseUser, User) -> Unit)? = null,
+            onFailure: ((Exception) -> Unit)? = null
+        ) {
+            getUserById(
+                authUser.uid,
+                onSuccess = { user ->
+                    currentUser = user
+                    onSuccess?.invoke(authUser, user)
+                },
+                onFailure = { exception ->
+                    onFailure?.invoke(exception)
+                }
+            )
+        }
+
+        private fun getUserById(
+            userId: String,
             onSuccess: ((User) -> Unit)? = null,
             onFailure: ((Exception) -> Unit)? = null
         ) {
             val db = Firebase.firestore
             db.collection("users")
-                .document(authResult.user!!.uid)
+                .document(userId)
                 .get()
                 .addOnSuccessListener { userDocument ->
                     Log.d("AccountService", "User data: $userDocument")
@@ -118,12 +132,12 @@ class AccountService {
                     var user = User(
                         userDocument.id,
                         accountType,
-                        authResult.user!!.email!!
+                        "todo@email.address", // TODO: Get email from database
                     )
 
                     if (accountType == AccountType.BUSINESS) {
                         RestaurantService.fetchByUserId(
-                            authResult.user!!.uid,
+                            userId,
                             onSuccess = { restaurant ->
                                 user.restaurant = restaurant
                                 onSuccess?.invoke(user)

@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <!-- Toolbar -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="0dp"
@@ -18,7 +17,6 @@
         app:titleCentered="true"
         app:navigationIcon="@drawable/back_arrow" />
 
-    <!-- Lock Button inside Toolbar -->
     <ImageButton
         android:id="@+id/lockButton"
         android:layout_width="48dp"
@@ -31,7 +29,6 @@
         app:layout_constraintTop_toTopOf="@id/toolbar"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Banner Image -->
     <ImageView
         android:id="@+id/restaurant_banner_image"
         android:layout_width="0dp"
@@ -42,7 +39,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Restaurant Details Card -->
     <androidx.cardview.widget.CardView
         android:id="@+id/restaurant_card"
         android:layout_width="0dp"
@@ -58,7 +54,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!-- Restaurant Name -->
             <TextView
                 android:id="@+id/restaurant_name_text"
                 android:layout_width="0dp"
@@ -73,7 +68,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/restaurant_price_text" />
 
-            <!-- Restaurant Price -->
             <TextView
                 android:id="@+id/restaurant_price_text"
                 android:layout_width="wrap_content"
@@ -88,7 +82,6 @@
                 app:layout_constraintBottom_toBottomOf="@id/restaurant_name_text"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <!-- Divider -->
             <View
                 android:id="@+id/divider"
                 android:layout_width="0dp"
@@ -99,7 +92,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <!-- Details Layout -->
             <LinearLayout
                 android:id="@+id/restaurant_details_layout"
                 android:layout_width="0dp"
@@ -110,7 +102,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent">
 
-                <!-- Bag Count -->
                 <TextView
                     android:id="@+id/restaurant_bag_count_text"
                     android:layout_width="wrap_content"
@@ -119,7 +110,6 @@
                     android:textColor="@color/accent"
                     android:textSize="14sp" />
 
-                <!-- Pickup Title -->
                 <TextView
                     android:id="@+id/restaurant_pickup_title"
                     android:layout_width="wrap_content"
@@ -130,7 +120,6 @@
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
-                <!-- Pickup Hours -->
                 <TextView
                     android:id="@+id/restaurant_pickup_text"
                     android:layout_width="wrap_content"
@@ -138,7 +127,6 @@
                     android:text="@string/restaurant_page_available_time"
                     android:textColor="@color/accent" />
 
-                <!-- Location Title -->
                 <TextView
                     android:id="@+id/restaurant_location_title"
                     android:layout_width="wrap_content"
@@ -149,7 +137,6 @@
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
-                <!-- Location -->
                 <TextView
                     android:id="@+id/restaurant_location_text"
                     android:layout_width="wrap_content"
@@ -160,7 +147,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Add to Cart Button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/addToCartButton"
         android:layout_width="0dp"

@@ -9,7 +9,7 @@ enum class AccountType(private val type: String) {
     }
 
     companion object {
-        @OptIn(kotlin.ExperimentalStdlibApi::class) // Opt-in annotation here
+        @OptIn(kotlin.ExperimentalStdlibApi::class)
         fun fromString(string: String) : AccountType {
             return entries.first {
                 it.type == string.lowercase()

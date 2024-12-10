@@ -50,6 +50,9 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.play.services.vision)
 
+    // Glide
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+
     // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)

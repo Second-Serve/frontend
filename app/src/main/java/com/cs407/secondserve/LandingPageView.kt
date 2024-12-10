@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cs407.secondserve.service.AccountService
 import com.cs407.secondserve.util.Debug
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.functions.ktx.functions
 import com.google.firebase.ktx.Firebase
@@ -25,19 +26,16 @@ class LandingPageView : SecondServeView() {
             Firebase.functions.useEmulator("10.0.2.2", 5001)
         }
 
-//        runBlocking {
-//            LocationService.validateAddress("3 N Randall Ave")
-//        }
-
-        val prefs = getSharedPreferences("com.cs407.secondserve", Context.MODE_PRIVATE)
-        val savedEmail = prefs.getString(getString(R.string.saved_email_key), null)
-        val savedPassword = prefs.getString(getString(R.string.saved_password_key), null)
-
-        if (savedEmail != null && savedPassword != null && !Debug.FORCE_LANDING_PAGE) {
+        if (Firebase.auth.currentUser != null && !Debug.FORCE_LANDING_PAGE) {
             AccountService.signIn(
-                savedEmail,
-                savedPassword,
-                onSuccess = { _, _ -> loadRestaurantSearch() },
+                Firebase.auth.currentUser!!,
+                onSuccess = { _, user ->
+                    if (user.restaurant != null) {
+                        startActivityEmptyIntent(RestaurantMainView::class.java)
+                    } else {
+                        startActivityEmptyIntent(RestaurantSearchView::class.java)
+                    }
+                },
                 onFailure = { _ -> loadRecyclerView() }
             )
         } else {
@@ -83,9 +81,5 @@ class LandingPageView : SecondServeView() {
 
     private fun loadLogIn() {
         startActivity(Intent(this, LoginView::class.java))
-    }
-
-    private fun loadRestaurantSearch() {
-        startActivity(Intent(this, RestaurantSearchView::class.java))
     }
 }

@@ -8,10 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cs407.secondserve.model.Cart
 import com.cs407.secondserve.model.CartItem
 
-class CartAdapter : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
+class CartAdapter(private val onCartUpdated: () -> Unit) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
     private var cartItems: List<CartItem> = Cart.getItems()
-
 
     class CartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val itemName: TextView = itemView.findViewById(R.id.item_name_text)
@@ -40,5 +39,6 @@ class CartAdapter : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
     fun updateCart() {
         cartItems = Cart.getItems()
         notifyDataSetChanged()
+        onCartUpdated()
     }
 }

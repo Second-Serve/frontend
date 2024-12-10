@@ -73,23 +73,17 @@ class LoginView : AppCompatActivity() {
         AccountService.signIn(
             email,
             password,
-            onSuccess = { authResult, user ->
-                val authUser = authResult.user
-
-                if (authUser == null) {
-                    Toast.makeText(this, "Failed to retrieve user information", Toast.LENGTH_SHORT).show()
+            onSuccess = { authUser, user ->
+                if (user.accountType == AccountType.BUSINESS) {
+                    val intent = Intent(this, RestaurantMainView::class.java)
+                    startActivity(intent)
                     return@signIn
-                }
-
-                // If the user's email is verified, navigate to the restaurant search view
-                // Alternatively, if it's a business account, no need for email verification
-                if (authUser.isEmailVerified || user.accountType == AccountType.BUSINESS) {
+                } else if (authUser.isEmailVerified) {
                     val intent = Intent(this, RestaurantSearchView::class.java)
                     startActivity(intent)
                     return@signIn
                 }
 
-                // If the user's email is not verified, show a message and disable the login button
                 Toast.makeText(
                     this,
                     "Please verify your email before logging in.",
@@ -125,6 +119,7 @@ class LoginView : AppCompatActivity() {
             }
         )
     }
+
 
     private fun navigateToSignUp() {
         val intent = Intent(this, UserSignUpView::class.java)
