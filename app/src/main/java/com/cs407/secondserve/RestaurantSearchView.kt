@@ -23,6 +23,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cs407.secondserve.service.LocationService
@@ -119,6 +120,18 @@ class RestaurantSearchView : SecondServeView() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
+        val searchView: SearchView = findViewById(R.id.searchView)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filterRestaurantsByName(newText)
+                return true
+            }
+        })
+
         RestaurantService.fetchAll(
             onSuccess = { restaurants ->
                 updateRestaurants(restaurants)
@@ -162,6 +175,15 @@ class RestaurantSearchView : SecondServeView() {
     private fun sortRestaurantsAlphabeticallyZA() {
         val sorted = restaurants.sortedByDescending { it.name.lowercase(Locale.getDefault()) }
         restaurantAdapter.updateRestaurants(sorted)
+    }
+
+    private fun filterRestaurantsByName(query: String?) {
+        if (::restaurants.isInitialized && !query.isNullOrEmpty()) {
+            val filteredList = restaurants.filter { it.name.contains(query, ignoreCase = true) }
+            restaurantAdapter.updateRestaurants(filteredList)
+        } else {
+            restaurantAdapter.updateRestaurants(restaurants)
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
