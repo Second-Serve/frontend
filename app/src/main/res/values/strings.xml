@@ -63,7 +63,7 @@
     <string name="saturday">Saturday</string>
     <string name="sunday">Sunday</string>
     <string name="bag_price">Enter Price of Bags</string>
-    <string name="view_previous_orders">View Previous Orders</string>
+    <string name="view_previous_orders">View My Orders</string>
     <string name="minus"> -</string>
     <string name="plus"> +</string>
     <string name="restaurant_update_information">Update information</string>

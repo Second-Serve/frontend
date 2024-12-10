@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 
 
-class PreviousOrdersView : AppCompatActivity(){
+class PreviousOrdersView : SecondServeView(){
     private lateinit var toolbar: MaterialToolbar
     private lateinit var emptyStateLayout: LinearLayout
     private lateinit var ordersRecyclerView: RecyclerView

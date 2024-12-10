@@ -1,5 +1,6 @@
 package com.cs407.secondserve
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -18,7 +19,6 @@ import org.json.JSONObject
 
 class PaymentView : AppCompatActivity() {
 
-    // Declare the input fields and the submit button
     private lateinit var firstNameEditText: TextInputEditText
     private lateinit var lastNameEditText: TextInputEditText
     private lateinit var cardNumberEditText: TextInputEditText
@@ -40,10 +40,8 @@ class PaymentView : AppCompatActivity() {
         zipCodeEditText = findViewById(R.id.zipCodeEditText)
         submitPaymentButton = findViewById(R.id.submitPaymentButton)
 
-        // Set click listener for the submit button
         submitPaymentButton.setOnClickListener(this::submitPayment)
 
-        // Limit the card number input to 16 digits (ensure it's numeric)
         cardNumberEditText.filters = arrayOf(InputFilter.LengthFilter(16))
 
         cardNumberEditText.addTextChangedListener(object : TextWatcher {
@@ -54,18 +52,15 @@ class PaymentView : AppCompatActivity() {
             override fun afterTextChanged(editable: Editable?) {
                 editable?.let {
                     if (editable.length > 16) {
-                        // If the length exceeds 16 characters, truncate the input to 16 digits
                         cardNumberEditText.setText(editable.substring(0, 16))
-                        cardNumberEditText.setSelection(16)  // Move the cursor to the end
+                        cardNumberEditText.setSelection(16)
                     }
 
-                    // Ensure the card number contains only digits
                     if (!editable.toString().matches(Regex("^[0-9]*$"))) {
                         cardNumberEditText.setText(editable.toString().filter { it.isDigit() })
                         cardNumberEditText.setSelection(editable.length)
                     }
 
-                    // If the length is less than 16, show a toast reminder
                     // TODO: This spams the toast every time the user types a digit
                     if (editable.length < 16) {
                         Toast.makeText(this@PaymentView, "Card number must be 16 digits", Toast.LENGTH_SHORT).show()
@@ -96,7 +91,6 @@ class PaymentView : AppCompatActivity() {
         })
     }
 
-    // Function to check if all required fields are filled
     private fun isFormValid(): Boolean {
         val firstName = firstNameEditText.text.toString().trim()
         val lastName = lastNameEditText.text.toString().trim()
@@ -114,9 +108,7 @@ class PaymentView : AppCompatActivity() {
     }
 
     private fun submitPayment(view: View) {
-        // Perform validation
         if (isFormValid()) {
-            // If all fields are valid, proceed with payment processing (or another action)
             val orderData = Cart.toMap()
             Log.d("PaymentView", "Order Data: $orderData")
             Firebase.functions.getHttpsCallable("placeOrder")
@@ -131,8 +123,9 @@ class PaymentView : AppCompatActivity() {
                 }
 
             Toast.makeText(this, "Your order has been placed!", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, PreviousOrdersView::class.java)
+            startActivity(intent)
         } else {
-            // If validation fails, show a message
             Toast.makeText(this, "All fields are required", Toast.LENGTH_SHORT).show()
         }
     }
