@@ -1,8 +1,8 @@
 package com.cs407.secondserve
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Bundle
-import android.util.Base64
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
@@ -15,8 +15,8 @@ import com.cs407.secondserve.model.MapImageType
 import com.cs407.secondserve.service.LocationService
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.net.Uri
+import android.widget.Toast
 import com.bumptech.glide.Glide
 
 class RestaurantPageView : AppCompatActivity() {
@@ -90,6 +90,9 @@ class RestaurantPageView : AppCompatActivity() {
             finish()
         }
         val bannerImageView: ImageView = findViewById(R.id.restaurant_banner_image)
+        bannerImageView.setOnClickListener {
+            openAddressInMaps(address)
+        }
         fetchAndDisplayBannerImage(restaurantId, bannerImageView)
     }
 
@@ -116,9 +119,15 @@ class RestaurantPageView : AppCompatActivity() {
         )
     }
 
-
-    private fun decodeBase64ToBitmap(base64String: String): Bitmap {
-        val decodedBytes = Base64.decode(base64String, Base64.DEFAULT)
-        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+    private fun openAddressInMaps(address: String) {
+        try {
+            val mapsIntentUri = Uri.parse("https://maps.google.com/maps?daddr=${address}")
+            val mapIntent = Intent(Intent.ACTION_VIEW, mapsIntentUri)
+            mapIntent.setPackage("com.google.android.apps.maps")
+            startActivity(mapIntent)
+        } catch (e: ActivityNotFoundException) {
+            e.printStackTrace()
+            Toast.makeText(this, "Google Maps app not found.", Toast.LENGTH_SHORT).show()
+        }
     }
 }
