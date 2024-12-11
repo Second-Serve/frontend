@@ -81,7 +81,8 @@ class RestaurantService {
 
         fun fetchAll(
             onSuccess: ((List<Restaurant>) -> Unit)? = null,
-            onFailure: ((Exception) -> Unit)? = null
+            onFailure: ((Exception) -> Unit)? = null,
+            includeHidden: Boolean = false
         ) {
             val db = Firebase.firestore
             val future = db.collection("restaurants").get()
@@ -92,6 +93,18 @@ class RestaurantService {
                 var restaurantsNotLoaded = 0
                 for (restaurantDocument in result.documents) {
                     try {
+                        val restaurant = Restaurant.fromFetchedDocument(restaurantDocument)
+
+                        if (!includeHidden){
+                            if (restaurant.bagsAvailable - restaurant.bagsClaimed <= 0) {
+                                continue
+                            }
+
+                            if (restaurant.bagPrice == null || restaurant.bagPrice <= 0) {
+                                continue
+                            }
+                        }
+
                         restaurants += Restaurant.fromFetchedDocument(restaurantDocument)
                     } catch (e: NullPointerException) {
                         e.printStackTrace()
