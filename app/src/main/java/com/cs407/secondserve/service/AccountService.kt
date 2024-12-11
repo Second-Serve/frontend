@@ -60,6 +60,7 @@ class AccountService {
                                     pickupStartTime!!,
                                     pickupEndTime!!,
                                     onSuccess = {
+                                        currentUser = user
                                         onSuccess?.invoke(user)
                                     },
                                     onFailure = { exception ->
@@ -67,6 +68,7 @@ class AccountService {
                                     }
                                 )
                             } else {
+                                currentUser = user
                                 onSuccess?.invoke(user)
                             }
                         }
