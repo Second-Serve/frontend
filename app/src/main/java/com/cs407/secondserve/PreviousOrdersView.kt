@@ -1,5 +1,6 @@
 package com.cs407.secondserve
 
+import android.content.Intent
 import com.cs407.secondserve.R
 import android.os.Bundle
 import android.view.View
@@ -25,7 +26,8 @@ class PreviousOrdersView : SecondServeView(){
 
         setSupportActionBar(toolbar)
         toolbar.setNavigationOnClickListener {
-            onBackPressed()
+            val intent = Intent(this, RestaurantSearchView::class.java)
+            startActivity(intent)
         }
 
         ordersRecyclerView.layoutManager = LinearLayoutManager(this)
