@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -18,20 +17,28 @@
         android:padding="16dp">
 
         <TextView
-            android:id="@+id/orderTextView"
+            android:id="@+id/restaurantNameTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Order #12345"
-            android:textSize="18sp"
+            android:text="Restaurant Name: Example Restaurant"
+            android:textSize="16sp"
             android:textColor="@android:color/black"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:id="@+id/orderIdTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Order ID: 67890"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="8dp" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#E0E0E0"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="8dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,11 +51,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:drawablePadding="8dp"
                 android:text="01 Jan 2024"
                 android:textSize="14sp"
                 android:textColor="#666666"
-                android:gravity="center_vertical"/>
+                android:gravity="center_vertical" />
 
             <TextView
                 android:id="@+id/orderStatusTextView"
@@ -59,7 +65,7 @@
                 android:textColor="@color/accent"
                 android:paddingHorizontal="8dp"
                 android:paddingVertical="4dp"
-                android:textAllCaps="true"/>
+                android:textAllCaps="true" />
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>
