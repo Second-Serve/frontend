@@ -119,9 +119,9 @@ class RestaurantSearchView : SecondServeView() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
-        val searchView: androidx.appcompat.widget.SearchView = findViewById(R.id.searchView)
+        val searchView: SearchView = findViewById(R.id.searchView)
 
-        searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return true
             }
@@ -158,26 +158,46 @@ class RestaurantSearchView : SecondServeView() {
     }
 
     private fun sortRestaurantsByPriceAscending() {
+        if (!::restaurants.isInitialized) {
+            return
+        }
+
         val sorted = restaurants.sortedBy { it.bagPrice }
         restaurantAdapter.updateRestaurants(sorted)
     }
 
     private fun sortRestaurantsByPriceDescending() {
+        if (!::restaurants.isInitialized) {
+            return
+        }
+
         val sorted = restaurants.sortedByDescending { it.bagPrice }
         restaurantAdapter.updateRestaurants(sorted)
     }
 
     private fun sortRestaurantsAlphabeticallyAZ() {
+        if (!::restaurants.isInitialized) {
+            return
+        }
+
         val sorted = restaurants.sortedBy { it.name.lowercase(Locale.getDefault()) }
         restaurantAdapter.updateRestaurants(sorted)
     }
 
     private fun sortRestaurantsAlphabeticallyZA() {
+        if (!::restaurants.isInitialized) {
+            return
+        }
+
         val sorted = restaurants.sortedByDescending { it.name.lowercase(Locale.getDefault()) }
         restaurantAdapter.updateRestaurants(sorted)
     }
 
     private fun filterRestaurantsByName(query: String?) {
+        if (!::restaurants.isInitialized) {
+            return
+        }
+
         if (::restaurants.isInitialized && !query.isNullOrEmpty()) {
             val filteredList = restaurants.filter { it.name.contains(query, ignoreCase = true) }
             restaurantAdapter.updateRestaurants(filteredList)
