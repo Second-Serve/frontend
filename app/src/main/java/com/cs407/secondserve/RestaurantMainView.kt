@@ -70,7 +70,7 @@ class RestaurantMainView : AppCompatActivity() {
             bagPriceInput.setText(it.toString())
         }
         user.restaurant?.bagsAvailable.let {
-            quantityText.text = it.toString()
+            quantityText.text = (it ?: 0).toString()
             quantity = it ?: 0
         }
 

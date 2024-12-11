@@ -54,7 +54,7 @@
     <string name="pickup_hours_unavailable">Pickup hours unavailable</string>
     <string name="location_unavailable">Location unavailable</string>
     <string name="restaurant_show_more_button">Show More</string>
-    <string name="restaurant_distance_mi">%1$.1f mi away</string>
+    <string name="restaurant_distance_mi">%1$.1f mi</string>
     <string name="monday">Monday</string>
     <string name="tuesday">Tuesday</string>
     <string name="wednesday">Wednesday</string>

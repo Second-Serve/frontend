@@ -57,9 +57,10 @@ class RestaurantAdapter(
         )
 
         // Bag count
+        val bagsRemaining = restaurant.bagsAvailable - restaurant.bagsClaimed
         holder.bagCountTextView.text = context.getString(
             R.string.restaurant_bag_count,
-            restaurant.bagsAvailable
+            bagsRemaining
         )
 
         // Add to cart button

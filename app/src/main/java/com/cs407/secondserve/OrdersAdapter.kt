@@ -20,7 +20,7 @@ class OrdersAdapter(private val orders: List<PreviousOrdersView.Order>) : Recycl
 
     override fun onBindViewHolder(holder: OrdersViewHolder, position: Int) {
         val currentOrder = orders[position]
-        holder.restaurantNameTextView.text = "Restaurant Name: ${currentOrder.restaurantName}"
+        holder.restaurantNameTextView.text = "${currentOrder.restaurantName}"
         holder.orderIdTextView.text = "Order ID: ${currentOrder.orderId}"
     }
 

@@ -30,11 +30,11 @@
             android:id="@+id/list_restaurant_distance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0.0 km"
-            android:textSize="14sp"
+            android:text="@string/restaurant_distance_mi"
             android:textColor="@android:color/darker_gray"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:id="@+id/restaurant_details_layout"

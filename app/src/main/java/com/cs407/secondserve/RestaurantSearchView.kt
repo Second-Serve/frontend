@@ -23,11 +23,10 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.SearchView
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cs407.secondserve.service.LocationService
-import com.google.android.material.appbar.MaterialToolbar
 import java.util.Locale
 
 class RestaurantSearchView : SecondServeView() {
@@ -73,7 +72,7 @@ class RestaurantSearchView : SecondServeView() {
                 putExtra("restaurantId", restaurant.id)
                 putExtra("restaurantName", restaurant.name)
                 putExtra("restaurantBagPrice", restaurant.bagPrice)
-                putExtra("restaurantBagCount", restaurant.bagsAvailable)
+                putExtra("restaurantBagCount", restaurant.bagsAvailable - restaurant.bagsClaimed)
                 putExtra("restaurantPickupStart", pickupHoursToday.startTime)
                 putExtra("restaurantPickupEnd", pickupHoursToday.endTime)
                 putExtra("restaurantAddress", restaurant.address)
