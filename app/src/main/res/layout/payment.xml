@@ -10,27 +10,30 @@
         android:id="@+id/paymentTitleTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Payment Details"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@color/accent"
+        android:layout_marginBottom="24dp"
         android:gravity="center"
-        android:layout_marginBottom="24dp" />
+        android:text="Payment Details"
+        android:textColor="@color/accent"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <!-- First and Last Name in one row -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="16dp"
+        android:showDividers="middle"
+        android:divider="@drawable/empty_vertical_divider"
+        android:orientation="horizontal">
 
         <!-- First Name -->
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/firstNameInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:hintEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -44,10 +47,10 @@
         <!-- Last Name -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/lastNameInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             app:hintEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -63,10 +66,10 @@
     <!-- Credit Card Number -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/cardNumberInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         app:hintEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -80,10 +83,10 @@
     <!-- Expiration Date -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/expirationDateInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         app:hintEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -97,10 +100,10 @@
     <!-- CVC -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/cvcInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         app:hintEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -114,10 +117,10 @@
     <!-- Zip Code -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/zipCodeInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         app:hintEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -133,7 +136,7 @@
         android:id="@+id/submitPaymentButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Submit Payment"
-        android:padding="16dp" />
+        android:padding="16dp"
+        android:text="Submit Payment" />
 
 </LinearLayout>
