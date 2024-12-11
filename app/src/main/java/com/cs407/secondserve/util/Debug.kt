@@ -5,5 +5,6 @@ class Debug {
         const val FORCE_LANDING_PAGE = true
         const val SKIP_WISCARD_SCANNING = true
         const val USE_FIREBASE_EMULATOR = false
+        const val BYPASS_EMAIL_CONFIRMATION = true
     }
 }

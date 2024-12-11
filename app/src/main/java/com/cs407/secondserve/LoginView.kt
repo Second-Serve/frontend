@@ -14,6 +14,7 @@ import com.cs407.secondserve.service.LocationService
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.cs407.secondserve.model.AccountType
+import com.cs407.secondserve.util.Debug
 
 class LoginView : AppCompatActivity() {
     private lateinit var emailEditText: TextInputEditText
@@ -78,7 +79,7 @@ class LoginView : AppCompatActivity() {
                     val intent = Intent(this, RestaurantMainView::class.java)
                     startActivity(intent)
                     return@signIn
-                } else if (authUser.isEmailVerified) {
+                } else if (authUser.isEmailVerified || Debug.BYPASS_EMAIL_CONFIRMATION) {
                     val intent = Intent(this, RestaurantSearchView::class.java)
                     startActivity(intent)
                     return@signIn
