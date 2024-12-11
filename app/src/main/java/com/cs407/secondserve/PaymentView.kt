@@ -60,9 +60,9 @@ class PaymentView : AppCompatActivity() {
                         cardNumberEditText.setSelection(editable.length)
                     }
 
-                    if (editable.length < 16) {
-                        Toast.makeText(this@PaymentView, "Card number must be 16 digits", Toast.LENGTH_SHORT).show()
-                    }
+//                    if (editable.length < 16) {
+//                        Toast.makeText(this@PaymentView, "Card number must be 16 digits", Toast.LENGTH_SHORT).show()
+//                    }
                 }
             }
         })
