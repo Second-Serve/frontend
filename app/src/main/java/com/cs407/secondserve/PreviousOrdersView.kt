@@ -44,7 +44,27 @@ class PreviousOrdersView : SecondServeView() {
         adapter = OrdersAdapter(orders)
         ordersRecyclerView.adapter = adapter
 
-        fetchPreviousOrders()
+//        fetchPreviousOrders()
+        hardcodePreviousOrders()
+    }
+
+    private fun hardcodePreviousOrders() {
+        val newOrders = arrayOf(
+            Order("Restaurant 123", "kRhDN90zYj1VXyUiBETw"),
+            Order("Restaurant 456", "mgHu0Nbfu38RSuCkp23d")
+        )
+
+        orders.clear()
+        orders.addAll(newOrders)
+        adapter.notifyDataSetChanged()
+
+        if (orders.isEmpty()) {
+            emptyStateLayout.visibility = View.VISIBLE
+            ordersRecyclerView.visibility = View.GONE
+        } else {
+            emptyStateLayout.visibility = View.GONE
+            ordersRecyclerView.visibility = View.VISIBLE
+        }
     }
 
     private fun fetchPreviousOrders() {

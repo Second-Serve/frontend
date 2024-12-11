@@ -1,6 +1,5 @@
 package com.cs407.secondserve
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cs407.secondserve.service.AccountService
 import com.cs407.secondserve.util.Debug
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.functions.ktx.functions
 import com.google.firebase.ktx.Firebase
 
@@ -21,9 +20,10 @@ class LandingPageView : SecondServeView() {
         setContentView(R.layout.activity_main)
 
         if (Debug.USE_FIREBASE_EMULATOR) {
-//            Firebase.auth.useEmulator("10.0.2.2", 9099)
-            Firebase.database.useEmulator("10.0.2.2", 9000)
-            Firebase.functions.useEmulator("10.0.2.2", 5001)
+            val host = "10.0.2.2"
+            Firebase.functions.useEmulator(host, 5001)
+//            Firebase.auth.useEmulator(host, 9099)
+//            Firebase.firestore.useEmulator(host, 8080)
         }
 
         if (Firebase.auth.currentUser != null && !Debug.FORCE_LANDING_PAGE) {
